@@ -53,6 +53,51 @@ import java.util.List;
 
 @Config
 public final class MecanumDrive {
+    public enum State {
+        STOPPED,
+        MOVING,
+        TURNING,
+        STOPPING
+    }
+    private State currentState;
+
+    public void MecanumStateMachine() {
+        currentState = State.STOPPED;
+    }
+
+    public void update(){
+        switch(currentState){
+            case STOPPED:
+                Stopped();
+                break;
+            case MOVING:
+                Moving();
+                break;
+            case TURNING:
+                Turning();
+                break;
+            case STOPPING:
+                Stopping();
+                break;
+        }
+    }
+
+    private void Stopped(){
+        // some code
+    }
+
+    private void Moving(){
+        // some code
+    }
+
+    private void Turning(){
+        // some code
+    }
+
+    private void Stopping(){
+        //some code
+    }
+
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
