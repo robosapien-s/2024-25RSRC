@@ -7,7 +7,7 @@ public class InitialState implements IRobot {
     @Override
     public void execute(JoystickWrapper joystick) {
         if(joystick.gamepad2GetA()){
-           //
+
 
         }
 
