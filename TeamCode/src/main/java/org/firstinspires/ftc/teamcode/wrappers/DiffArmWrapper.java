@@ -58,6 +58,8 @@ public class DiffArmWrapper {
                 diff1.setPower(1);
                 diff2.setPower((leftStick-rightStick)/(leftStick+rightStick));
             }
+        telemetry.addData("Mode", currMode);
+        telemetry.update();
         }
     }
 }
