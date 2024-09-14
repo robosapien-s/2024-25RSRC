@@ -1,6 +1,9 @@
+/*
 package org.firstinspires.ftc.teamcode.states;
 
-import org.firstinspires.ftc.teamcode.IRobot;
+import org.firstinspires.ftc.teamcode.interfaces.IRobot;
+import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,10 +26,10 @@ public class StateManager implements IRobot {
     }
 
     @Override
-    public void execute() {
+    public void execute(JoystickWrapper joystick) {
         IRobot currentStateRobot = stateMap.get(state);
         if (currentStateRobot != null) {
-            currentStateRobot.execute();
+            currentStateRobot.execute(joystick);
         }
     }
 
@@ -38,3 +41,4 @@ public class StateManager implements IRobot {
         return state;
     }
 }//
+*/

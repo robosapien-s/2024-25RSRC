@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
-
+import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.states.DroppingState;
 import org.firstinspires.ftc.teamcode.states.ExtendingState;
 import org.firstinspires.ftc.teamcode.states.InitialState;
@@ -12,32 +11,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Robot implements IRobot {
+
+    private static Robot instance;
     public State state = State.INITIAL;
+
     IntakingState intakingState = new IntakingState();
     InitialState initialState = new InitialState();
     ExtendingState extendingState = new ExtendingState();
     DroppingState droppingState = new DroppingState();
 
     private final Map<State, IRobot> stateMap = new HashMap<>();
+
     public Robot(){
+        instance = this;
         stateMap.put(State.INTAKING, intakingState);
         stateMap.put(State.INITIAL, initialState);
         stateMap.put(State.EXTENDING, extendingState);
         stateMap.put(State.DROPPING, droppingState);
     }
 
-    public State getState(){
-        return state;
+    public static Robot getInstance() {
+        return instance;
+    }
 
+    public State getCurrentState(){
+        return state;
+    }
+
+    public void switchState(State newState){
+        state = newState;
     }
 
     @Override
-    public void execute(JoystickWrapper joystick) {
+    public void execute() {
         IRobot currentStateRobot = stateMap.get(state);
-        if (currentStateRobot != null) {
-            currentStateRobot.execute(joystick);
-        }
-        currentStateRobot.execute(joystick);
+        assert currentStateRobot != null;
+        currentStateRobot.execute();
     }
 }
-// change
