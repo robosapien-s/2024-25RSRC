@@ -11,10 +11,6 @@ public interface IRobot {
         INITIAL,
         INTAKING
     }
-    public final DcMotorEx leftFront = hardwareMap.get(DcMotorEx .class, "fL");
-    public final DcMotorEx leftBack = hardwareMap.get(DcMotorEx.class, "bL");
-    public final DcMotorEx rightBack = hardwareMap.get(DcMotorEx.class, "bR");
-    public final DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "fR");
     void execute();
 
-}//
+}

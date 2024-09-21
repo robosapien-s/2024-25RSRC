@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
+import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
+import org.firstinspires.ftc.teamcode.wrappers.MotorController;
 import org.firstinspires.ftc.teamcode.states.DroppingState;
 import org.firstinspires.ftc.teamcode.states.ExtendingState;
 import org.firstinspires.ftc.teamcode.states.InitialState;
@@ -13,17 +18,24 @@ import java.util.Map;
 public class Robot implements IRobot {
 
     private static Robot instance;
-    public State state = State.INITIAL;
-    private JoystickWrapper joystick;
-    IntakingState intakingState = new IntakingState();
-    InitialState initialState = new InitialState(joystick);
-    ExtendingState extendingState = new ExtendingState(joystick);
-    DroppingState droppingState = new DroppingState();
+    private State state = State.INITIAL;
+    private final JoystickWrapper joystick;
+    private final MotorController motorController;
 
+    // State instances
     private final Map<State, IRobot> stateMap = new HashMap<>();
 
-    public Robot(){
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         instance = this;
+
+        joystick = new JoystickWrapper(gamepad1, gamepad2);
+
+        motorController = new MotorController(hardwareMap);
+
+        IntakingState intakingState = new IntakingState();
+        InitialState initialState = new InitialState(joystick);
+        ExtendingState extendingState = new ExtendingState(joystick, motorController);
+        DroppingState droppingState = new DroppingState();
         stateMap.put(State.INTAKING, intakingState);
         stateMap.put(State.INITIAL, initialState);
         stateMap.put(State.EXTENDING, extendingState);
@@ -34,18 +46,19 @@ public class Robot implements IRobot {
         return instance;
     }
 
-    public State getCurrentState(){
+    public State getCurrentState() {
         return state;
     }
 
-    public void switchState(State newState){
+    public void switchState(State newState) {
         state = newState;
     }
 
     @Override
     public void execute() {
         IRobot currentStateRobot = stateMap.get(state);
-        assert currentStateRobot != null;
-        currentStateRobot.execute();
+        if (currentStateRobot != null) {
+            currentStateRobot.execute();
+        }
     }
 }
