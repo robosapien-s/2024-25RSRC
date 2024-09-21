@@ -17,23 +17,30 @@ import java.util.Map;
 
 public class Robot implements IRobot {
 
+    //robot instance for singleton
     private static Robot instance;
+
+    //current state
     private State state = State.INITIAL;
+    private IRobot currentStateRobot;
+
+    //initialize wrappers
     private final JoystickWrapper joystick;
     private final MotorController motorController;
+
 
     // State instances
     private final Map<State, IRobot> stateMap = new HashMap<>();
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         instance = this;
-
+        //WRAPPER INSTANCES
         joystick = new JoystickWrapper(gamepad1, gamepad2);
-
         motorController = new MotorController(hardwareMap);
 
+        // STATE CREATION
         IntakingState intakingState = new IntakingState();
-        InitialState initialState = new InitialState(joystick);
+        InitialState initialState = new InitialState(joystick, motorController);
         ExtendingState extendingState = new ExtendingState(joystick, motorController);
         DroppingState droppingState = new DroppingState();
         stateMap.put(State.INTAKING, intakingState);
@@ -56,7 +63,7 @@ public class Robot implements IRobot {
 
     @Override
     public void execute() {
-        IRobot currentStateRobot = stateMap.get(state);
+        currentStateRobot = stateMap.get(state);
         if (currentStateRobot != null) {
             currentStateRobot.execute();
         }

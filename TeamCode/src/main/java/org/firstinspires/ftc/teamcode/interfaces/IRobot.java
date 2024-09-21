@@ -9,7 +9,8 @@ public interface IRobot {
         DROPPING,
         EXTENDING,
         INITIAL,
-        INTAKING
+        INTAKING,
+        DRIVE
     }
     void execute();
 

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Robot;
 
 @TeleOp(name="Robot Linear OpMode", group="Linear Opmode")
-public class DriveTest extends LinearOpMode {
+public class StateTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
