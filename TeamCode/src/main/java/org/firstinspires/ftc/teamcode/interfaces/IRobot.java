@@ -4,9 +4,6 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
 public interface IRobot {
     public enum State {
         DROPPING,
@@ -21,4 +18,3 @@ public interface IRobot {
     void execute();
 
 }//
-// initialState, intakingState, extendingState, droppingState

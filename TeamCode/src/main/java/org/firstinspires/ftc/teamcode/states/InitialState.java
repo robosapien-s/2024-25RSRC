@@ -6,9 +6,15 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class InitialState implements IRobot {
 
+    private JoystickWrapper joystick;
+
+    public InitialState(JoystickWrapper joystick) {
+        this.joystick = joystick;
+    }
+
     @Override
     public void execute() {
-        if (true) {
+        if (joystick.gamepad1GetA()) {
             Robot.getInstance().switchState(State.EXTENDING);
         }
     }

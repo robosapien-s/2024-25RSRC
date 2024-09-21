@@ -14,10 +14,10 @@ public class Robot implements IRobot {
 
     private static Robot instance;
     public State state = State.INITIAL;
-
+    private JoystickWrapper joystick;
     IntakingState intakingState = new IntakingState();
-    InitialState initialState = new InitialState();
-    ExtendingState extendingState = new ExtendingState();
+    InitialState initialState = new InitialState(joystick);
+    ExtendingState extendingState = new ExtendingState(joystick);
     DroppingState droppingState = new DroppingState();
 
     private final Map<State, IRobot> stateMap = new HashMap<>();
