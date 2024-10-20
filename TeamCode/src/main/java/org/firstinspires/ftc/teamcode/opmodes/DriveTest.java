@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
-@TeleOp(name="Robot Linear OpMode", group="Linear Opmode")
+@TeleOp(name="Robot Linear OpMode", group="test")
 public class DriveTest extends LinearOpMode {
 
     @Override
