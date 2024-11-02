@@ -15,9 +15,10 @@ public class InitialState implements IRobot {
     @Override
     public void execute() {
         if (joystick.gamepad1GetA()) {
-            Robot.getInstance().switchState(State.MECANUM_DRIVE);
-        } else if (joystick.gamepad1GetB()) {
-            Robot.getInstance().switchState(State.FIELD_CENTRIC_DRIVE);
+            Robot.setSlideTargetPosition(1500);
+            //Robot.getInstance().switchState(State.MECANUM_DRIVE);
+        //} else if (joystick.gamepad1GetB()) {
+        //    Robot.getInstance().switchState(State.FIELD_CENTRIC_DRIVE);
         }
     }
 }

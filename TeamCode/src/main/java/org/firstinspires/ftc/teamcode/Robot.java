@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
 import org.firstinspires.ftc.teamcode.states.*;
 import org.firstinspires.ftc.teamcode.wrappers.MotorController;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
+import org.firstinspires.ftc.teamcode.SlideController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,16 +19,17 @@ public class Robot implements IRobot {
     private State state = State.INITIAL;
     private final JoystickWrapper joystick;
     private final MotorController motorController;
+    private final SlideController slideController;
 
     private final Map<State, IRobot> stateMap = new HashMap<>();
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         instance = this;
-
         joystick = new JoystickWrapper(gamepad1, gamepad2);
-
         motorController = new MotorController(hardwareMap);
+        slideController = new SlideController(hardwareMap);
 
+        // Initialize states
         IntakingState intakingState = new IntakingState();
         InitialState initialState = new InitialState(joystick);
         ExtendingState extendingState = new ExtendingState(joystick, motorController);
@@ -61,5 +63,10 @@ public class Robot implements IRobot {
         if (currentStateRobot != null) {
             currentStateRobot.execute();
         }
+
+        slideController.update();
+    }
+    public static void setSlideTargetPosition(int target) {
+        slideController.setTargetPosition(target);
     }
 }
