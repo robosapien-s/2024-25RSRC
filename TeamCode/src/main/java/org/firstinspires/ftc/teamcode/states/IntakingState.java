@@ -1,15 +1,19 @@
 package org.firstinspires.ftc.teamcode.states;
 
-import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
-import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class IntakingState implements IRobot {
 
     @Override
-    public void execute() {
+    public void execute(Robot robot) {
         if (true) {
-            Robot.getInstance().switchState(State.EXTENDING);
+            robot.switchState(State.EXTENDING);
         }
+    }
+
+    @Override
+    public State getState() {
+        return State.INTAKING;
     }
 }

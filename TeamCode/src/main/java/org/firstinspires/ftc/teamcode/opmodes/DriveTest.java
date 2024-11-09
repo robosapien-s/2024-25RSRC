@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp(name="Robot Linear OpMode", group="test")
 public class DriveTest extends LinearOpMode {
@@ -15,7 +15,7 @@ public class DriveTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.execute();
+            robot.execute(telemetry);
 
             telemetry.addData("State", robot.getCurrentState().toString());
             telemetry.update();

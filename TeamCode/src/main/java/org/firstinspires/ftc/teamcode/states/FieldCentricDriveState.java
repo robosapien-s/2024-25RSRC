@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.states;
 
-import com.qualcomm.robotcore.util.RobotLog;
-import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 import org.firstinspires.ftc.teamcode.wrappers.MotorController;
@@ -18,7 +17,7 @@ public class FieldCentricDriveState implements IRobot {
     }
 
     @Override
-    public void execute() {
+    public void execute(Robot robot) {
         double y = -joystick.gamepad1GetLeftStickY();
         double x = joystick.gamepad1GetLeftStickX();
         double rx = joystick.gamepad1GetRightStickX();
@@ -40,9 +39,14 @@ public class FieldCentricDriveState implements IRobot {
         motorController.reqRfChange(frPower);
 
         if (joystick.gamepad1GetA()) {
-            Robot.getInstance().switchState(State.MECANUM_DRIVE);
+            robot.switchState(State.MECANUM_DRIVE);
         } else if (joystick.gamepad1GetY()) {
-            Robot.getInstance().switchState(State.INITIAL);
+            robot.switchState(State.INITIAL);
         }
+    }
+
+    @Override
+    public State getState() {
+        return State.FIELD_CENTRIC_DRIVE;
     }
 }

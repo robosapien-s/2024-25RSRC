@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.states;
 
-import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.MotorController;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -17,7 +17,7 @@ public class ExtendingState implements IRobot {
     }
 
     @Override
-    public void execute() {
+    public void execute(Robot robot) {
         if (!motorExtended) {
             motorController.reqEmChange(1.0);
             motorExtended = true;
@@ -25,8 +25,13 @@ public class ExtendingState implements IRobot {
 
         if (joystick.gamepad1GetB()) {
             motorController.reqEmChange(0);
-            Robot.getInstance().switchState(State.INITIAL);
+            robot.switchState(State.INITIAL);
             motorExtended = false;
         }
+    }
+
+    @Override
+    public State getState() {
+        return State.EXTENDING;
     }
 }

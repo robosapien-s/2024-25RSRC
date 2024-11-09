@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.states;
 
-import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 import org.firstinspires.ftc.teamcode.wrappers.MotorController;
@@ -16,7 +16,7 @@ public class MecanumDriveState implements IRobot {
     }
 
     @Override
-    public void execute() {
+    public void execute(Robot robot) {
         double y = -joystick.gamepad1GetLeftStickY();
         double x = joystick.gamepad1GetLeftStickX();
         double rx = joystick.gamepad1GetRightStickX();
@@ -33,9 +33,14 @@ public class MecanumDriveState implements IRobot {
         motorController.reqRfChange(frPower);
 
         if (joystick.gamepad1GetB()) {
-            Robot.getInstance().switchState(State.FIELD_CENTRIC_DRIVE);
+            robot.switchState(State.FIELD_CENTRIC_DRIVE);
         } else if (joystick.gamepad1GetY()) {
-            Robot.getInstance().switchState(State.INITIAL);
+            robot.switchState(State.INITIAL);
         }
+    }
+
+    @Override
+    public State getState() {
+        return State.MECANUM_DRIVE;
     }
 }
