@@ -14,17 +14,13 @@ public class DriveTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        FCDrivingWrapper drivingWrapper = new FCDrivingWrapper(hardwareMap, telemetry);
-        RevIMUv2 imu = new RevIMUv2(hardwareMap, "imu");
         Robot robot = new Robot(hardwareMap, gamepad1, gamepad2);
 
-        JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
+
 
         waitForStart();
 
         while (opModeIsActive()) {
-            drivingWrapper.drive(imu, joystickWrapper, 1, 1);
-
             robot.execute(telemetry);
 
             telemetry.addData("State", robot.getCurrentState().toString());

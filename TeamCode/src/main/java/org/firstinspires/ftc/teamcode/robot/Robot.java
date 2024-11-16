@@ -20,6 +20,7 @@ public class Robot {
 
     //private static Robot instance;
     private IRobot currentState;
+    private final FCDrive drive;
     private final JoystickWrapper joystick;
     private final HorizontalSlideController horizontalSlideController;
     private final VerticalSlideController verticalSlideController;
@@ -32,11 +33,12 @@ public class Robot {
 
 
     private final Map<State, Supplier<IRobot>> instanceStateMap = new HashMap<>();
-    private IRobot drive;
+//    private IRobot drive;
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
 
+        drive = new FCDrive(hardwareMap);
         horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1");
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true);
         clawSlideController = new ClawSlideController(hardwareMap,  "clawSliderCR", "verticalSlide1");
@@ -67,9 +69,11 @@ public class Robot {
 
     public void execute(Telemetry telemetry) {
         currentState.execute(this);
+        drive.update(telemetry, joystick, 1, 1);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         clawSlideController.update(telemetry);
+
     }
 
     public void setHorizontalSlideTargetPosition(int target) {

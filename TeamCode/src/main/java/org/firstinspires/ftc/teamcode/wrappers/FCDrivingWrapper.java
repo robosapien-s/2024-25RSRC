@@ -20,9 +20,8 @@ public class FCDrivingWrapper{
     DcMotorEx motorBackLeft;
     DcMotorEx motorBackRight;
 
-    public FCDrivingWrapper(HardwareMap inHardwareMap, Telemetry inTelemetry) {
+    public FCDrivingWrapper(HardwareMap inHardwareMap) {
         hardwareMap = inHardwareMap;
-        telemetry = inTelemetry;
         //0
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("fL");
         //1
@@ -61,7 +60,8 @@ public class FCDrivingWrapper{
         return backRightPower;
     }
 
-    public void drive(RevIMUv2 revIMU, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
+    public void drive(Telemetry telemetry, RevIMUv2 revIMU, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
+        this.telemetry = telemetry;
         double angle = -Math.toRadians(revIMU.getHeading());
 
         double y = -joystickWrapper.gamepad1GetLeftStickY(); // Remember, this is reversed! | Defining the y variable
@@ -79,8 +79,8 @@ public class FCDrivingWrapper{
         motorFrontRight.setPower(FrontRightPower(denominator, yr, xr, t / speed) * speed);
         motorBackRight.setPower(BackRightPower(denominator, yr, xr, t / speed) * speed);
 
-        telemetry.addData("Heading", angle);
-        telemetry.update();
+        this.telemetry.addData("Heading", angle);
+        this.telemetry.update();
     }
     public double calculateDenominator(double x, double y, double rx) {
         return Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
