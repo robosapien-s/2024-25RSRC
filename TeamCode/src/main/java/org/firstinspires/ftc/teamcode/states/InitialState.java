@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class InitialState implements IRobot {
 
     private final JoystickWrapper joystick;
+    private static final double CLAW_SERVO_UP = 0.5;
+    private static final double CLAW_SERVO_DOWN = 0.4;
 
     public InitialState(JoystickWrapper joystick) {
         this.joystick = joystick;
@@ -15,13 +17,13 @@ public class InitialState implements IRobot {
     @Override
     public void execute(Robot robot) {
         if (joystick.gamepad1GetB()) {
-            robot.setHorizontalSlideTargetPosition(540);
+            robot.setClawPosition(CLAW_SERVO_DOWN);
         } else if (joystick.gamepad1GetX()) {
             robot.setHorizontalSlideTargetPosition(0);
         } else if(joystick.gamepad1GetY()) {
             robot.setVerticalSlideTargetPosition(3000);
         } else if(joystick.gamepad1GetA()) {
-            robot.setVerticalSlideTargetPosition(10);
+            robot.setClawPosition(CLAW_SERVO_UP);
         } else if(joystick.gamepad1GetDRight()) {
             robot.setClawSlideTargetPosition(-21110);
         } else if(joystick.gamepad1GetDLeft()) {
