@@ -31,6 +31,8 @@ public class InitialState implements IRobot {
         } else if(joystick.gamepad1GetDDown()) {
             robot.setClawAnglePosition(1);
         }
+
+        robot.setIntakePower(joystick.gamepad1GetRightTrigger()-joystick.gamepad1GetLeftTrigger());
     }
 
     @Override

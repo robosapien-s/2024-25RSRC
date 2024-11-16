@@ -28,6 +28,8 @@ public class Robot {
     private final Servo clawAngleServo;
     private final Servo clawRotationServo;
     private final Servo clawServo;
+    private final CRServo intakeServo;
+
 
     private final Map<State, Supplier<IRobot>> instanceStateMap = new HashMap<>();
     private IRobot drive;
@@ -41,6 +43,7 @@ public class Robot {
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
+        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
         instanceStateMap.put(State.INITIAL, () -> new InitialState(joystick));
         instanceStateMap.put(State.INTAKING, IntakingState::new);
@@ -91,5 +94,9 @@ public class Robot {
 
     public void setClawPosition(double position) {
         clawServo.setPosition(position);
+    }
+
+    public void setIntakePower(double power) {
+        intakeServo.setPower(power);
     }
 }
