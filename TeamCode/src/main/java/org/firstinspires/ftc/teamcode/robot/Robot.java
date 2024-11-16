@@ -69,7 +69,7 @@ public class Robot {
 
     public void execute(Telemetry telemetry) {
         currentState.execute(this);
-        drive.update(telemetry, joystick, 1, 1);
+//        drive.update(telemetry, joystick, 1, 1);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         clawSlideController.update(telemetry);

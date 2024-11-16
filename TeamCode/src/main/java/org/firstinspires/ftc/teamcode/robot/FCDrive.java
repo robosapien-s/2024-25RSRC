@@ -16,9 +16,10 @@ public class FCDrive {
         public FCDrive(HardwareMap hardwareMap) {
                 drivingWrapper = new FCDrivingWrapper(hardwareMap);
                 imu = new RevIMUv2(hardwareMap, "imu");
+                imu.init();
         }
 
         public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
-                drivingWrapper.drive(telemetry,imu, joystickWrapper, speed, rotSpeed);
+                drivingWrapper.drive(telemetry, imu, joystickWrapper, speed, rotSpeed);
         }
 }
