@@ -53,6 +53,8 @@ public class Robot {
         instanceStateMap.put(State.DROPPING, DroppingState::new);
         //drive = new FieldCentricDriveState(joystick, motorController);
         switchState(State.INITIAL);
+
+        drive.init();
     }
 
     public State getCurrentState() {
@@ -69,7 +71,7 @@ public class Robot {
 
     public void execute(Telemetry telemetry) {
         currentState.execute(this);
-//        drive.update(telemetry, joystick, 1, 1);
+        drive.update(telemetry, joystick, 1, 1);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         clawSlideController.update(telemetry);

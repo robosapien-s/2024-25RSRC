@@ -16,6 +16,9 @@ public class FCDrive {
         public FCDrive(HardwareMap hardwareMap) {
                 drivingWrapper = new FCDrivingWrapper(hardwareMap);
                 imu = new RevIMUv2(hardwareMap, "imu");
+        }
+
+        public void init() {
                 imu.init();
         }
 
