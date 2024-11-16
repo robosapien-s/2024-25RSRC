@@ -8,8 +8,7 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class InitialState implements IRobot {
 
     private final JoystickWrapper joystick;
-    private static final double CLAW_OPEN = 0.3;
-    private static final double CLAW_CLOSE = 0.7;
+
 
 
 
@@ -19,17 +18,24 @@ public class InitialState implements IRobot {
 
     @Override
     public void initialize(Robot robot){
-        robot.setClawPosition(CLAW_OPEN);
-        robot.setClawRotationPosition(ROT_SERVO);
-        robot.setVerticalSlideTargetPosition(3000);
-        robot.setIntakePower(joystick.gamepad1GetRightTrigger() - joystick.gamepad1GetLeftTrigger());
-        robot.setClawAnglePosition(1);
-        Constants.initialStateCalled = true;
+        robot.setClawPosition(Robot.CLAW_OPEN);
+        robot.setClawRotationPosition(Robot.ROT_SERVO_DEFAULT);
+        robot.setClawAnglePosition(Robot.CLAW_ANGLE_DOWN);
+        robot.setClawSlideTargetPosition(Robot.CLAW_SLIDER_DOWN);
+        robot.setVerticalSlideTargetPosition(0);
+        robot.setHorizontalSlideTargetPosition(0);
     }
 
 
     @Override
     public void execute(Robot robot) {
+
+
+        if(joystick.gamepad1GetA()) {
+            robot.switchState(State.INTAKING);
+        }
+
+        /*
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
         } else if (joystick.gamepad1GetX()) {
@@ -47,6 +53,8 @@ public class InitialState implements IRobot {
         } else if(joystick.gamepad1GetDDown()) {
             robot.setClawAnglePosition(1);
         }
+
+         */
 
         robot.setIntakePower(joystick.gamepad1GetRightTrigger()-joystick.gamepad1GetLeftTrigger());
     }

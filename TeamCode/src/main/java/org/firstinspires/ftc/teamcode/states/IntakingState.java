@@ -6,10 +6,15 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 public class IntakingState implements IRobot {
 
     @Override
+    public void initialize(Robot robot) {
+        robot.setHorizontalSlideTargetPosition(Robot.HORIZONTAL_SLIDE_INTAKE_INITIAL);
+        robot.setIntakePower(1);
+    }
+
+    @Override
     public void execute(Robot robot) {
-        if (true) {
-            robot.switchState(State.EXTENDING);
-        }
+
+
     }
 
     @Override

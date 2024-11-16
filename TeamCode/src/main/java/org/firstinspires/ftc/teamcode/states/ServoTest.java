@@ -14,7 +14,7 @@ public class ServoTest {
     public ServoTest(JoystickWrapper joystick) {
         this.joystick = joystick;
     }
-    
+
     public void execute(Robot robot) {
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
