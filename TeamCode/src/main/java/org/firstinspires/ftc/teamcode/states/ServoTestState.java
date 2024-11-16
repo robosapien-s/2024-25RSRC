@@ -1,39 +1,36 @@
+/*
+red -
+blue -
+yellow - rotation
+green -
+ */
 package org.firstinspires.ftc.teamcode.states;
 
-import org.firstinspires.ftc.teamcode.robot.Constants;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
-public class InitialState implements IRobot {
+public class ServoTestState implements IRobot {
 
     private final JoystickWrapper joystick;
-    private static final double CLAW_OPEN = 0.3;
-    private static final double CLAW_CLOSE = 0.7;
+    private static final double CLAW_SERVO_UP = 0.5;
+    private static final double CLAW_SERVO_DOWN = 0.4;
 
-
-
-    public InitialState(JoystickWrapper joystick) {
+    public ServoTestState(JoystickWrapper joystick) {
         this.joystick = joystick;
     }
 
     @Override
-    public void initialize(Robot robot){
-        robot.setClawPosition(CLAW_OPEN);
-        robot.setClawRotationPosition(ROT_SERVO);
-        robot.setVerticalSlideTargetPosition(3000);
-        robot.setIntakePower(joystick.gamepad1GetRightTrigger() - joystick.gamepad1GetLeftTrigger());
-        robot.setClawAnglePosition(1);
-        Constants.initialStateCalled = true;
-    }
+    public void initialize(Robot robot) {
 
+    }
 
     @Override
     public void execute(Robot robot) {
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
         } else if (joystick.gamepad1GetX()) {
-            robot.setClawRotationPosition(ROT_SERVO);
+            robot.setHorizontalSlideTargetPosition(0);
         } else if(joystick.gamepad1GetY()) {
             robot.setVerticalSlideTargetPosition(3000);
         } else if(joystick.gamepad1GetA()) {

@@ -67,6 +67,7 @@ public class Robot {
 
     public void switchState(State newState) {
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
+        currentState.initialize(this);
     }
 
     public void execute(Telemetry telemetry) {
