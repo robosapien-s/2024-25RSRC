@@ -64,7 +64,7 @@ public class RevIMUv2 extends GyroEx {
      * Initializes gyro with custom parameters.
      */
     public void init(BNO055IMU.Parameters parameters) {
-        revIMU.initialize(parameters);
+        boolean didInit = revIMU.initialize(parameters);
 
         globalHeading = 0;
         relativeHeading = 0;
