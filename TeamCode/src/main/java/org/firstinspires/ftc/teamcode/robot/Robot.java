@@ -18,6 +18,21 @@ import java.util.function.Supplier;
 
 public class Robot {
 
+    public static final double CLAW_OPEN = 0.3;
+    public static final double CLAW_CLOSE = 0.7;
+
+    public static final double ROT_SERVO_DEFAULT = 0.3;
+
+    public static final double CLAW_ANGLE_FORWARD = 1.0;
+    public static final double CLAW_ANGLE_DOWN = 0.5;
+    public static final double CLAW_ANGLE_BACK = 0.0;
+
+    public static final int CLAW_SLIDER_FORWARD = 0;
+    public static final int CLAW_SLIDER_DOWN = 2000;
+    public static final int CLAW_SLIDER_BACK = -21110;
+
+    public static final int HORIZONTAL_SLIDE_INTAKE_INITIAL = 200;
+
     //private static Robot instance;
     private IRobot currentState;
     private final FCDrive drive;
@@ -67,6 +82,7 @@ public class Robot {
 
     public void switchState(State newState) {
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
+        currentState.initialize(this);
     }
 
     public void execute(Telemetry telemetry) {

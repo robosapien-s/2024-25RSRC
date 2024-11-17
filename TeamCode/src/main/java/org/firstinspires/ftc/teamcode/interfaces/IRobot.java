@@ -12,6 +12,10 @@ public interface IRobot {
         MECANUM_DRIVE,
         FIELD_CENTRIC_DRIVE
     }
+
+
+    void initialize(Robot robot);
+
     void execute(Robot robot);
 
     IRobot.State getState();
