@@ -17,6 +17,11 @@ public class ExtendingState implements IRobot {
     }
 
     @Override
+    public void initialize(Robot robot) {
+
+    }
+
+    @Override
     public void execute(Robot robot) {
         if (!motorExtended) {
             motorController.reqEmChange(1.0);

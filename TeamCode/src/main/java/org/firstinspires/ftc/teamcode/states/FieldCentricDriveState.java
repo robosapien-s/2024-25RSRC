@@ -17,6 +17,11 @@ public class FieldCentricDriveState implements IRobot {
     }
 
     @Override
+    public void initialize(Robot robot) {
+
+    }
+
+    @Override
     public void execute(Robot robot) {
         double y = -joystick.gamepad1GetLeftStickY();
         double x = joystick.gamepad1GetLeftStickX();

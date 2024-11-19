@@ -7,5 +7,7 @@ public interface IRobotPidMechanism {
 
     public void setTargetPosition(int position);
 
+    public void increaseTargetPosition(int offset);
+
     public String getName();
 }

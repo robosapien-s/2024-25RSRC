@@ -6,6 +6,11 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 public class DroppingState implements IRobot {
 
     @Override
+    public void initialize(Robot robot) {
+
+    }
+
+    @Override
     public void execute(Robot robot) {
         if (true) {
             robot.switchState(State.EXTENDING);

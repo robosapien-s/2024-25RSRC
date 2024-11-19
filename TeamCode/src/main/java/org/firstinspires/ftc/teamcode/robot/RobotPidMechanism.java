@@ -55,7 +55,22 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     }
 
     public void setTargetPosition(int position) {
-        targetPosition = position;
+
+        if(position<0) {
+            targetPosition = 0;
+        } else {
+            targetPosition = position;
+        }
+    }
+
+    public void increaseTargetPosition(int offset) {
+        //TODO need limit
+
+        int newTargetPosition = targetPosition + offset;
+        if(newTargetPosition < 0) {
+            newTargetPosition = 0;
+        }
+        targetPosition = newTargetPosition;
     }
 
     public double testCapPower(double power, double cap) {

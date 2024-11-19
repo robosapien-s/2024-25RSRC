@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.wrappers;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.GyroEx;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.interfaces.IImu;
 
-public class RevIMUv2 extends GyroEx implements IImu {
+public class RevIMUv3 extends GyroEx implements IImu {
 
-    private BNO055IMU revIMU;
+    private IMU revIMU;
 
     /***
      * Heading relative to starting position
@@ -34,8 +37,8 @@ public class RevIMUv2 extends GyroEx implements IImu {
      * @param hw      Hardware map
      * @param imuName Name of sensor in configuration
      */
-    public RevIMUv2(HardwareMap hw, String imuName) {
-        revIMU = hw.get(BNO055IMU.class, imuName);
+    public RevIMUv3(HardwareMap hw, String imuName) {
+        revIMU = hw.get(IMU.class, imuName);
         multiplier = 1;
     }
 
@@ -44,7 +47,7 @@ public class RevIMUv2 extends GyroEx implements IImu {
      *
      * @param hw Hardware map
      */
-    public RevIMUv2(HardwareMap hw) {
+    public RevIMUv3(HardwareMap hw) {
         this(hw, "imu");
     }
 
@@ -52,19 +55,21 @@ public class RevIMUv2 extends GyroEx implements IImu {
      * Initializes gyro with default parameters.
      */
     public void init() {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
 
-        init(parameters);
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        // Now initialize the IMU with this mounting orientation
+        // Note: if you choose two conflicting directions, this initialization will cause a code exception.
+        init(new IMU.Parameters(orientationOnRobot));
     }
 
     /**
      * Initializes gyro with custom parameters.
      */
-    public void init(BNO055IMU.Parameters parameters) {
+    public void init(IMU.Parameters parameters) {
         boolean didInit = revIMU.initialize(parameters);
 
         globalHeading = 0;
@@ -92,18 +97,26 @@ public class RevIMUv2 extends GyroEx implements IImu {
      */
     @Override
     public double getAbsoluteHeading() {
-        return revIMU.getAngularOrientation().firstAngle * multiplier;
+
+        YawPitchRollAngles orientation = revIMU.getRobotYawPitchRollAngles();
+        AngularVelocity angularVelocity = revIMU.getRobotAngularVelocity(AngleUnit.DEGREES);
+        return orientation.getYaw() * multiplier;
+    }
+
+    @Override
+    public double[] getAngles() {
+        return new double[0];
     }
 
     /**
      * @return X, Y, Z angles of gyro
      */
-    public double[] getAngles() {
-        // make a singular hardware call
-        Orientation orientation = revIMU.getAngularOrientation();
-
-        return new double[]{orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle};
-    }
+//    public double[] getAngles() {
+//        // make a singular hardware call
+//        Orientation orientation = revIMU.getAngularOrientation();
+//
+//        return new double[]{orientation.firstAngle, orientation.secondAngle, orientation.thirdAngle};
+//    }
 
     /**
      * @return Transforms heading into {@link Rotation2d}
@@ -131,7 +144,7 @@ public class RevIMUv2 extends GyroEx implements IImu {
     /**
      * @return the internal sensor being wrapped
      */
-    public BNO055IMU getRevIMU() {
+    public IMU getRevIMU() {
         return revIMU;
     }
 

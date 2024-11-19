@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.interfaces.IImu;
 import org.firstinspires.ftc.teamcode.wrappers.RevIMUv2;
 
 public class FCDrivingWrapper{
@@ -60,7 +61,7 @@ public class FCDrivingWrapper{
         return backRightPower;
     }
 
-    public void drive(Telemetry telemetry, RevIMUv2 revIMU, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
+    public void drive(Telemetry telemetry, IImu revIMU, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
         this.telemetry = telemetry;
         double angle = -Math.toRadians(revIMU.getHeading());
 

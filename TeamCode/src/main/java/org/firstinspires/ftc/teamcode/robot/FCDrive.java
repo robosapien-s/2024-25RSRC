@@ -7,15 +7,16 @@ import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.wrappers.FCDrivingWrapper;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 import org.firstinspires.ftc.teamcode.wrappers.RevIMUv2;
+import org.firstinspires.ftc.teamcode.wrappers.RevIMUv3;
 
-public class FCDrive {
+public class FCDrive implements IDrive {
         private FCDrivingWrapper drivingWrapper;
-        private RevIMUv2 imu;
+        private RevIMUv3 imu;
 
 
         public FCDrive(HardwareMap hardwareMap) {
                 drivingWrapper = new FCDrivingWrapper(hardwareMap);
-                imu = new RevIMUv2(hardwareMap, "imu");
+                imu = new RevIMUv3(hardwareMap, "imu");
         }
 
         public void init() {

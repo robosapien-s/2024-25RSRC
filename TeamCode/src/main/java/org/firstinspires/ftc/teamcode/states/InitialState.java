@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.states;
 
-import org.firstinspires.ftc.teamcode.robot.Constants;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -22,8 +21,9 @@ public class InitialState implements IRobot {
         robot.setClawRotationPosition(Robot.ROT_SERVO_DEFAULT);
         robot.setClawAnglePosition(Robot.CLAW_ANGLE_DOWN);
         robot.setClawSlideTargetPosition(Robot.CLAW_SLIDER_DOWN);
-        robot.setVerticalSlideTargetPosition(0);
+        robot.setVerticalSlideTargetPosition(120);
         robot.setHorizontalSlideTargetPosition(0);
+        robot.setIntakeAngleServoPosition(Robot.INTAKE_ANGLE_TRANSFER);
     }
 
 
@@ -33,8 +33,23 @@ public class InitialState implements IRobot {
 
         if(joystick.gamepad1GetA()) {
             robot.switchState(State.INTAKING);
+        } else if(joystick.gamepad1GetX()) {
+            robot.setIntakeAngleServoPosition(.48);
+        } else if(joystick.gamepad1GetB()) {
+            robot.setIntakeAngleServoPosition(.51);
+        } else if(joystick.gamepad1GetRightBumperDown()) {
+            robot.setClawPosition(Robot.CLAW_CLOSE);
+        } else if(joystick.gamepad1GetLeftBumperDown()) {
+            robot.setClawPosition(Robot.CLAW_OPEN);
+        } else if(joystick.gamepad1GetDUp()) {
+            robot.increseVerticalSlideTargetPosition(100);
+        } else if(joystick.gamepad1GetDDown()) {
+            robot.setVerticalSlideTargetPosition(120);
+        } else if(joystick.gamepad1GetDRight()) {
+            robot.increseHorizontalSlideTargetPosition(50);
+        } else if(joystick.gamepad1GetDLeft()) {
+            robot.increseHorizontalSlideTargetPosition(-50);
         }
-
         /*
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
