@@ -79,7 +79,8 @@ public class Robot {
 
 
         drive = new FCDrive(hardwareMap);
-//        drive = new MecanumDrive(hardwareMap);
+        //drive = new FDrive(hardwareMap);
+        //drive.init();
     }
 
     public State getCurrentState() {
@@ -142,5 +143,15 @@ public class Robot {
 
     public void setIntakeAngleServoPosition(double position) {
         intakeAngleServo.setPosition(position);
+    }
+
+    public int getVerticalSlidePosition(){
+        return verticalSlideController.getCurrentPosition();
+    }
+    public int getHorizontalSlidePosition(){
+        return horizontalSlideController.getCurrentPosition();
+    }
+    public int getClawSlide(){
+        return clawSlideController.getCurrentPosition();
     }
 }

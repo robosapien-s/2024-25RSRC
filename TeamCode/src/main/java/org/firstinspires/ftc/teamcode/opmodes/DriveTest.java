@@ -36,6 +36,7 @@ public class DriveTest extends LinearOpMode {
         public static final int VERTICAL_SLIDE_POSITION = 140;
 
         public static final int VERTICAL_SLIDE_TRANSFER_POSITION = 420;
+        public static final int HORIZONTAL_SLIDE_TRANSFER_POSITION = 100;
     }
 
     public static DriveTest.Params PARAMS = new DriveTest.Params();

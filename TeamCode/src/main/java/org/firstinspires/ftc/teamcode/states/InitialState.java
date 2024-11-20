@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.states;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.CallBackTask;
 import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
+import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
@@ -40,7 +41,8 @@ public class InitialState implements IRobot {
         if(joystick.gamepad1GetA()) {
             //robot.switchState(State.INTAKING);
 
-            taskArrayList.add(new CallBackTask(new CallBackTask.CallBackListener() {
+            RobotTaskSeries transferSeries = new RobotTaskSeries();
+            transferSeries.add(new CallBackTask(new CallBackTask.CallBackListener() {
                 @Override
                 public void setPosition(double value) {
                     robot.setClawPosition(value);
@@ -52,6 +54,36 @@ public class InitialState implements IRobot {
                 }
             }, DriveTest.Params.CLAW_CLOSE, 1, "", true));
 
+
+            transferSeries.add(new CallBackTask(new CallBackTask.CallBackListener() {
+                @Override
+                public void setPosition(double value) {
+                    robot.setHorizontalSlideTargetPosition((int) value);
+
+                }
+
+                @Override
+                public double getPosition() {
+
+                    return robot.getHorizontalSlidePosition();
+                }
+            }, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "", true));
+
+            transferSeries.add(new CallBackTask(new CallBackTask.CallBackListener() {
+                @Override
+                public void setPosition(double value) {
+                    robot.setVerticalSlideTargetPosition((int) value);
+
+                }
+
+                @Override
+                public double getPosition() {
+
+                    return robot.getVerticalSlidePosition();
+                }
+            }, DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION, 1, "", true));
+
+            taskArrayList.add(transferSeries);
 
         } else if(joystick.gamepad1GetX()) {
             robot.setIntakeAngleServoPosition(.48);
