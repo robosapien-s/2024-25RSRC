@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.states;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.MotorController;
@@ -22,7 +23,7 @@ public class ExtendingState implements IRobot {
     }
 
     @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot, Telemetry telemetry) {
         if (!motorExtended) {
             motorController.reqEmChange(1.0);
             motorExtended = true;

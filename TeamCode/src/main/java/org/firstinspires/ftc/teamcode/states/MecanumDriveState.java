@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.states;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -21,7 +22,7 @@ public class MecanumDriveState implements IRobot {
     }
 
     @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot, Telemetry telemetry) {
         double y = -joystick.gamepad1GetLeftStickY();
         double x = joystick.gamepad1GetLeftStickX();
         double rx = joystick.gamepad1GetRightStickX();

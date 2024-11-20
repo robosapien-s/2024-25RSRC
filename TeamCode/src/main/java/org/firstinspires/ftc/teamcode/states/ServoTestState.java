@@ -6,6 +6,7 @@ green -
  */
 package org.firstinspires.ftc.teamcode.states;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -26,7 +27,7 @@ public class ServoTestState implements IRobot {
     }
 
     @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot, Telemetry telemetry) {
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
         } else if (joystick.gamepad1GetX()) {

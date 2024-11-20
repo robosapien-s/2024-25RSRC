@@ -36,6 +36,7 @@ public class Robot {
 
     public static final double INTAKE_ANGLE_TRANSFER = .48;
     public static final double INTAKE_ANGLE_DOWN = .51;
+    public static final int VERTICAL_SLIDE_POSITION = 140;
 
     //private static Robot instance;
     private IRobot currentState;
@@ -72,6 +73,7 @@ public class Robot {
         instanceStateMap.put(State.INTAKING, IntakingState::new);
         //instanceStateMap.put(State.EXTENDING, () -> new ExtendingState(joystick, motorController));
         instanceStateMap.put(State.DROPPING, DroppingState::new);
+        instanceStateMap.put(State.WALLPICKUP, WallPickUpState::new);
         //drive = new FieldCentricDriveState(joystick, motorController);
         switchState(State.INITIAL);
 
@@ -95,7 +97,7 @@ public class Robot {
     }
 
     public void execute(Telemetry telemetry) {
-        currentState.execute(this);
+        currentState.execute(this, telemetry);
         drive.update(telemetry, joystick, 1, 1);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);

@@ -1,15 +1,21 @@
 package org.firstinspires.ftc.teamcode.states;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.CallBackTask;
+import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
+import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
+
+import java.util.ArrayList;
 
 public class InitialState implements IRobot {
 
     private final JoystickWrapper joystick;
 
 
-
+    ArrayList<IRobotTask> taskArrayList = new ArrayList<IRobotTask>();
 
     public InitialState(JoystickWrapper joystick) {
         this.joystick = joystick;
@@ -17,34 +23,48 @@ public class InitialState implements IRobot {
 
     @Override
     public void initialize(Robot robot){
-        robot.setClawPosition(Robot.CLAW_OPEN);
-        robot.setClawRotationPosition(Robot.ROT_SERVO_DEFAULT);
-        robot.setClawAnglePosition(Robot.CLAW_ANGLE_DOWN);
-        robot.setClawSlideTargetPosition(Robot.CLAW_SLIDER_DOWN);
+        robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
+        robot.setClawRotationPosition(DriveTest.Params.ROT_SERVO_DEFAULT);
+        robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_DOWN);
+        robot.setClawSlideTargetPosition(DriveTest.Params.CLAW_SLIDER_DOWN);
         robot.setVerticalSlideTargetPosition(120);
         robot.setHorizontalSlideTargetPosition(0);
-        robot.setIntakeAngleServoPosition(Robot.INTAKE_ANGLE_TRANSFER);
+        robot.setIntakeAngleServoPosition(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
     }
 
 
     @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot, Telemetry telemetry) {
 
 
         if(joystick.gamepad1GetA()) {
-            robot.switchState(State.INTAKING);
+            //robot.switchState(State.INTAKING);
+
+            taskArrayList.add(new CallBackTask(new CallBackTask.CallBackListener() {
+                @Override
+                public void setPosition(double value) {
+                    robot.setClawPosition(value);
+                }
+
+                @Override
+                public double getPosition() {
+                    return DriveTest.Params.CLAW_CLOSE;
+                }
+            }, DriveTest.Params.CLAW_CLOSE, 1, "", true));
+
+
         } else if(joystick.gamepad1GetX()) {
             robot.setIntakeAngleServoPosition(.48);
         } else if(joystick.gamepad1GetB()) {
             robot.setIntakeAngleServoPosition(.51);
         } else if(joystick.gamepad1GetRightBumperDown()) {
-            robot.setClawPosition(Robot.CLAW_CLOSE);
+            robot.setClawPosition(DriveTest.Params.CLAW_CLOSE);
         } else if(joystick.gamepad1GetLeftBumperDown()) {
-            robot.setClawPosition(Robot.CLAW_OPEN);
+            robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
         } else if(joystick.gamepad1GetDUp()) {
-            robot.increseVerticalSlideTargetPosition(100);
+            robot.increseVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION);
         } else if(joystick.gamepad1GetDDown()) {
-            robot.setVerticalSlideTargetPosition(120);
+            robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
         } else if(joystick.gamepad1GetDRight()) {
             robot.increseHorizontalSlideTargetPosition(50);
         } else if(joystick.gamepad1GetDLeft()) {
@@ -72,6 +92,26 @@ public class InitialState implements IRobot {
          */
 
         robot.setIntakePower(joystick.gamepad1GetRightTrigger()-joystick.gamepad1GetLeftTrigger());
+
+
+        executeTasks(telemetry);
+    }
+
+    public void executeTasks(Telemetry telemetry) {
+
+        if(!taskArrayList.isEmpty()) {
+
+            boolean isStarted = taskArrayList.get(0).hasStarted();
+            boolean isRunning = taskArrayList.get(0).isRunning();
+            boolean isComplete = taskArrayList.get(0).isComplete();
+
+            taskArrayList.get(0).execute(telemetry);
+
+
+            if(isComplete){
+                taskArrayList.remove(0);
+            }
+        }
     }
 
     @Override
