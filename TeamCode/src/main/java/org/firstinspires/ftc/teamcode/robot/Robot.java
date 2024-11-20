@@ -76,9 +76,8 @@ public class Robot {
         switchState(State.INITIAL);
 
 
-        //drive = new FCDrive(hardwareMap);
-        drive = new MecanumDrive(hardwareMap);
-        drive.init();
+        drive = new FCDrive(hardwareMap);
+//        drive = new MecanumDrive(hardwareMap);
     }
 
     public State getCurrentState() {
