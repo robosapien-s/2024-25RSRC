@@ -33,10 +33,10 @@ public class MecanumDrive implements IDrive {
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    @Override
-    public void init() {
-
-    }
+//    @Override
+//    public void init() {
+//
+//    }
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {

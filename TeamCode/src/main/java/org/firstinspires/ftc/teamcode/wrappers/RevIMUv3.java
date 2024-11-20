@@ -66,6 +66,12 @@ public class RevIMUv3 extends GyroEx implements IImu {
         init(new IMU.Parameters(orientationOnRobot));
     }
 
+
+    public void init(RevHubOrientationOnRobot.LogoFacingDirection logoDirection, RevHubOrientationOnRobot.UsbFacingDirection usbDirection) {
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+        init(new IMU.Parameters(orientationOnRobot));
+    }
+
     /**
      * Initializes gyro with custom parameters.
      */
