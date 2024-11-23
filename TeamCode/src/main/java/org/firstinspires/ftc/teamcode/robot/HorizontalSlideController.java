@@ -7,7 +7,8 @@ public class HorizontalSlideController extends RobotPidMechanism {
 
     private final DcMotorEx motorSlide1;
 
-    public HorizontalSlideController(HardwareMap hardwareMap, String mainSlide) {
+
+    public HorizontalSlideController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosotion) {
 
         super(
                 0.05,     // Proportional gain
@@ -15,8 +16,10 @@ public class HorizontalSlideController extends RobotPidMechanism {
                 0.0003,    // Derivative gain
                 -1.0,      // Minimum output limit
                 1.0,       // Maximum output limit
-                0.1       // Output ramp rate (optional)
-                // Integral wind-up limit (optional)
+                0.1,  // Output ramp rate (optional)
+                // Integral wind-up limit (optional),
+                inMaxPosition,
+                inMinPosotion
         );
 
 

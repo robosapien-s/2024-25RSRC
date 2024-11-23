@@ -11,26 +11,34 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 import java.util.ArrayList;
 
-public class InitialState implements IRobot {
+public class InitialState extends BaseState {
 
-    private final JoystickWrapper joystick;
-
-
-    ArrayList<IRobotTask> taskArrayList = new ArrayList<IRobotTask>();
 
     public InitialState(JoystickWrapper joystick) {
-        this.joystick = joystick;
+        super(joystick);
     }
 
     @Override
-    public void initialize(Robot robot){
-        robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
-        robot.setClawRotationPosition(DriveTest.Params.ROT_SERVO_DEFAULT);
-        robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_DOWN);
-        robot.setClawSlideTargetPosition(DriveTest.Params.CLAW_SLIDER_DOWN);
-        robot.setVerticalSlideTargetPosition(120);
-        robot.setHorizontalSlideTargetPosition(0);
-        robot.setIntakeAngleServoPosition(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
+    public void initialize(Robot robot, IRobot prevState){
+
+        if(prevState == null) {
+            robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
+            robot.setClawRotationPosition(DriveTest.Params.ROT_SERVO_DEFAULT);
+            robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_DOWN);
+            robot.setClawSlideTargetPosition(DriveTest.Params.CLAW_SLIDER_DOWN);
+            robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
+            robot.setHorizontalSlideTargetPosition(0);
+            robot.setIntakeAngleServoPosition(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
+        } else {
+            RobotTaskSeries transferSeries = new RobotTaskSeries();
+            transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1000, "ClawClose", true));
+            transferSeries.add(createHorizontalSlideTask(robot, 0, 1000, "HorizontalSlide", true));
+            transferSeries.add(createClawSlideTask(robot, DriveTest.Params.CLAW_SLIDER_DOWN, 1000, "CLAW_SLIDER_BACK", true));
+            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_DOWN, 1000, "CLAW_ANGLE_BACK", true));
+            transferSeries.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_DEFAULT, 1000, "ROT_SERVO_BACK", true));
+            transferSeries.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_POSITION, 1000, "HorizontalSlide", false));
+            taskArrayList.add(transferSeries);
+        }
     }
 
 
@@ -39,69 +47,30 @@ public class InitialState implements IRobot {
 
 
         if(joystick.gamepad1GetA()) {
-            //robot.switchState(State.INTAKING);
-
-            RobotTaskSeries transferSeries = new RobotTaskSeries();
-            transferSeries.add(new CallBackTask(new CallBackTask.CallBackListener() {
-                @Override
-                public void setPosition(double value) {
-                    robot.setClawPosition(value);
-                }
-
-                @Override
-                public double getPosition() {
-                    return DriveTest.Params.CLAW_CLOSE;
-                }
-            }, DriveTest.Params.CLAW_CLOSE, 1, "", true));
-
-
-            transferSeries.add(new CallBackTask(new CallBackTask.CallBackListener() {
-                @Override
-                public void setPosition(double value) {
-                    robot.setHorizontalSlideTargetPosition((int) value);
-
-                }
-
-                @Override
-                public double getPosition() {
-
-                    return robot.getHorizontalSlidePosition();
-                }
-            }, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "", true));
-
-            transferSeries.add(new CallBackTask(new CallBackTask.CallBackListener() {
-                @Override
-                public void setPosition(double value) {
-                    robot.setVerticalSlideTargetPosition((int) value);
-
-                }
-
-                @Override
-                public double getPosition() {
-
-                    return robot.getVerticalSlidePosition();
-                }
-            }, DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION, 1, "", true));
-
-            taskArrayList.add(transferSeries);
-
-        } else if(joystick.gamepad1GetX()) {
-            robot.setIntakeAngleServoPosition(.48);
+            robot.switchState(State.WALLPICKUP);
         } else if(joystick.gamepad1GetB()) {
-            robot.setIntakeAngleServoPosition(.51);
-        } else if(joystick.gamepad1GetRightBumperDown()) {
-            robot.setClawPosition(DriveTest.Params.CLAW_CLOSE);
-        } else if(joystick.gamepad1GetLeftBumperDown()) {
-            robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
-        } else if(joystick.gamepad1GetDUp()) {
-            robot.increseVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION);
-        } else if(joystick.gamepad1GetDDown()) {
-            robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
-        } else if(joystick.gamepad1GetDRight()) {
-            robot.increseHorizontalSlideTargetPosition(50);
-        } else if(joystick.gamepad1GetDLeft()) {
-            robot.increseHorizontalSlideTargetPosition(-50);
+            robot.switchState(State.INTAKING);
         }
+        //robot.switchState(State.DROPPING_L1);
+
+
+//        else if(joystick.gamepad1GetX()) {
+//            robot.setIntakeAngleServoPosition(.48);
+//        } else if(joystick.gamepad1GetB()) {
+//            robot.switchState(State.SERVO_TEST);
+//        } else if(joystick.gamepad1GetRightBumperDown()) {
+//            robot.setClawPosition(DriveTest.Params.CLAW_CLOSE);
+//        } else if(joystick.gamepad1GetLeftBumperDown()) {
+//            robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
+//        } else if(joystick.gamepad1GetDUp()) {
+//            robot.increseVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION);
+//        } else if(joystick.gamepad1GetDDown()) {
+//            robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
+//        } else if(joystick.gamepad1GetDRight()) {
+//            robot.increseHorizontalSlideTargetPosition(50);
+//        } else if(joystick.gamepad1GetDLeft()) {
+//            robot.increseHorizontalSlideTargetPosition(-50);
+//        }
         /*
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
@@ -123,28 +92,13 @@ public class InitialState implements IRobot {
 
          */
 
-        robot.setIntakePower(joystick.gamepad1GetRightTrigger()-joystick.gamepad1GetLeftTrigger());
+       // robot.setIntakePower(joystick.gamepad1GetRightTrigger()-joystick.gamepad1GetLeftTrigger());
 
 
         executeTasks(telemetry);
     }
 
-    public void executeTasks(Telemetry telemetry) {
 
-        if(!taskArrayList.isEmpty()) {
-
-            boolean isStarted = taskArrayList.get(0).hasStarted();
-            boolean isRunning = taskArrayList.get(0).isRunning();
-            boolean isComplete = taskArrayList.get(0).isComplete();
-
-            taskArrayList.get(0).execute(telemetry);
-
-
-            if(isComplete){
-                taskArrayList.remove(0);
-            }
-        }
-    }
 
     @Override
     public State getState() {

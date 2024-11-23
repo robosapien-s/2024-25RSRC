@@ -6,19 +6,18 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.MotorController;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
-public class ExtendingState implements IRobot {
+public class ExtendingState extends BaseState {
 
     private boolean motorExtended = false;
-    private final JoystickWrapper joystick;
     private final MotorController motorController;
 
     public ExtendingState(JoystickWrapper joystick, MotorController motorController) {
-        this.joystick = joystick;
+        super(joystick);
         this.motorController = motorController;
     }
 
     @Override
-    public void initialize(Robot robot) {
+    public void initialize(Robot robot, IRobot prevState) {
 
     }
 

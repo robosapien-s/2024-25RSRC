@@ -10,8 +10,10 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
 
     private final PIDEx pidController;
     private int targetPosition;
+    private int maxPostition;
+    private int minPosition;
 
-    public RobotPidMechanism(double kp, double ki, double kd, double minL, double maxL, double rampRate) {
+    public RobotPidMechanism(double kp, double ki, double kd, double minL, double maxL, double rampRate, int inMaxPostition, int inMinPosition) {
 
         PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
                 kp,     // Proportional gain
@@ -26,9 +28,14 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
         pidController = new PIDEx(pidCoefficients);
 
         targetPosition = 0;
+        maxPostition = inMaxPostition;
+        minPosition = inMinPosition;
     }
 
-    public RobotPidMechanism() {
+    public RobotPidMechanism( int inMaxPostition, int inMinPosition) {
+
+        maxPostition = inMaxPostition;
+        minPosition = inMinPosition;
 
         PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
                 0.005,     // Proportional gain
@@ -54,23 +61,23 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
         onSetPower(power);
     }
 
-    public void setTargetPosition(int position) {
-
-        if(position<0) {
-            targetPosition = 0;
-        } else {
-            targetPosition = position;
+    public int evaluateConstraints(int position) {
+        if(position < minPosition) {
+            position = minPosition;
+        } else if(position > maxPostition) {
+            position = maxPostition;
         }
+
+        return position;
+    }
+
+    public void setTargetPosition(int position) {
+        targetPosition = evaluateConstraints(position);
     }
 
     public void increaseTargetPosition(int offset) {
         //TODO need limit
-
-        int newTargetPosition = targetPosition + offset;
-        if(newTargetPosition < 0) {
-            newTargetPosition = 0;
-        }
-        targetPosition = newTargetPosition;
+        targetPosition = evaluateConstraints(targetPosition+offset);
     }
 
     public double testCapPower(double power, double cap) {

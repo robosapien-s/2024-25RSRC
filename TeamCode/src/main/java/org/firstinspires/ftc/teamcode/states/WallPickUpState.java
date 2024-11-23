@@ -1,101 +1,44 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.CallBackTask;
+import org.firstinspires.ftc.teamcode.controllers.RobotTaskParallel;
+import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
+import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
+import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
-public class WallPickUpState implements IRobot {
+public class WallPickUpState extends BaseState {
 
-    private enum Step {
-        CLOSE_CLAW,
-        LIFT_CLAW,
-        ROTATE_AND_ANGLE,
-        LIFT_VERTICAL_SLIDE,
-        MOVE_CLAW_SLIDE_FORWARD,
-        OPEN_CLAW,
-        RETURN_TO_ORIGINAL,
-        COMPLETE
+    public WallPickUpState(JoystickWrapper joystick) {
+        super(joystick);
     }
 
-    private Step currentStep = Step.CLOSE_CLAW;
-
-    private long stepStartTime = 0;
-    private static final long STEP_DELAY_MS = 500;
-
     @Override
-    public void initialize(Robot robot) {
-        currentStep = Step.CLOSE_CLAW;
-        stepStartTime = System.currentTimeMillis();
+    public void initialize(Robot robot, IRobot prevState) {
+
+        RobotTaskParallel transferParallel = new RobotTaskParallel();
+
+        transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "Claw", true));
+        transferParallel.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1000, "Horizontal", false));
+        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_WALL_POSITION, 1000, "Vertical", false));
+        transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
+        transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 1000, "ClawAngle", true));
+        transferParallel.add(createClawRotationTask( robot, DriveTest.Params.ROT_SERVO_BACK, 1000, "ClawRotation", true));
+
+        taskArrayList.add(transferParallel);
     }
 
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
-        long elapsedTime = System.currentTimeMillis() - stepStartTime;
 
-        switch (currentStep) {
-            case CLOSE_CLAW:
-                robot.setClawPosition(Robot.CLAW_CLOSE);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    stepStartTime = System.currentTimeMillis();
-                    currentStep = Step.LIFT_CLAW;
-                }
-                break;
-
-            case LIFT_CLAW:
-                robot.setVerticalSlideTargetPosition(500);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    stepStartTime = System.currentTimeMillis();
-                    currentStep = Step.ROTATE_AND_ANGLE;
-                }
-                break;
-
-            case ROTATE_AND_ANGLE:
-                robot.setClawRotationPosition(0.5);
-                robot.setClawAnglePosition(Robot.CLAW_ANGLE_FORWARD);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    stepStartTime = System.currentTimeMillis();
-                    currentStep = Step.LIFT_VERTICAL_SLIDE;
-                }
-                break;
-
-            case LIFT_VERTICAL_SLIDE:
-                robot.setVerticalSlideTargetPosition(2000);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    stepStartTime = System.currentTimeMillis();
-                    currentStep = Step.MOVE_CLAW_SLIDE_FORWARD;
-                }
-                break;
-
-            case MOVE_CLAW_SLIDE_FORWARD:
-                robot.setClawSlideTargetPosition(Robot.CLAW_SLIDER_FORWARD);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    stepStartTime = System.currentTimeMillis();
-                    currentStep = Step.OPEN_CLAW;
-                }
-                break;
-
-            case OPEN_CLAW:
-                robot.setClawPosition(Robot.CLAW_OPEN);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    stepStartTime = System.currentTimeMillis();
-                    currentStep = Step.RETURN_TO_ORIGINAL;
-                }
-                break;
-
-            case RETURN_TO_ORIGINAL:
-                robot.setClawSlideTargetPosition(Robot.CLAW_SLIDER_DOWN);
-                robot.setVerticalSlideTargetPosition(0);
-                robot.setClawRotationPosition(Robot.ROT_SERVO_DEFAULT);
-                robot.setClawAnglePosition(Robot.CLAW_ANGLE_DOWN);
-                if (elapsedTime >= STEP_DELAY_MS) {
-                    currentStep = Step.COMPLETE;
-                }
-                break;
-
-            case COMPLETE:
-                robot.switchState(State.INITIAL);
-                break;
+        if(joystick.gamepad1GetA()) {
+            robot.switchState(State.SPECIMEN_HANG);
+        } else if(joystick.gamepad1GetB())  {
+            robot.switchState(State.INTAKING);
         }
+        executeTasks(telemetry);
     }
 
     @Override

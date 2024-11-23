@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+
 public class VerticalSlideController extends RobotPidMechanism {
 
     private final DcMotorEx motorSlide1;
@@ -11,17 +13,34 @@ public class VerticalSlideController extends RobotPidMechanism {
 
     private boolean isLeftMotorEncoded = true;
 
-    public VerticalSlideController(HardwareMap hardwareMap, String mainSlide, String secondSlide, boolean inIsLeftMotorEncoded) {
+    public VerticalSlideController(HardwareMap hardwareMap, String mainSlide, String secondSlide, boolean inIsLeftMotorEncoded, int inMaxPosition, int inMinPosotion) {
+
+//        super(
+//                0.05,     // Proportional gain
+//                0.0001,    // Integral gain
+//                0.003,    // Derivative gain
+//                -1.0,      // Minimum output limit
+//                1.0,       // Maximum output limit
+//                0.1,  // Output ramp rate (optional)
+//                // Integral wind-up limit (optional),
+//                inMaxPosition,
+//                inMinPosotion
+//        );
+
 
         super(
-                0.05,     // Proportional gain
-                0.0001,    // Integral gain
-                0.0003,    // Derivative gain
+                DriveTest.Params.VERTICAL_SLIDE_PID_kp,     // Proportional gain
+                DriveTest.Params.VERTICAL_SLIDE_PID_ki,    // Integral gain
+                DriveTest.Params.VERTICAL_SLIDE_PID_kd,    // Derivative gain
                 -1.0,      // Minimum output limit
                 1.0,       // Maximum output limit
-                0.1       // Output ramp rate (optional)
-                // Integral wind-up limit (optional)
+                0.1,  // Output ramp rate (optional)
+                // Integral wind-up limit (optional),
+                inMaxPosition,
+                inMinPosotion
         );
+
+
 
         motorSlide1 = hardwareMap.get(DcMotorEx.class, mainSlide);
         motorSlide2 = hardwareMap.get(DcMotorEx.class, secondSlide);

@@ -9,6 +9,7 @@ public class SlideController extends RobotPidMechanism {
     private final DcMotorEx motorSlide2;
 
     public SlideController(HardwareMap hardwareMap) {
+        super(0,0);
         motorSlide1 = hardwareMap.get(DcMotorEx.class, "motorSlide1");
         motorSlide2 = hardwareMap.get(DcMotorEx.class, "motorSlide2");
 

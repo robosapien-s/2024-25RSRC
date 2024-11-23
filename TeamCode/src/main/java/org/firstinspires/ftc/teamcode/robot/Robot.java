@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
+import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.states.*;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
@@ -43,7 +44,7 @@ public class Robot {
     private final IDrive drive;
     private final JoystickWrapper joystick;
     private final HorizontalSlideController horizontalSlideController;
-    private final VerticalSlideController verticalSlideController;
+    private VerticalSlideController verticalSlideController;
     private final ClawSlideController clawSlideController;
 
     private final Servo clawAngleServo;
@@ -53,16 +54,19 @@ public class Robot {
 
     private final Servo intakeAngleServo;
 
+    private final HardwareMap hardwareMap = null;
+
 
     private final Map<State, Supplier<IRobot>> instanceStateMap = new HashMap<>();
 //    private IRobot drive;
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
+        hardwareMap = hardwareMap;
 
-        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1");
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true);
-        clawSlideController = new ClawSlideController(hardwareMap,  "clawSliderCR", "verticalSlide1");
+        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+        clawSlideController = new ClawSlideController(hardwareMap,  "clawSliderCR", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
@@ -70,17 +74,36 @@ public class Robot {
         intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
 
         instanceStateMap.put(State.INITIAL, () -> new InitialState(joystick));
-        instanceStateMap.put(State.INTAKING, IntakingState::new);
+        instanceStateMap.put(State.INTAKING, () -> new IntakingState(joystick));
         //instanceStateMap.put(State.EXTENDING, () -> new ExtendingState(joystick, motorController));
-        instanceStateMap.put(State.DROPPING, DroppingState::new);
-        instanceStateMap.put(State.WALLPICKUP, WallPickUpState::new);
+        instanceStateMap.put(State.DROPPING_L1, () -> new DroppingL1State(joystick));
+        instanceStateMap.put(State.DROPPING_L2, () -> new DroppingL2State(joystick));
+        instanceStateMap.put(State.WALLPICKUP, () -> new WallPickUpState(joystick));
+        instanceStateMap.put(State.SPECIMEN_HANG, () -> new SpecimenHangState(joystick));
+        instanceStateMap.put(State.SERVO_TEST, () -> new ServoTestState(joystick));
+        instanceStateMap.put(State.PID_TUNING, () -> new PidTuningState(joystick));
+
         //drive = new FieldCentricDriveState(joystick, motorController);
         switchState(State.INITIAL);
 
 
-        drive = new FCDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap);
         //drive = new FDrive(hardwareMap);
         //drive.init();
+    }
+
+    public void newVerticalControlPidTuning() {
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+
+    }
+
+    public HashMap<String, Servo> getServoForTesting() {
+        HashMap<String, Servo> servoHashMap = new HashMap<>();
+        servoHashMap.put("clawAngleServo", clawAngleServo);
+        servoHashMap.put("clawRotationServo", clawRotationServo);
+        servoHashMap.put("clawServo", clawServo);
+        servoHashMap.put("intakeAngleServo", intakeAngleServo);
+        return servoHashMap;
     }
 
     public State getCurrentState() {
@@ -92,8 +115,9 @@ public class Robot {
     }
 
     public void switchState(State newState) {
+        IRobot prevState = currentState;
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
-        currentState.initialize(this);
+        currentState.initialize(this, prevState);
     }
 
     public void execute(Telemetry telemetry) {
@@ -129,8 +153,14 @@ public class Robot {
         clawAngleServo.setPosition(position);
     }
 
+    public double getClawAnglePosition() {return clawAngleServo.getPosition();}
+
     public void setClawRotationPosition(double position) {
         clawRotationServo.setPosition(position);
+    }
+
+    public double getClawRotationPosition() {
+        return clawRotationServo.getPosition();
     }
 
     public void setClawPosition(double position) {
@@ -151,7 +181,8 @@ public class Robot {
     public int getHorizontalSlidePosition(){
         return horizontalSlideController.getCurrentPosition();
     }
-    public int getClawSlide(){
+    public int getClawSlidePosition(){
         return clawSlideController.getCurrentPosition();
     }
+
 }
