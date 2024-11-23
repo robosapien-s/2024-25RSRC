@@ -20,25 +20,6 @@ import java.util.function.Supplier;
 
 public class Robot {
 
-    public static final double CLAW_OPEN = 0.3;
-    public static final double CLAW_CLOSE = 0.67;
-
-    public static final double ROT_SERVO_DEFAULT = 0.4;
-
-    public static final double CLAW_ANGLE_FORWARD = 1.0;
-    public static final double CLAW_ANGLE_DOWN = 0.5;
-    public static final double CLAW_ANGLE_BACK = 0.0;
-
-    public static final int CLAW_SLIDER_FORWARD = 0;
-    public static final int CLAW_SLIDER_DOWN = 2000;
-    public static final int CLAW_SLIDER_BACK = -21110;
-
-    public static final int HORIZONTAL_SLIDE_INTAKE_INITIAL = 200;
-
-    public static final double INTAKE_ANGLE_TRANSFER = .48;
-    public static final double INTAKE_ANGLE_DOWN = .51;
-    public static final int VERTICAL_SLIDE_POSITION = 140;
-
     //private static Robot instance;
     private IRobot currentState;
     private final IDrive drive;
@@ -129,50 +110,62 @@ public class Robot {
 
     }
 
-    public void setHorizontalSlideTargetPosition(int target) {
+    public Robot setHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.setTargetPosition(target);
+        return this;
     }
 
-    public void setVerticalSlideTargetPosition(int target) {
+    public Robot setVerticalSlideTargetPosition(int target) {
         verticalSlideController.setTargetPosition(target);
+        return this;
     }
 
-    public void increseVerticalSlideTargetPosition(int target) {
+    public Robot increseVerticalSlideTargetPosition(int target) {
         verticalSlideController.increaseTargetPosition(target);
+        return this;
     }
 
-    public void increseHorizontalSlideTargetPosition(int target) {
+    public Robot increseHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.increaseTargetPosition(target);
+        return this;
     }
 
-    public void setClawSlideTargetPosition(int target) {
+    public Robot setClawSlideTargetPosition(int target) {
         clawSlideController.setTargetPosition(target);
+        return this;
     }
 
-    public void setClawAnglePosition(double position) {
+    public Robot setClawAnglePosition(double position) {
         clawAngleServo.setPosition(position);
+        return this;
     }
 
-    public double getClawAnglePosition() {return clawAngleServo.getPosition();}
+    public double getClawAnglePosition() {
+        return clawAngleServo.getPosition();
+    }
 
-    public void setClawRotationPosition(double position) {
+    public Robot setClawRotationPosition(double position) {
         clawRotationServo.setPosition(position);
+        return this;
     }
 
     public double getClawRotationPosition() {
         return clawRotationServo.getPosition();
     }
 
-    public void setClawPosition(double position) {
+    public Robot setClawPosition(double position) {
         clawServo.setPosition(position);
+        return this;
     }
 
-    public void setIntakePower(double power) {
+    public Robot setIntakePower(double power) {
         intakeServo.setPower(power);
+        return this;
     }
 
-    public void setIntakeAngleServoPosition(double position) {
+    public Robot setIntakeAngleServoPosition(double position) {
         intakeAngleServo.setPosition(position);
+        return this;
     }
 
     public int getVerticalSlidePosition(){
