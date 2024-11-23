@@ -38,7 +38,7 @@ public class DriveTest extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_TRANSFER_POSITION = 420;
 
-        public static int VERTICAL_SLIDE_WALL_POSITION = 275;
+        public static int VERTICAL_SLIDE_WALL_POSITION = 20;
 
         public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1450;
 

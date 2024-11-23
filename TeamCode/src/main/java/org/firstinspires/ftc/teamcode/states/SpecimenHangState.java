@@ -22,8 +22,9 @@ public class SpecimenHangState extends BaseState {
 
 
         taskArrayList.add(createClawTask(robot, DriveTest.Params.CLAW_CLOSE, 500, "Claw", false));
+        taskArrayList.add(createVerticalSlideTask( robot, 30, 100, "ClawSlide", true));
         taskArrayList.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_FORWARD, 500, "ClawSlide", true));
-
+        taskArrayList.add(createVerticalSlideTask( robot, DriveTest.Params.VERTICAL_SLIDE_WALL_POSITION, 100, "ClawSlide", true));
         RobotTaskParallel transferParallel = new RobotTaskParallel();
 
         transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_FORWARD, 1000, "ClawAngle", true));
