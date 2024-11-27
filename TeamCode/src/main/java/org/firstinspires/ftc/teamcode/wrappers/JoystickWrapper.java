@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.wrappers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.usefulStuff.QuikMaths;
+
 // REMOVED STICK ANGLE BECAUSE OF ROADRUNNER DEPENDENCY ADD BACK WHEN POSSIBLE
 public class JoystickWrapper {
 
@@ -51,6 +53,14 @@ public class JoystickWrapper {
 
     double gamepad2leftStickLastDirection;
     double gamepad2rightStickLastDirection;
+
+    public double gamepad1GetLeftStickAngleRaw() {
+        return QuikMaths.GetAngleFromVector(-gamepad1.left_stick_y, -gamepad1.left_stick_x);
+    }
+
+    public double gamepad1GetRightStickAngleRaw() {
+        return QuikMaths.GetAngleFromVector(-gamepad1.right_stick_y, -gamepad1.right_stick_x);
+    }
 
 
     public JoystickWrapper(Gamepad inGamepad1, Gamepad inGamepad2) {
@@ -544,6 +554,13 @@ public class JoystickWrapper {
     }
 
 
+    public double gamepad2GetLeftStickAngleRaw() {
+        return QuikMaths.GetAngleFromVector(gamepad2.left_stick_x, gamepad2.left_stick_y);
+    }
+
+    public double gamepad2GetRightStickAngleRaw() {
+        return QuikMaths.GetAngleFromVector(gamepad2.right_stick_x, gamepad2.right_stick_y);
+    }
 
 
 

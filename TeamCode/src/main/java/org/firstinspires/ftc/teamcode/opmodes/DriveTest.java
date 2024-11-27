@@ -19,16 +19,16 @@ public class DriveTest extends LinearOpMode {
         public static double CLAW_OPEN = 0.3;
         public static double CLAW_CLOSE = 0.67;
 
-        public static double ROT_SERVO_DEFAULT = 0.86;
-        public static double ROT_SERVO_BACK = 0.18;
+        public static double ROT_SERVO_DEFAULT = 0.0794;
+        public static double ROT_SERVO_BACK = 0.7394;
 
         public static double CLAW_ANGLE_FORWARD = 0;
         public static double CLAW_ANGLE_DOWN = 0.3;
         public static double CLAW_ANGLE_BACK = 0.6;
 
-        public static int CLAW_SLIDER_FORWARD = 8000;
+        public static int CLAW_SLIDER_FORWARD = 4400;
         public static int CLAW_SLIDER_DOWN = 0;
-        public static int CLAW_SLIDER_BACK = -9300;
+        public static int CLAW_SLIDER_BACK = -5000;
 
         public static int HORIZONTAL_SLIDE_INTAKE_INITIAL = 200;
 
@@ -65,7 +65,7 @@ public class DriveTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        Robot robot = new Robot(hardwareMap, gamepad1, gamepad2);
+        Robot robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry);
 
 
 

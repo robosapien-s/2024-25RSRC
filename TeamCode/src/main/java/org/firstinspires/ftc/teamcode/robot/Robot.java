@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.states.*;
+import org.firstinspires.ftc.teamcode.robot.AngleDrive;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 import java.util.HashMap;
@@ -60,7 +61,7 @@ public class Robot {
     private final Map<State, Supplier<IRobot>> instanceStateMap = new HashMap<>();
 //    private IRobot drive;
 
-    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         hardwareMap = hardwareMap;
 
@@ -87,8 +88,9 @@ public class Robot {
         switchState(State.INITIAL);
 
 
-        drive = new MecanumDrive(hardwareMap);
-        //drive = new FDrive(hardwareMap);
+        //drive = new MecanumDrive(hardwareMap);
+        //drive = new FCDrive(hardwareMap);
+        drive = new AngleDrive(hardwareMap);
         //drive.init();
     }
 
