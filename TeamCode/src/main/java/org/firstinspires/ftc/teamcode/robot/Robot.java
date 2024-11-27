@@ -1,17 +1,23 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.states.*;
-import org.firstinspires.ftc.teamcode.robot.AngleDrive;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 import java.util.HashMap;
@@ -21,7 +27,6 @@ import java.util.function.Supplier;
 
 public class Robot {
 
-    //private static Robot instance;
     private IRobot currentState;
     private final IDrive drive;
     private final JoystickWrapper joystick;
@@ -33,22 +38,19 @@ public class Robot {
     private final Servo clawRotationServo;
     private final Servo clawServo;
     private final CRServo intakeServo;
-
     private final Servo intakeAngleServo;
 
-    private final HardwareMap hardwareMap = null;
-
+    private final HardwareMap hardwareMap;
 
     private final Map<State, Supplier<IRobot>> instanceStateMap = new HashMap<>();
-//    private IRobot drive;
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
-        hardwareMap = hardwareMap;
+        this.hardwareMap = hardwareMap;
 
         horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
-        clawSlideController = new ClawSlideController(hardwareMap,  "clawSliderCR", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
@@ -57,7 +59,6 @@ public class Robot {
 
         instanceStateMap.put(State.INITIAL, () -> new InitialState(joystick));
         instanceStateMap.put(State.INTAKING, () -> new IntakingState(joystick));
-        //instanceStateMap.put(State.EXTENDING, () -> new ExtendingState(joystick, motorController));
         instanceStateMap.put(State.DROPPING_L1, () -> new DroppingL1State(joystick));
         instanceStateMap.put(State.DROPPING_L2, () -> new DroppingL2State(joystick));
         instanceStateMap.put(State.WALLPICKUP, () -> new WallPickUpState(joystick));
@@ -65,19 +66,13 @@ public class Robot {
         instanceStateMap.put(State.SERVO_TEST, () -> new ServoTestState(joystick));
         instanceStateMap.put(State.PID_TUNING, () -> new PidTuningState(joystick));
 
-        //drive = new FieldCentricDriveState(joystick, motorController);
         switchState(State.INITIAL);
 
-
-        //drive = new MecanumDrive(hardwareMap);
-        //drive = new FCDrive(hardwareMap);
         drive = new AngleDrive(hardwareMap);
-        //drive.init();
     }
 
     public void newVerticalControlPidTuning() {
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
-
     }
 
     public HashMap<String, Servo> getServoForTesting() {
@@ -90,7 +85,7 @@ public class Robot {
     }
 
     public State getCurrentState() {
-        if(currentState != null) {
+        if (currentState != null) {
             return currentState.getState();
         } else {
             return State.INVALID;
@@ -109,7 +104,6 @@ public class Robot {
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         clawSlideController.update(telemetry);
-
     }
 
     public Robot setHorizontalSlideTargetPosition(int target) {
@@ -170,14 +164,56 @@ public class Robot {
         return this;
     }
 
-    public int getVerticalSlidePosition(){
+    public int getVerticalSlidePosition() {
         return verticalSlideController.getCurrentPosition();
     }
-    public int getHorizontalSlidePosition(){
+
+    public int getHorizontalSlidePosition() {
         return horizontalSlideController.getCurrentPosition();
     }
-    public int getClawSlidePosition(){
+
+    public int getClawSlidePosition() {
         return clawSlideController.getCurrentPosition();
     }
+
+    public String sensorColor() {
+        // Create a color sensor reference
+        NormalizedColorSensor colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
+
+        // Variables for gain adjustment and HSV color values
+        float gain = 2.0f;
+        final float[] hsvValues = new float[3];
+
+        // Enable the sensor's light if it supports SwitchableLight
+        if (colorSensor instanceof SwitchableLight) {
+            ((SwitchableLight) colorSensor).enableLight(true);
+        }
+
+        // Adjust sensor gain (if needed)
+        colorSensor.setGain(gain);
+
+        // Retrieve the normalized colors from the sensor
+        NormalizedRGBA colors = colorSensor.getNormalizedColors();
+
+        // Convert the colors to HSV
+        Color.colorToHSV(colors.toColor(), hsvValues);
+
+        // Analyze the hue to determine the color
+        float hue = hsvValues[0];
+        String detectedColor;
+
+        if ((hue >= 0 && hue <= 30) || (hue >= 330 && hue <= 360)) {
+            detectedColor = "Red"; // Hue range for red
+        } else if (hue >= 210 && hue <= 270) {
+            detectedColor = "Blue"; // Hue range for blue
+        } else if (hue >= 45 && hue <= 75) {
+            detectedColor = "Yellow"; // Hue range for yellow
+        } else {
+            detectedColor = "None"; // No specified color detected
+        }
+
+        return detectedColor;
+    }
+
 
 }
