@@ -299,6 +299,13 @@ public class JoystickWrapper {
         return gamepad1.right_stick_y;
     }
 
+    public double gamepad1GetExponentialRightStickX(double exponent) {
+        return Math.signum(gamepad1.right_stick_x)*Math.abs(Math.pow(gamepad1.right_stick_x, exponent));
+    }
+
+    public double gamepad1GetExponentialRightStickY(double exponent) {
+        return Math.signum(gamepad1.right_stick_y)*Math.abs(Math.pow(gamepad1.right_stick_y, exponent));
+    }
     public double gamepad1GetLeftStickX() {
         return gamepad1.left_stick_x;
     }
@@ -307,9 +314,19 @@ public class JoystickWrapper {
         return gamepad1.left_stick_y;
     }
 
+    public double gamepad1GetExponentialLeftStickX(double exponent) {
+        return Math.signum(gamepad1.left_stick_x)*Math.abs(Math.pow(gamepad1.left_stick_x, exponent));
+    }
+
+    public double gamepad1GetExponentialLeftStickY(double exponent) {
+        return Math.signum(gamepad1.left_stick_y)*Math.abs(Math.pow(gamepad1.left_stick_y, exponent));
+    }
+
     public boolean gamepad1GetARaw() {
         return gamepad1.a;
     }
+
+
 
 
 

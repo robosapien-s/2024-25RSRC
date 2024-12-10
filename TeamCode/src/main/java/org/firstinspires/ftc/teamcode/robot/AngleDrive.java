@@ -159,7 +159,7 @@ public class AngleDrive implements IDrive {
 
         Translation2d translation2d;
 
-        translation2d =RotateAngle(joystickWrapper.gamepad1GetLeftStickX(),joystickWrapper.gamepad1GetLeftStickY(),yaw);
+        translation2d =RotateAngle(joystickWrapper.gamepad1GetExponentialLeftStickX(2),joystickWrapper.gamepad1GetExponentialLeftStickY(2),yaw);
 
 
         if(isAutoMode && joystickWrapper.gamepad1GetLeftStick()) {
