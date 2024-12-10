@@ -12,6 +12,7 @@ public interface IRobot {
         EXTENDING,
         INITIAL,
         INTAKING,
+        INTAKINGCLAW,
         MECANUM_DRIVE,
         WALLPICKUP,
         FIELD_CENTRIC_DRIVE,

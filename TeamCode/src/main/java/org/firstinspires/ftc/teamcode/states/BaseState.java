@@ -117,6 +117,72 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
+
+
+    protected IRobotTask createIntakeClawTask(Robot robot, double position, int duration, String name, boolean steps) {
+
+        return new CallBackTask(new CallBackTask.CallBackListener() {
+            @Override
+            public void setPosition(double value) {
+                robot.setIntakeClawServo(value);
+            }
+
+            @Override
+            public double getPosition() {
+                return robot.getIntakeClawServo();
+            }
+        }, position, duration, name, steps);
+    }
+
+
+    protected IRobotTask createIntakeClawAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
+
+        return new CallBackTask(new CallBackTask.CallBackListener() {
+            @Override
+            public void setPosition(double value) {
+                robot.setIntakeAngleServo(value);
+            }
+
+            @Override
+            public double getPosition() {
+                return robot.getIntakeAngleServo();
+            }
+        }, position, duration, name, steps);
+    }
+
+    protected IRobotTask createIntakeRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
+
+        return new CallBackTask(new CallBackTask.CallBackListener() {
+            @Override
+            public void setPosition(double value) {
+                robot.setIntakeRotationServo(value);
+            }
+
+            @Override
+            public double getPosition() {
+                return robot.getIntakeRotationServo();
+            }
+        }, position, duration, name, steps);
+    }
+
+    protected IRobotTask createIntakeKnuckleTask(Robot robot, double position, int duration, String name, boolean steps) {
+
+        return new CallBackTask(new CallBackTask.CallBackListener() {
+            @Override
+            public void setPosition(double value) {
+                robot.setIntakeKnuckleServo(value);
+            }
+
+            @Override
+            public double getPosition() {
+                return robot.getIntakeKnuckleServo();
+            }
+        }, position, duration, name, steps);
+    }
+
+
+
+
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 

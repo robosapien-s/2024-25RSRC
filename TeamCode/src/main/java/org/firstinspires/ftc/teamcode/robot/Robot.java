@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.robot;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -12,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -39,6 +37,9 @@ public class Robot {
     private final Servo clawServo;
     private final CRServo intakeServo;
     private final Servo intakeAngleServo;
+    private final Servo intakeKnuckleServo;
+    private final Servo intakeRotationServo;
+    private final Servo intakeClawServo;
 
     private final HardwareMap hardwareMap;
 
@@ -54,8 +55,13 @@ public class Robot {
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
+
         intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+
         intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
+        intakeKnuckleServo = hardwareMap.get(Servo.class, "intakeKnuckleServo");
+        intakeRotationServo = hardwareMap.get(Servo.class, "intakeRotationServo");
+        intakeClawServo = hardwareMap.get(Servo.class, "intakeClawServo");
 
         instanceStateMap.put(State.INITIAL, () -> new InitialState(joystick));
         instanceStateMap.put(State.INTAKING, () -> new IntakingState(joystick));
@@ -65,8 +71,9 @@ public class Robot {
         instanceStateMap.put(State.SPECIMEN_HANG, () -> new SpecimenHangState(joystick));
         instanceStateMap.put(State.SERVO_TEST, () -> new ServoTestState(joystick));
         instanceStateMap.put(State.PID_TUNING, () -> new PidTuningState(joystick));
+        instanceStateMap.put(State.INTAKINGCLAW, () -> new IntakingStateClaw(joystick));
 
-        switchState(State.INITIAL);
+        switchState(State.INTAKINGCLAW);
 
         drive = new AngleDrive(hardwareMap);
     }
@@ -154,14 +161,46 @@ public class Robot {
         return this;
     }
 
+
+
+    public Robot setIntakeKnuckleServo(double position) {
+        intakeKnuckleServo.setPosition(position);
+        return this;
+    }
+    public double getIntakeKnuckleServo() {
+        return intakeKnuckleServo.getPosition();
+    }
+
+
+    public Robot setIntakeRotationServo(double position) {
+        intakeRotationServo.setPosition(position);
+        return this;
+    }
+    public double getIntakeRotationServo() {
+        return intakeRotationServo.getPosition();
+    }
+
+    public Robot setIntakeClawServo(double position) {
+        intakeClawServo.setPosition(position);
+        return this;
+    }
+    public double getIntakeClawServo() {
+        return intakeClawServo.getPosition();
+    }
+
+
     public Robot setIntakePower(double power) {
         intakeServo.setPower(power);
         return this;
     }
 
-    public Robot setIntakeAngleServoPosition(double position) {
+    public Robot setIntakeAngleServo(double position) {
         intakeAngleServo.setPosition(position);
         return this;
+    }
+
+    public double getIntakeAngleServo() {
+        return intakeAngleServo.getPosition();
     }
 
     public int getVerticalSlidePosition() {

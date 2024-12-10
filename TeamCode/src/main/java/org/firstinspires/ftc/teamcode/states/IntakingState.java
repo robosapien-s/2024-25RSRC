@@ -22,7 +22,7 @@ public class IntakingState extends BaseState {
             robot.setClawSlideTargetPosition(DriveTest.Params.CLAW_SLIDER_DOWN);
             robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
             robot.setHorizontalSlideTargetPosition(0);
-            robot.setIntakeAngleServoPosition(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
+            robot.setIntakeAngleServo(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
         } else {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "ClawClose", false));

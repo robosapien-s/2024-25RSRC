@@ -40,7 +40,7 @@ public class SpecimenHangState extends BaseState {
 
         if(joystick.gamepad1GetB()) {
             //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
-            robot.switchState(State.INTAKING);
+            robot.switchState(State.INTAKINGCLAW);
         } else if(joystick.gamepad1GetA()) {
             if(subState == 0) {
                 subState++;

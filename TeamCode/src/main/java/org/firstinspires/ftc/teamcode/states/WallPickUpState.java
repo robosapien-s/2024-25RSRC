@@ -36,7 +36,7 @@ public class WallPickUpState extends BaseState {
         if(joystick.gamepad1GetA()) {
             robot.switchState(State.SPECIMEN_HANG);
         } else if(joystick.gamepad1GetB())  {
-            robot.switchState(State.INTAKING);
+            robot.switchState(State.INTAKINGCLAW);
         }
         executeTasks(telemetry);
     }

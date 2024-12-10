@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.controllers.CallBackTask;
-import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
-import java.util.ArrayList;
 
 public class InitialState extends BaseState {
 
@@ -28,7 +24,7 @@ public class InitialState extends BaseState {
             robot.setClawSlideTargetPosition(DriveTest.Params.CLAW_SLIDER_DOWN);
             robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
             robot.setHorizontalSlideTargetPosition(0);
-            robot.setIntakeAngleServoPosition(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
+            robot.setIntakeAngleServo(DriveTest.Params.INTAKE_ANGLE_TRANSFER);
         } else {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1000, "ClawClose", true));

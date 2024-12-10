@@ -16,13 +16,16 @@ public class DroppingL1State extends BaseState {
         super(joystick);
     }
 
+    public int getHeight() {
+        return DriveTest.Params.VERTICAL_SLIDE_DROP_L1;
+    }
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
         RobotTaskSeries transferSeries = new RobotTaskSeries();
-        transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_CLOSE, 500, "ClawClose", false));
-        transferSeries.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 500, "HorizontalSlide", false));
-        transferSeries.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DROP_L1, 1, "VerticalSlide", false));
+        transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_CLOSE, 1, "ClawClose", false));
+        transferSeries.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "HorizontalSlide", false));
+        transferSeries.add(createVerticalSlideTask(robot, getHeight(), 1, "VerticalSlide", false));
         transferSeries.add(createClawSlideTask(robot, DriveTest.Params.CLAW_SLIDER_BACK, 1, "CLAW_SLIDER_BACK", false));
         transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_BACK, 1, "CLAW_ANGLE_BACK", false));
         transferSeries.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_DEFAULT, 1, "ROT_SERVO_BACK", false));
@@ -40,10 +43,10 @@ public class DroppingL1State extends BaseState {
                 substate++;
                 robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
             } else {
-                robot.switchState(State.INTAKING);
+                robot.switchState(State.INTAKINGCLAW);
             }
         } else if(joystick.gamepad1GetA()) {
-            robot.switchState(State.WALLPICKUP);
+            robot.switchState(State.INTAKINGCLAW);
         }
 
         executeTasks(telemetry);
