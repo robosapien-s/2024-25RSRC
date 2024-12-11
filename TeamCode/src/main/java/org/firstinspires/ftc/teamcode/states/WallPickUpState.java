@@ -18,17 +18,15 @@ public class WallPickUpState extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
-        RobotTaskParallel transferParallel = new RobotTaskParallel();
+        RobotTaskSeries transferParallel = new RobotTaskSeries();
 
         transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "Claw", false));
         transferParallel.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1000, "Horizontal", false));
         transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_WALL_POSITION, 1000, "Vertical", false));
         transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
         transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 1000, "ClawAngle", false));
-        transferParallel.add(createClawRotationTask( robot, DriveTest.Params.ROT_SERVO_BACK, 1000, "ClawRotation", false));
+        transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,100,"ClawRotation",false));
         transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 1000, "Vertical", false));
-        transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_CLOSE, 1, "Claw", false));
-        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION, 1000, "Vertical", false));
         taskArrayList.add(transferParallel);
     }
 
