@@ -8,7 +8,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import org.firstinspires.ftc.teamcode.robot.HorizontalSlideController;
 
 @TeleOp(name = "PID Test", group = "Test")
-public class PidTest extends LinearOpMode {
+public class HorizontalPidTest extends LinearOpMode {
 
     private HorizontalSlideController slideController;
     private double lastkP = 0.0, lastkI = 0.0, lastkD = 0.0;

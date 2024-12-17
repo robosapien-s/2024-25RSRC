@@ -43,13 +43,7 @@ public class HorizontalSlideController extends RobotPidMechanism {
         motorSlide1.setPower(-power);
     }
 
-    /**
-     * Calculate the PID output based on the current and target positions.
-     *
-     * @param targetPosition The desired target position.
-     * @param currentPosition The current position of the motor.
-     * @return The power to be set to the motor.
-     */
+
     public double calculateOutput(int targetPosition, int currentPosition) {
         double error = targetPosition - currentPosition;
 
