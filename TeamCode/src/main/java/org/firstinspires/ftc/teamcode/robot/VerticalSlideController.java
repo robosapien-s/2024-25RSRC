@@ -12,9 +12,9 @@ public class VerticalSlideController extends RobotPidMechanism {
     private final DcMotorEx motorSlide2;
 
     // Dashboard-configurable PID coefficients and target position
-    public static double kP = 0.05;
+    public static double kP = 0.1;
     public static double kI = 0.0001;
-    public static double kD = 0.003;
+    public static double kD = 0.03;
     public static int targetPosition = 0;
 
     private boolean isLeftMotorEncoded = true;
@@ -59,12 +59,19 @@ public class VerticalSlideController extends RobotPidMechanism {
     @Override
     public void onSetPower(double power) {
         if (isLeftMotorEncoded) {
-            motorSlide1.setPower(-power);
-            motorSlide2.setPower(-power);
+           motorSlide1.setPower(-power);
+           motorSlide2.setPower(-power);
         } else {
-            motorSlide1.setPower(-power);
-            motorSlide2.setPower(power);
+           motorSlide1.setPower(-power);
+           motorSlide2.setPower(power);
         }
+
+        currentPower = power;
+    }
+
+    double currentPower = 0;
+    public double getCurrentPower() {
+        return currentPower;
     }
 
     // PID reset method to clear integral and previous error
