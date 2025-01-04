@@ -83,11 +83,123 @@ public class Robot {
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(1); // Set pipeline for AprilTag detection
         limelight.start();
 
         switchState(State.INITIAL);
         drive = new AngleDrive(hardwareMap);
+    }
+    public Robot setHorizontalSlideTargetPosition(int target) {
+        horizontalSlideController.setTargetPosition(target);
+        return this;
+    }
+
+    public Robot setVerticalSlideTargetPosition(int target) {
+        verticalSlideController.setTargetPosition(target);
+        return this;
+    }
+
+    public Robot increseVerticalSlideTargetPosition(int target) {
+        verticalSlideController.increaseTargetPosition(target);
+        return this;
+    }
+
+    public Robot increseHorizontalSlideTargetPosition(int target) {
+        horizontalSlideController.increaseTargetPosition(target);
+        return this;
+    }
+
+    public Robot setClawSlideTargetPosition(int target) {
+        clawSlideController.setTargetPosition(target);
+        return this;
+    }
+
+    public Robot setClawAnglePosition(double position) {
+        clawAngleServo.setPosition(position);
+        return this;
+    }
+
+    public double getClawAnglePosition() {
+        return clawAngleServo.getPosition();
+    }
+
+    public Robot setClawRotationPosition(double position) {
+        clawRotationServo.setPosition(position);
+        return this;
+    }
+
+    public double getClawRotationPosition() {
+        return clawRotationServo.getPosition();
+    }
+
+    public Robot setClawPosition(double position) {
+        clawServo.setPosition(position);
+        return this;
+    }
+
+
+
+    public Robot setIntakeKnuckleServo(double position) {
+        intakeKnuckleServo.setPosition(position);
+        return this;
+    }
+    public double getIntakeKnuckleServo() {
+        return intakeKnuckleServo.getPosition();
+    }
+
+
+    public Robot setIntakeRotationServo(double position) {
+        intakeRotationServo.setPosition(position);
+        return this;
+    }
+    public double getIntakeRotationServo() {
+        return intakeRotationServo.getPosition();
+    }
+
+    public Robot setIntakeClawServo(double position) {
+        intakeClawServo.setPosition(position);
+        return this;
+    }
+    public double getIntakeClawServo() {
+        return intakeClawServo.getPosition();
+    }
+
+
+    public Robot setIntakePower(double power) {
+        intakeServo.setPower(power);
+        return this;
+    }
+
+    public Robot setIntakeAngleServo(double position) {
+        intakeAngleServo.setPosition(position);
+        return this;
+    }
+
+    public double getIntakeAngleServo() {
+        return intakeAngleServo.getPosition();
+    }
+
+    public int getVerticalSlidePosition() {
+        return verticalSlideController.getCurrentPosition();
+    }
+
+    public int getHorizontalSlidePosition() {
+        return horizontalSlideController.getCurrentPosition();
+    }
+
+    public int getClawSlidePosition() {
+        return clawSlideController.getCurrentPosition();
+    }
+    public void newVerticalControlPidTuning() {
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+    }
+    public HashMap<String, Servo> getServoForTesting() {
+        HashMap<String, Servo> servoHashMap = new HashMap<>();
+        servoHashMap.put("clawAngleServo", clawAngleServo);
+        servoHashMap.put("clawRotationServo", clawRotationServo);
+        servoHashMap.put("clawServo", clawServo);
+        servoHashMap.put("intakeAngleServo", intakeAngleServo);
+        return servoHashMap;
     }
 
     public void execute(Telemetry telemetry) {
@@ -103,6 +215,14 @@ public class Robot {
         verticalSlideController.update(telemetry);
         clawSlideController.update(telemetry);
     }
+    public State getCurrentState() {
+        if (currentState != null) {
+            return currentState.getState();
+        } else {
+            return State.INVALID;
+        }
+    }
+
 
     private void pollForAprilTag(Telemetry telemetry) {
         LLResult result = limelight.getLatestResult();
