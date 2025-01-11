@@ -4,12 +4,13 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class ClawSlideController extends RobotPidMechanism {
+public class DualServoSlideController extends RobotPidMechanism{
 
-    private final CRServo servo;
+    private final CRServo servo1;
+    private final CRServo servo2;
     private final DcMotorEx servoEncoder;
 
-    public ClawSlideController(HardwareMap hardwareMap, String servoName, String encoderName, int inMaxPosition, int inMinPosition) {
+    public DualServoSlideController(HardwareMap hardwareMap, String servo1Name, String servo2name, String encoderName, int inMaxPosition, int inMinPosition) {
 
         super(  0.0009,     // Proportional gain
                 0.0,    // Integral gain
@@ -23,7 +24,8 @@ public class ClawSlideController extends RobotPidMechanism {
         );
 
 
-        servo = hardwareMap.get(CRServo.class, servoName);
+        servo1 = hardwareMap.get(CRServo.class, servo1Name);
+        servo2 = hardwareMap.get(CRServo.class, servo2name);
         servoEncoder = hardwareMap.get(DcMotorEx.class, encoderName);
     }
 
@@ -32,14 +34,15 @@ public class ClawSlideController extends RobotPidMechanism {
         return servoEncoder.getCurrentPosition();
     }
 
-    @Override
+
     public void onSetPower(double power) {
         double cappedPower = testCapPower(power, 1);
-        servo.setPower(cappedPower);
+        servo1.setPower(cappedPower);
+        servo2.setPower(cappedPower);
     }
 
     @Override
     public String getName() {
-        return "Claw Slider";
+        return "Dual Claw Slider";
     }
 }

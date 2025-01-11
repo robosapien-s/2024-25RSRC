@@ -81,6 +81,12 @@ public class ServoTestState extends BaseState {
             }
         }
 
+        if (joystick.gamepad1GetA()) {
+            robot.setDualSlideTargetPosition(50);
+        }
+        if (joystick.gamepad1GetB()) {
+            robot.setDualSlideTargetPosition(0);
+        }
 
         String servoName = servoNames.get(index);
         telemetry.addData(servoName, Objects.requireNonNull(servoHashMap.get(servoName)).getPosition());

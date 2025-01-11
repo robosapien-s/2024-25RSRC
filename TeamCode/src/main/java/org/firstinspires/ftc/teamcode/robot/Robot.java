@@ -36,6 +36,7 @@ public class Robot {
     private final HorizontalSlideController horizontalSlideController;
     private VerticalSlideController verticalSlideController;
     private final ClawSlideController clawSlideController;
+    private final DualServoSlideController dualServoSlideController;
 
     private final Servo clawAngleServo;
     private final Servo clawRotationServo;
@@ -60,6 +61,7 @@ public class Robot {
         horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
         clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
@@ -86,7 +88,7 @@ public class Robot {
         limelight.pipelineSwitch(1); // Set pipeline for AprilTag detection
         limelight.start();
 
-        switchState(State.INITIAL);
+        switchState(State.SERVO_TEST);
         drive = new AngleDrive(hardwareMap);
     }
     public Robot setHorizontalSlideTargetPosition(int target) {
@@ -111,6 +113,11 @@ public class Robot {
 
     public Robot setClawSlideTargetPosition(int target) {
         clawSlideController.setTargetPosition(target);
+        return this;
+    }
+
+    public Robot setDualSlideTargetPosition(int target) {
+        dualServoSlideController.setTargetPosition(target);
         return this;
     }
 
