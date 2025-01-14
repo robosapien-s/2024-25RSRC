@@ -30,7 +30,7 @@ public class AprilTagDetection extends LinearOpMode {
         }
 
         telemetry.setMsTransmissionInterval(11);
-        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(0);
 
         // Start polling for data
         limelight.start();
