@@ -86,6 +86,11 @@ public class AngleDrive implements IDrive {
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
+        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetLeftStickX(), joystickWrapper.gamepad1GetLeftStickY(), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
+    }
+
+    @Override
+    public void updateRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
 
@@ -116,7 +121,7 @@ public class AngleDrive implements IDrive {
 //            }
 //        }
 
-        if (length(joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY()) > .5) {
+        if (length(rightStickX, rightStickY) > .5) {
 
             /*if(joystickWrapper.gamepad1.left_stick_button){
                 if (joystickWrapper.gamepad1.right_stick_button){
@@ -125,7 +130,7 @@ public class AngleDrive implements IDrive {
                     targetHeading = Math.toDegrees(Math.atan2(-joystickWrapper.gamepad1GetLeftStickY(), joystickWrapper.gamepad1GetLeftStickX())) + - 90;
                 }*/
             /*}else {*/
-            targetHeading = normalize(Math.toDegrees(Math.atan2(-joystickWrapper.gamepad1GetRightStickY(), joystickWrapper.gamepad1GetRightStickX())) - 90);
+            targetHeading = normalize(Math.toDegrees(Math.atan2(-rightStickY, rightStickX)) - 90);
             //}
         }   // Save for telemetry
 
@@ -159,10 +164,10 @@ public class AngleDrive implements IDrive {
 
         Translation2d translation2d;
 
-        translation2d =RotateAngle(joystickWrapper.gamepad1GetExponentialLeftStickX(2),joystickWrapper.gamepad1GetExponentialLeftStickY(2),yaw);
+        translation2d =RotateAngle(leftStickX*Math.abs(leftStickX), leftStickY*Math.abs(leftStickY),yaw);
 
 
-        if(isAutoMode && joystickWrapper.gamepad1GetLeftStick()) {
+        if(isAutoMode && isLeftStickPressed) {
             translation2d =RotateAngle(autoModeX,autoModeY,yaw);
         }
 
@@ -170,7 +175,7 @@ public class AngleDrive implements IDrive {
         /* TODO
         if (joystickWrapper.gamepad1GetA()) {
             cosineThing = !cosineThing;
-        }
+        }2
         */
 
         if (cosineThing) {

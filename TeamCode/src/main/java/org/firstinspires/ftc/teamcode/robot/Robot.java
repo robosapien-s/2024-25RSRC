@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import android.graphics.Color;
 
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
@@ -15,6 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -53,6 +56,18 @@ public class Robot {
     private boolean isAprilTagDetected = false;
 
     private final Map<State, Supplier<IRobot>> instanceStateMap = new HashMap<>();
+
+    private boolean isAutoMode = false;
+    private PIDEx xPid;
+    private PIDEx yPid;
+
+    private double targetX;
+    private double targetY;
+    private double targetHeading;
+
+
+
+
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
@@ -209,15 +224,58 @@ public class Robot {
         return servoHashMap;
     }
 
-    public void execute(Telemetry telemetry) {
-        if (!isAprilTagDetected) {
-            pollForAprilTag(telemetry);
-        } else {
-            switchState(State.GO_TO_APRIL_TAG);
-        }
 
+    public void initPid() {
+        PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
+                0.1, 0, 0, 0, 0, 0
+        );
+
+        xPid = new PIDEx(pidCoefficients);
+        yPid = new PIDEx(pidCoefficients);
+    }
+
+    public void setAutoTarget(double targetX, double targetY, double targetHeading) {
+        isAutoMode = true;
+        this.targetX = targetX;
+        this.targetY= targetY;
+        this.targetHeading= targetHeading; //IN RADIANS
+    }
+
+    public void disableAutoMode() {
+        isAutoMode = false;
+    }
+
+
+    public void execute(Telemetry telemetry) {
+//        if (!isAprilTagDetected) {
+//            pollForAprilTag(telemetry);
+//        } else {
+//            switchState(State.GO_TO_APRIL_TAG);
+//        }
+        if (isAutoMode) {
+            Pose3D robotPos = pollForAprilTag(telemetry);
+
+            double xPower = xPid.calculate(targetX, robotPos.getPosition().x);
+            double yPower = yPid.calculate(targetY, robotPos.getPosition().y);
+
+            if (xPower*xPower+yPower*yPower > 1) {
+                double mag = Math.sqrt(xPower*xPower+yPower*yPower);
+                xPower = xPower/mag;
+                yPower = yPower/mag;
+            }
+
+            double rightStickX = Math.cos(targetHeading);
+            double rightStickY = -Math.sin(targetHeading);
+            telemetry.addData("X Power", xPower);
+            telemetry.addData("Y Power", yPower);
+            telemetry.addData("Right Stick X", rightStickX);
+            telemetry.addData("Right Stick Y", rightStickY);
+            telemetry.update();
+//            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
+        } else {
+            drive.update(telemetry, joystick, 1, 1);
+        }
         currentState.execute(this, telemetry);
-        drive.update(telemetry, joystick, 1, 1);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         clawSlideController.update(telemetry);
@@ -231,20 +289,43 @@ public class Robot {
     }
 
 
-    private void pollForAprilTag(Telemetry telemetry) {
+    private Pose3D pollForAprilTag(Telemetry telemetry) {
+        Pose3D botPose = null;
         LLResult result = limelight.getLatestResult();
+
         if (result != null && result.isValid()) {
+            botPose = result.getBotpose();
+            double captureLatency = result.getCaptureLatency();
+            double targetingLatency = result.getTargetingLatency();
+
+            // Extract fiducial results (AprilTags)
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-            for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                telemetry.addData("AprilTag Found", "ID: %d, Family: %s", fr.getFiducialId(), fr.getFamily());
-                telemetry.addData("Target Position", "X: %.2f, Y: %.2f", fr.getTargetXDegrees(), fr.getTargetYDegrees());
-                isAprilTagDetected = true;
-                break;
+            if (!fiducialResults.isEmpty()) {
+                for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                    int tagId = fr.getFiducialId();
+                    Pose3D robotPos = fr.getRobotPoseFieldSpace();
+                    if (tagId != 0) {
+                        botPose = robotPos;
+                        telemetry.addData("AprilTag ID", tagId);
+                        telemetry.addData("Bot Pose", robotPos.getPosition());
+                        telemetry.addData("Capture Latency", "%.2f ms", captureLatency);
+                        telemetry.addData("Targeting Latency", "%.2f ms", targetingLatency);
+                    } else {
+                        telemetry.addData("Tag ID", tagId);
+                        telemetry.addData("Pose3D", "No pose data available.");
+                    }
+                }
+            } else {
+                telemetry.addData("AprilTag", "No AprilTag detected.");
             }
         } else {
-            telemetry.addData("AprilTag", "No tags detected");
+            telemetry.addData("Limelight", "No valid result.");
         }
+
         telemetry.update();
+        return botPose;
+
+
     }
 
     public void switchState(State newState) {

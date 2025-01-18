@@ -32,4 +32,9 @@ public class FCDrive implements IDrive {
         public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
                 drivingWrapper.drive(telemetry, imu, joystickWrapper, speed, rotSpeed);
         }
+
+        @Override
+        public void updateRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
+                throw new UnsupportedOperationException("Not implemented");
+        }
 }

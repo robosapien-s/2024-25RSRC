@@ -40,9 +40,15 @@ public class MecanumDrive implements IDrive {
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
-        double y = -joystickWrapper.gamepad1GetLeftStickY(); // Remember, Y stick value is reversed
-        double x = joystickWrapper.gamepad1GetLeftStickX() * 1.1; // Counteract imperfect strafing
-        double rx = joystickWrapper.gamepad1GetRightStickX();
+        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetLeftStickX(), joystickWrapper.gamepad1GetLeftStickY(), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
+
+    }
+
+    @Override
+    public void updateRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
+        double y = -leftStickY; // Remember, Y stick value is reversed
+        double x = leftStickX * 1.1; // Counteract imperfect strafing
+        double rx = rightStickX;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
