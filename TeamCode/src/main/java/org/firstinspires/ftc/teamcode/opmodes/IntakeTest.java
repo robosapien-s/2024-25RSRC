@@ -28,12 +28,12 @@ public class IntakeTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if(joystickWrapper.gamepad1GetA()) {
-                intake1.setPower(1);
+                intake1.setPower(-1);
                 intake2.setPower(-1);
             }
 
             if(joystickWrapper.gamepad1GetX()) {
-                intake1.setPower(-1);
+                intake1.setPower(1);
                 intake2.setPower(1);
             }
 

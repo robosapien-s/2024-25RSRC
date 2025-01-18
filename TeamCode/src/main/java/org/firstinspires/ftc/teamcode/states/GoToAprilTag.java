@@ -26,7 +26,6 @@ public class GoToAprilTag implements IRobot {
             robot.disableAutoMode();
         }
         telemetry.addData("State", "Moving to AprilTag");
-        telemetry.update();
         // Add navigation logic toward the detected AprilTag
     }
 

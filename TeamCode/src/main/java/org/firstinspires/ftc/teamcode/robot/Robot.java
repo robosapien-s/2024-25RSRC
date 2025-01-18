@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -105,6 +106,8 @@ public class Robot {
 
         switchState(State.GO_TO_APRIL_TAG);
         drive = new AngleDrive(hardwareMap);
+
+        initPid();
     }
     public Robot setHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.setTargetPosition(target);
@@ -254,23 +257,30 @@ public class Robot {
 //        }
         if (isAutoMode) {
             Pose3D robotPos = pollForAprilTag(telemetry);
+            double xPower = 0;
+            double yPower = 0;
+            if (robotPos != null) {
+                xPower = xPid.calculate(targetX, robotPos.getPosition().x);
+                yPower = yPid.calculate(targetY, robotPos.getPosition().y);
 
-            double xPower = xPid.calculate(targetX, robotPos.getPosition().x);
-            double yPower = yPid.calculate(targetY, robotPos.getPosition().y);
-
-            if (xPower*xPower+yPower*yPower > 1) {
-                double mag = Math.sqrt(xPower*xPower+yPower*yPower);
-                xPower = xPower/mag;
-                yPower = yPower/mag;
+                if (xPower*xPower+yPower*yPower > 1) {
+                    double mag = Math.sqrt(xPower*xPower+yPower*yPower);
+                    xPower = xPower/mag;
+                    yPower = yPower/mag;
+                }
             }
 
             double rightStickX = Math.cos(targetHeading);
             double rightStickY = -Math.sin(targetHeading);
+
             telemetry.addData("X Power", xPower);
             telemetry.addData("Y Power", yPower);
             telemetry.addData("Right Stick X", rightStickX);
             telemetry.addData("Right Stick Y", rightStickY);
-            telemetry.update();
+            telemetry.addData("Current Pos", robotPos);
+            telemetry.addData("Target X", targetX);
+            telemetry.addData("Target Y", targetY);
+
 //            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
         } else {
             drive.update(telemetry, joystick, 1, 1);
