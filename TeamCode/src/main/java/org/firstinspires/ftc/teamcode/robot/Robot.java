@@ -100,10 +100,10 @@ public class Robot {
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.pipelineSwitch(1); // Set pipeline for AprilTag detection
+        limelight.pipelineSwitch(0); // Set pipeline for AprilTag detection
         limelight.start();
 
-        switchState(State.SERVO_TEST);
+        switchState(State.GO_TO_APRIL_TAG);
         drive = new AngleDrive(hardwareMap);
     }
     public Robot setHorizontalSlideTargetPosition(int target) {
