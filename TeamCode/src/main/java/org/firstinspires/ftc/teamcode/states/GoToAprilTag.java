@@ -20,6 +20,11 @@ public class GoToAprilTag implements IRobot {
 
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
+        if (joystick.gamepad1GetA()) {
+            robot.setAutoTarget(50,50,0);
+        } else if (joystick.gamepad1GetB()) {
+            robot.disableAutoMode();
+        }
         telemetry.addData("State", "Moving to AprilTag");
         telemetry.update();
         // Add navigation logic toward the detected AprilTag

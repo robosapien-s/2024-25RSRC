@@ -54,7 +54,7 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
 
     public void update(Telemetry telemetry) {
         int currentPosition = getCurrentPosition();
-        double power = pidController.calculate(currentPosition, targetPosition);
+        double power = pidController.calculate(currentPosition, targetPosition); //TODO: check if this is correct, I think it's backwards
 
         telemetry.addData(getName()+ ": currentPosition", currentPosition);
         telemetry.addData(getName()+ ": Slide Power", power);
