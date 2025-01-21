@@ -86,7 +86,7 @@ public class AngleDrive implements IDrive {
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
-        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetLeftStickX(), joystickWrapper.gamepad1GetLeftStickY(), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
+        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetExponentialLeftStickX(2), joystickWrapper.gamepad1GetExponentialLeftStickY(2), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
     }
 
     @Override

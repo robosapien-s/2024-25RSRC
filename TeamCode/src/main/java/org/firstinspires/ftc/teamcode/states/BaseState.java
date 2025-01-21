@@ -105,14 +105,14 @@ public abstract class BaseState implements IRobot {
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
             public void setPosition(double value) {
-                robot.setClawSlideTargetPosition((int) value);
+                robot.setDualSlideTargetPosition((int) value);
 
             }
 
             @Override
             public double getPosition() {
 
-                return robot.getClawSlidePosition();
+                return robot.getDualSlideTargetPosition();
             }
         }, position, duration, name, steps);
     }

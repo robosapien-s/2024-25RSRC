@@ -16,22 +16,24 @@ import org.firstinspires.ftc.teamcode.wrappers.RevIMUv2;
 public class DriveTest extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = 0.3;
-        public static double CLAW_CLOSE = 0.67;
+        public static double CLAW_OPEN = 0.36;
+        public static double CLAW_CLOSE = 0.6;
 
-        public static double ROT_SERVO_DEFAULT = 0.0794;
-        public static double ROT_SERVO_BACK = 0.7394;
+        public static double ROT_SERVO_DEFAULT = .74;
+        public static double ROT_SERVO_BACK = .08;
 
-        public static double CLAW_ANGLE_FORWARD = 0;
-        public static double CLAW_ANGLE_DOWN = 0.3;
-        public static double CLAW_ANGLE_BACK = 0.6;
+        public static double CLAW_ANGLE_FORWARD = .66;
 
-        public static double CLAW_ANGLE_TRANSFER = .095;
+        public static double CLAW_ANGLE_FORWARD_SPECIMEN = .48;
+        public static double CLAW_ANGLE_DOWN = 0.96;
+        public static double CLAW_ANGLE_BACK = 0.14;
 
-        public static int CLAW_SLIDER_FORWARD = 4400;
-        public static int CLAW_SLIDER_TRANSFER = -800;
-        public static int CLAW_SLIDER_DOWN = 0;
-        public static int CLAW_SLIDER_BACK = -5000;
+        public static double CLAW_ANGLE_TRANSFER = .48;
+
+        public static int CLAW_SLIDER_FORWARD = 12000;
+        public static int CLAW_SLIDER_TRANSFER = 2000;
+        public static int CLAW_SLIDER_DOWN = 6000;
+        public static int CLAW_SLIDER_BACK = 0;
 
         public static int HORIZONTAL_SLIDE_INTAKE_INITIAL = 200;
 
@@ -50,7 +52,9 @@ public class DriveTest extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_DROP_L1 = 1800;
 
-        public static int VERTICAL_SLIDE_DROP_L2 = 2200;
+        public static int VERTICAL_SLIDE_DROP_L2 = 4100;
+
+        public static int VERTICAL_SLIDE_MAX_POSITION = 2100;
 
         public static int HORIZONTAL_SLIDE_TRANSFER_POSITION = 210;
 
@@ -69,15 +73,16 @@ public class DriveTest extends LinearOpMode {
         public static double INTAKE_CLAW_LOOSE = .5175;
 
 
-        public static double INTAKE_ROT_SERVO_DEFAULT = .52;
+        public static double INTAKE_ROT_SERVO_DEFAULT = .2393;
 
 
-        public static double INTAKE_ANGLE_READY = .6183;
-        public static double INTAKE_ANGLE_PICKUP =  .68;
+        public static double INTAKE_ANGLE_READY = .3;//.6183;
+        //public static double INTAKE_ANGLE_READY_LOW = .3394;//.6183;
+        public static double INTAKE_ANGLE_PICKUP =  .5;//.68;
 
         public static double INTAKE_ANGLE_TRANSFER = .35;
 
-        public static double INTAKE_KNUCKLE_PICKUP = .1;
+        public static double INTAKE_KNUCKLE_PICKUP = 0.1789;//.1;
         public static double INTAKE_KNUCKLE_TRANSFER = .78;
 
 

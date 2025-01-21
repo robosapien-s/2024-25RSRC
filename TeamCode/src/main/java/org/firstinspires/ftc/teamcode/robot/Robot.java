@@ -75,9 +75,9 @@ public class Robot {
         this.hardwareMap = hardwareMap;
 
         horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
-        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
-        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "verticalSlide1", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
+        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
@@ -100,11 +100,13 @@ public class Robot {
         instanceStateMap.put(State.INTAKINGCLAW, () -> new IntakingStateClaw(joystick));
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
 
+        /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0); // Set pipeline for AprilTag detection
         limelight.start();
+        */
 
-        switchState(State.GO_TO_APRIL_TAG);
+        switchState(State.INTAKINGCLAW);
         drive = new AngleDrive(hardwareMap);
 
         initPid();
@@ -129,6 +131,11 @@ public class Robot {
         return this;
     }
 
+    public Robot increseClawSlideTargetPosition(int target) {
+        dualServoSlideController.increaseTargetPosition(target);
+        return this;
+    }
+
     public Robot setClawSlideTargetPosition(int target) {
         clawSlideController.setTargetPosition(target);
         return this;
@@ -137,6 +144,10 @@ public class Robot {
     public Robot setDualSlideTargetPosition(int target) {
         dualServoSlideController.setTargetPosition(target);
         return this;
+    }
+
+    public int getDualSlideTargetPosition() {
+        return dualServoSlideController.getCurrentPosition();
     }
 
     public Robot setClawAnglePosition(double position) {
@@ -224,6 +235,10 @@ public class Robot {
         servoHashMap.put("clawRotationServo", clawRotationServo);
         servoHashMap.put("clawServo", clawServo);
         servoHashMap.put("intakeAngleServo", intakeAngleServo);
+        servoHashMap.put("intakeKnuckleServo", intakeKnuckleServo);
+        servoHashMap.put("intakeRotationServo", intakeRotationServo);
+        servoHashMap.put("intakeClawServo", intakeClawServo);
+
         return servoHashMap;
     }
 
@@ -255,7 +270,7 @@ public class Robot {
 //        } else {
 //            switchState(State.GO_TO_APRIL_TAG);
 //        }
-        if (isAutoMode) {
+        if (isAutoMode && limelight != null) {
             Pose3D robotPos = pollForAprilTag(telemetry);
             double xPower = 0;
             double yPower = 0;
@@ -283,12 +298,13 @@ public class Robot {
 
 //            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
         } else {
-            drive.update(telemetry, joystick, 1, 1);
+            drive.update(telemetry, joystick, 1, .5);
         }
         currentState.execute(this, telemetry);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
-        clawSlideController.update(telemetry);
+        dualServoSlideController.update(telemetry);
+
     }
     public State getCurrentState() {
         if (currentState != null) {

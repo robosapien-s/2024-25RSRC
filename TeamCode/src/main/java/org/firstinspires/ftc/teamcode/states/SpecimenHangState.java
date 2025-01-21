@@ -23,12 +23,13 @@ public class SpecimenHangState extends BaseState {
 
         taskArrayList.add(createClawTask(robot, DriveTest.Params.CLAW_CLOSE, 500, "Claw", false));
         taskArrayList.add(createVerticalSlideTask(robot, robot.getVerticalSlidePosition() + 80, 500, "Vertical", false));
+        taskArrayList.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_FORWARD_SPECIMEN, 200, "ClawAngle", false));
         taskArrayList.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_FORWARD, 500, "ClawSlide", false));
 
         RobotTaskParallel transferParallel = new RobotTaskParallel();
 
-        transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_FORWARD, 1000, "ClawAngle", true));
-        transferParallel.add(createClawRotationTask( robot, DriveTest.Params.ROT_SERVO_DEFAULT, 1000, "ClawRotation", true));
+        //transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_FORWARD_SPECIMEN, 1000, "ClawAngle", true));
+        transferParallel.add(createClawRotationTask( robot, DriveTest.Params.ROT_SERVO_DEFAULT, 1000, "ClawRotation", false));
         transferParallel.add(createHorizontalSlideTask(robot, 0, 1000, "Horizontal", true));
         transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_HANG_PREP_POSITION, 1000, "Vertical", false));
 
@@ -38,10 +39,10 @@ public class SpecimenHangState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-        if(joystick.gamepad1GetB()) {
+        if(joystick.gamepad1GetA()) {
             //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
             robot.switchState(State.INTAKINGCLAW);
-        } else if(joystick.gamepad1GetA()) {
+        } else if(joystick.gamepad1GetB()) {
             if(subState == 0) {
                 subState++;
                 //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
@@ -59,6 +60,18 @@ public class SpecimenHangState extends BaseState {
             robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_PREP_POSITION);
         } else if(joystick.gamepad1GetDDown()) {
             robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+        }
+
+        if(joystick.gamepad1GetLeftBumperRaw()) {
+            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-500));
+        } else {
+            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*500));
+        }
+
+        if(joystick.gamepad1GetRightBumperRaw()) {
+            robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
+        } else {
+            robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
         }
 
         executeTasks(telemetry);

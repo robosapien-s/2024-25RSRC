@@ -56,7 +56,9 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
         int currentPosition = getCurrentPosition();
         double power = pidController.calculate(currentPosition, targetPosition); //TODO: check if this is correct, I think it's backwards
 
+        //power = testCapPower(power, .6);
         telemetry.addData(getName()+ ": currentPosition", currentPosition);
+        telemetry.addData(getName()+ ": targetPosition", targetPosition);
         telemetry.addData(getName()+ ": Slide Power", power);
         onSetPower(power);
     }
@@ -76,8 +78,16 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     }
 
     public void increaseTargetPosition(int offset) {
+        int newTargetPosition = targetPosition+offset;
+
+        if(newTargetPosition > maxPostition) {
+            newTargetPosition = maxPostition;
+        } else if(newTargetPosition < minPosition) {
+            newTargetPosition = minPosition;
+        }
+
         //TODO need limit
-        targetPosition = evaluateConstraints(targetPosition+offset);
+        targetPosition = evaluateConstraints(newTargetPosition);
     }
 
     public double testCapPower(double power, double cap) {

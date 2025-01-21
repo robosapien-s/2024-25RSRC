@@ -12,9 +12,9 @@ public class VerticalSlideController extends RobotPidMechanism {
     private final DcMotorEx motorSlide2;
 
     // Dashboard-configurable PID coefficients and target position
-    public static double kP = 0.1;
-    public static double kI = 0.0001;
-    public static double kD = 0.03;
+    public static double kP = 0.022;
+    public static double kI = 0.00001;
+    public static double kD = 0.068;
     public static int targetPosition = 0;
 
     private boolean isLeftMotorEncoded = true;
@@ -40,6 +40,7 @@ public class VerticalSlideController extends RobotPidMechanism {
         // Reverse the direction of the left motor if it's encoded
         if (isLeftMotorEncoded) {
             motorSlide1.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorSlide2.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         // Reset and configure encoders
@@ -59,11 +60,11 @@ public class VerticalSlideController extends RobotPidMechanism {
     @Override
     public void onSetPower(double power) {
         if (isLeftMotorEncoded) {
-           motorSlide1.setPower(-power);
-           motorSlide2.setPower(-power);
+          motorSlide1.setPower(-power);
+          motorSlide2.setPower(power);
         } else {
-           motorSlide1.setPower(-power);
-           motorSlide2.setPower(power);
+           //motorSlide1.setPower(-power);
+           //motorSlide2.setPower(power);
         }
 
         currentPower = power;
@@ -104,5 +105,10 @@ public class VerticalSlideController extends RobotPidMechanism {
         previousError = error;
 
         return output;
+    }
+
+    @Override
+    public String getName() {
+        return "Vertical Slider";
     }
 }

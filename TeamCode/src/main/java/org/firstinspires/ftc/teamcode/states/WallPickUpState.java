@@ -21,7 +21,7 @@ public class WallPickUpState extends BaseState {
         RobotTaskSeries transferParallel = new RobotTaskSeries();
 
         transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "Claw", false));
-        transferParallel.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1000, "Horizontal", false));
+        transferParallel.add(createHorizontalSlideTask(robot, 0, 1000, "Horizontal", false));
         transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_WALL_POSITION, 1000, "Vertical", false));
         transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
         transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 1000, "ClawAngle", false));
@@ -33,10 +33,22 @@ public class WallPickUpState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-        if(joystick.gamepad1GetA()) {
+        if(joystick.gamepad1GetB()) {
             robot.switchState(State.SPECIMEN_HANG);
-        } else if(joystick.gamepad1GetB())  {
+        } else if(joystick.gamepad1GetA())  {
             robot.switchState(State.INTAKING);
+        }
+
+        if(joystick.gamepad1GetLeftBumperRaw()) {
+            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-500));
+        } else {
+            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*500));
+        }
+
+        if(joystick.gamepad1GetRightBumperRaw()) {
+            robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
+        } else {
+            robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
         }
         executeTasks(telemetry);
     }

@@ -12,9 +12,9 @@ public class DualServoSlideController extends RobotPidMechanism{
 
     public DualServoSlideController(HardwareMap hardwareMap, String servo1Name, String servo2name, String encoderName, int inMaxPosition, int inMinPosition) {
 
-        super(  0.0009,     // Proportional gain
+        super(  0.00044,     // Proportional gain
                 0.0,    // Integral gain
-                .0077,    // Derivative gain
+                0.004,    // Derivative gain
                 -1.0,      // Minimum output limit
                 1.0,       // Maximum output limit
                 0.1,  // Output ramp rate (optional)
