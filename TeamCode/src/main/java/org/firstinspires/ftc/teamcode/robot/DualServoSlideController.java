@@ -27,6 +27,8 @@ public class DualServoSlideController extends RobotPidMechanism{
         servo1 = hardwareMap.get(CRServo.class, servo1Name);
         servo2 = hardwareMap.get(CRServo.class, servo2name);
         servoEncoder = hardwareMap.get(DcMotorEx.class, encoderName);
+        servoEncoder.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        servoEncoder.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override

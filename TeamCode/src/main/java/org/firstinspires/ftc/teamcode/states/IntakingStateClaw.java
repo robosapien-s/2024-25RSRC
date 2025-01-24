@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.CallBackTask;
+import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
@@ -122,11 +124,46 @@ public class IntakingStateClaw extends BaseState {
         }
 
         if(joystick.gamepad1GetB()) {
-            robot.switchState(State.WALLPICKUP);
+
+           robot.switchState(State.WALLPICKUP);
         }
 
         if(joystick.gamepad1GetX()) {
-            robot.switchState(State.DROPPING_L1);
+
+
+            RobotTaskSeries transferSeries = new RobotTaskSeries();
+
+            transferSeries.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "Claw", false));
+            transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "Claw", false));
+            transferSeries.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_TRANSFER, 1, "ClawSlide", false));
+
+            transferSeries.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION, 1, "IntakeClawClose", false));
+            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_TRANSFER, 1000, "IntakeClawOpen", false));
+
+
+            transferSeries.add(createIntakeRotationTask(robot, DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT, 1000, "IntakeClawClose", false));
+
+            transferSeries.add(createIntakeKnuckleTask(robot, DriveTest.Params.INTAKE_KNUCKLE_TRANSFER, 400, "IntakeClawClose", false));
+            transferSeries.add(createIntakeClawTask(robot, DriveTest.Params.INTAKE_CLAW_LOOSE, 300, "IntakeClawLoose", false));
+            transferSeries.add(createIntakeClawAngleTask(robot, DriveTest.Params.INTAKE_ANGLE_TRANSFER, 1000, "IntakeClawClose", false));
+
+
+
+            //transferSeries.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_TRANSFER+800, 200, "ClawSlide", false));
+            transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_CLOSE, 200, "Claw", false));
+            transferSeries.add(createIntakeClawTask(robot, DriveTest.Params.INTAKE_CLAW_OPEN, 100, "IntakeClawOpen", false));
+
+            transferSeries.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
+                @Override
+                public void execute() {
+                    robot.switchState(State.DROPPING_L1);
+                }
+            }, "Set Drop State"));
+
+            taskArrayList.add(transferSeries);
+
+
+
         }
 
 //        if(joystick.gamepad1GetLeftBumperDown()) {

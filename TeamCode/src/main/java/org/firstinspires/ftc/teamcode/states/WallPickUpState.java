@@ -26,7 +26,7 @@ public class WallPickUpState extends BaseState {
         transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
         transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 1000, "ClawAngle", false));
         transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,100,"ClawRotation",false));
-        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 1000, "Vertical", false));
+        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
         taskArrayList.add(transferParallel);
     }
 

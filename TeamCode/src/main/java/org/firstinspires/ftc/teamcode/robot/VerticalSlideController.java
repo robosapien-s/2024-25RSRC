@@ -12,9 +12,9 @@ public class VerticalSlideController extends RobotPidMechanism {
     private final DcMotorEx motorSlide2;
 
     // Dashboard-configurable PID coefficients and target position
-    public static double kP = 0.022;
-    public static double kI = 0.00001;
-    public static double kD = 0.068;
+    public static double kP = 0.0056;
+    public static double kI = 0.0000;
+    public static double kD = 0.001;
     public static int targetPosition = 0;
 
     private boolean isLeftMotorEncoded = true;

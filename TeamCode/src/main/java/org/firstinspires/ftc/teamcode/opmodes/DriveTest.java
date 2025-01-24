@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.FCDrivingWrapper;
@@ -17,7 +19,7 @@ public class DriveTest extends LinearOpMode {
 
     public static class Params {
         public static double CLAW_OPEN = 0.36;
-        public static double CLAW_CLOSE = 0.6;
+        public static double CLAW_CLOSE = 0.66;
 
         public static double ROT_SERVO_DEFAULT = .74;
         public static double ROT_SERVO_BACK = .08;
@@ -28,10 +30,10 @@ public class DriveTest extends LinearOpMode {
         public static double CLAW_ANGLE_DOWN = 0.96;
         public static double CLAW_ANGLE_BACK = 0.14;
 
-        public static double CLAW_ANGLE_TRANSFER = .48;
+        public static double CLAW_ANGLE_TRANSFER = .8;
 
         public static int CLAW_SLIDER_FORWARD = 12000;
-        public static int CLAW_SLIDER_TRANSFER = 2000;
+        public static int CLAW_SLIDER_TRANSFER = 2650;
         public static int CLAW_SLIDER_DOWN = 6000;
         public static int CLAW_SLIDER_BACK = 0;
 
@@ -40,7 +42,7 @@ public class DriveTest extends LinearOpMode {
         public static double INTAKE_ANGLE_DOWN = .51;
         public static int VERTICAL_SLIDE_POSITION = 140;
 
-        public static int VERTICAL_SLIDE_TRANSFER_POSITION = 420;
+        public static int VERTICAL_SLIDE_TRANSFER_POSITION = 400;
 
         public static int VERTICAL_SLIDE_WALL_POSITION = 275;
 
@@ -56,7 +58,7 @@ public class DriveTest extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_MAX_POSITION = 2100;
 
-        public static int HORIZONTAL_SLIDE_TRANSFER_POSITION = 210;
+        public static int HORIZONTAL_SLIDE_TRANSFER_POSITION = 0;
 
         public static int HORIZONTAL_SLIDE_MAX_POSITION = 400;
 
@@ -78,12 +80,12 @@ public class DriveTest extends LinearOpMode {
 
         public static double INTAKE_ANGLE_READY = .3;//.6183;
         //public static double INTAKE_ANGLE_READY_LOW = .3394;//.6183;
-        public static double INTAKE_ANGLE_PICKUP =  .5;//.68;
+        public static double INTAKE_ANGLE_PICKUP =  .43;//.68;
 
-        public static double INTAKE_ANGLE_TRANSFER = .35;
+        public static double INTAKE_ANGLE_TRANSFER = .255;
 
         public static double INTAKE_KNUCKLE_PICKUP = 0.1789;//.1;
-        public static double INTAKE_KNUCKLE_TRANSFER = .78;
+        public static double INTAKE_KNUCKLE_TRANSFER = .97;
 
 
     }
@@ -95,16 +97,30 @@ public class DriveTest extends LinearOpMode {
 
         Robot robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry);
 
-
+        //0
+        DcMotorEx frontLeftMotor = hardwareMap.get(DcMotorEx.class,"fL");
+        //1
+        DcMotorEx frontRightMotor = hardwareMap.get(DcMotorEx.class,"fR");
+        //2
+        DcMotorEx backLeftMotor = hardwareMap.get(DcMotorEx.class,"bL");
+        //3
+        DcMotorEx backRightMotor = hardwareMap.get(DcMotorEx.class,"bR");
 
         waitForStart();
 
         while (opModeIsActive()) {
             robot.execute(telemetry);
 
-            telemetry.addData("State", robot.getCurrentState().toString());
-           // telemetry.addData("Vertical slide", )
+            telemetry.addData("FrontLeftMotor current (A): ", frontLeftMotor.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("FrontRightMotor current (A): ", frontRightMotor.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("BackLeftMotor current (A): ", backLeftMotor.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("BackRightMotor current (A): ", backRightMotor.getCurrent(CurrentUnit.AMPS));
+
             telemetry.update();
+
+           // telemetry.addData("State", robot.getCurrentState().toString());
+           // telemetry.addData("Vertical slide", )
+           // telemetry.update();
         }
     }
 }

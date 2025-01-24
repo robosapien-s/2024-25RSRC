@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -38,10 +39,10 @@ public class AngleDrive implements IDrive {
 
     double targetHeading;
 
-    DcMotor frontLeftMotor;
-    DcMotor backLeftMotor;
-    DcMotor frontRightMotor;
-    DcMotor backRightMotor;
+    DcMotorEx frontLeftMotor;
+    DcMotorEx backLeftMotor;
+    DcMotorEx frontRightMotor;
+    DcMotorEx backRightMotor;
 
     boolean isAutoMode = false;
     double autoModeX = 0;
@@ -57,13 +58,14 @@ public class AngleDrive implements IDrive {
     public void Initialize(HardwareMap hardwareMap) {
 
         //0
-        frontLeftMotor = hardwareMap.dcMotor.get("fL");
+        frontLeftMotor = hardwareMap.get(DcMotorEx.class,"fL");
         //1
-        frontRightMotor = hardwareMap.dcMotor.get("fR");
+        frontRightMotor = hardwareMap.get(DcMotorEx.class,"fR");
         //2
-        backLeftMotor = hardwareMap.dcMotor.get("bL");
+        backLeftMotor = hardwareMap.get(DcMotorEx.class,"bL");
         //3
-        backRightMotor = hardwareMap.dcMotor.get("bR");
+        backRightMotor = hardwareMap.get(DcMotorEx.class,"bR");
+
 
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -86,7 +88,7 @@ public class AngleDrive implements IDrive {
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
-        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetExponentialLeftStickX(2), joystickWrapper.gamepad1GetExponentialLeftStickY(2), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
+        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetExponentialLeftStickX(1), joystickWrapper.gamepad1GetExponentialLeftStickY(1), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
     }
 
     @Override
@@ -97,6 +99,14 @@ public class AngleDrive implements IDrive {
         pitch = orientation.getPitch(AngleUnit.DEGREES);
         roll = orientation.getRoll(AngleUnit.DEGREES);
         yaw = orientation.getYaw(AngleUnit.DEGREES);
+
+        telemetry.addData("FrontLeftMotor current (A): ", frontLeftMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("FrontRightMotor current (A): ", frontRightMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("BackLeftMotor current (A): ", backLeftMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("BackRightMotor current (A): ", backRightMotor.getCurrent(CurrentUnit.AMPS));
+
+        telemetry.addData("yaw", yaw);
+        telemetry.update();
 
         normalizedHeadingError = -yaw;
 
@@ -185,7 +195,7 @@ public class AngleDrive implements IDrive {
         }
 
 
-        telemetry.update();
+        //telemetry.update();
     }
 
     double length(double x, double y) {

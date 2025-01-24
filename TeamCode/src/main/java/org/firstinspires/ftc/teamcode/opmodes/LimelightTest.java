@@ -8,20 +8,49 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
+import java.util.ArrayList;
 import java.util.List;
 @TeleOp(name = "Sensor: Limelight3A", group = "Sensor")
 public class LimelightTest extends LinearOpMode {
 
     private Limelight3A limelight;
 
+    public static double calculateRectangleAngle(List<List<Double>> points) {
+        // Step 1: Compute all distances and group adjacent points
+        List<double[]> sides = new ArrayList<>();
+        for (int i = 0; i < points.size(); i++) {
+            for (int j = i + 1; j < points.size(); j++) {
+                double distance = Math.sqrt(Math.pow(points.get(i).get(0) - points.get(j).get(0), 2) +
+                        Math.pow(points.get(i).get(1) - points.get(j).get(1), 2));
+                sides.add(new double[] {i, j, distance}); // Store index pairs and their distance
+            }
+        }
+
+        // Step 2: Sort by distance to identify sides and diagonals
+        sides.sort((a, b) -> Double.compare(a[2], b[2]));
+
+        // The two shortest distances are the sides; find the longer one
+        double[] longerSide = sides.get(1); // Second shortest distance is the longer side
+
+        // Step 3: Use the longer side to calculate the angle relative to the x-axis
+        List<Double> p1 = points.get((int) longerSide[0]);
+        List<Double> p2 = points.get((int) longerSide[1]);
+
+        double deltaX = p2.get(0) - p1.get(0);
+        double deltaY = p2.get(1) - p1.get(1);
+
+        return Math.atan2(deltaY, deltaX); // Angle in radians
+    }
+
     @Override
     public void runOpMode() throws InterruptedException
     {
+        double lastResult = 0;
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
         telemetry.setMsTransmissionInterval(11);
 
-        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(2);
 
         /*
          * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
@@ -43,6 +72,23 @@ public class LimelightTest extends LinearOpMode {
 
             LLResult result = limelight.getLatestResult();
             if (result != null) {
+
+                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+
+                if(!colorResults.isEmpty()) {
+
+                    LLResultTypes.ColorResult colorResult = colorResults.get(0);
+
+                    List<List<Double>> corners =  colorResult.getTargetCorners();
+
+                    if(corners.size() == 4) {
+                        lastResult = calculateRectangleAngle(corners);
+
+
+
+                }
+
+                /*
                 // Access general information
                 Pose3D botpose = result.getBotpose();
                 double captureLatency = result.getCaptureLatency();
@@ -90,8 +136,14 @@ public class LimelightTest extends LinearOpMode {
                         telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
                     }
                 }
+
+                 */
             } else {
                 telemetry.addData("Limelight", "No data available");
+            }
+
+                telemetry.addData("angle", "The angle of the rectangle relative to the x-axis (longer side) is: "
+                        + Math.toDegrees(lastResult) + " degrees");
             }
 
             telemetry.update();

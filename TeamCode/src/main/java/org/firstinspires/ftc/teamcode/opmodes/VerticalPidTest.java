@@ -21,7 +21,8 @@ public class VerticalPidTest extends LinearOpMode {
 
         JoystickWrapper joystick = new JoystickWrapper(gamepad1, gamepad2);
         // Initialize the slide controller
-        slideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+
+        slideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
 
         // Initialize the FTC Dashboard for real-time monitoring
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -32,7 +33,7 @@ public class VerticalPidTest extends LinearOpMode {
         while (opModeIsActive()) {
             // Check for changes in PID coefficients and reinitialize if needed
             if (coefficientsChanged()) {
-                slideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+                slideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
 
             }
             int currentPosition = slideController.getCurrentPosition();
@@ -41,6 +42,14 @@ public class VerticalPidTest extends LinearOpMode {
             if(joystick.gamepad1GetA()) {
                 slideController.setTargetPosition(targetPosition);
             }
+
+
+            if(joystick.gamepad1GetRightBumperRaw()) {
+                slideController.increaseTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
+            } else {
+                slideController.increaseTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
+            }
+
             //slideController.setTargetPosition(targetPosition);
             slideController.update(telemetry);
             TelemetryPacket packet = new TelemetryPacket();
