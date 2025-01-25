@@ -45,7 +45,7 @@ public class InitialState extends BaseState {
         if(joystick.gamepad1GetA()) {
             robot.switchState(State.WALLPICKUP);
         } else if(joystick.gamepad1GetB()) {
-            robot.switchState(State.INTAKING);
+            robot.switchState(State.INTAKINGCLAW);
         } else if(joystick.gamepad1GetY()) {
             robot.switchState(State.SERVO_TEST);
         }

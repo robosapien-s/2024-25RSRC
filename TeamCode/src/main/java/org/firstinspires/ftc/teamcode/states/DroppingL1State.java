@@ -37,7 +37,7 @@ public class DroppingL1State extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-        if(joystick.gamepad1GetB()) {
+        if(joystick.gamepad1GetX()) {
 
             if(substate == 0) {
                 substate++;

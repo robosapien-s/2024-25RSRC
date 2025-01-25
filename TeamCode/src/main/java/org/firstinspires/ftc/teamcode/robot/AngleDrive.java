@@ -106,7 +106,7 @@ public class AngleDrive implements IDrive {
         telemetry.addData("BackRightMotor current (A): ", backRightMotor.getCurrent(CurrentUnit.AMPS));
 
         telemetry.addData("yaw", yaw);
-        telemetry.update();
+//        telemetry.update();
 
         normalizedHeadingError = -yaw;
 

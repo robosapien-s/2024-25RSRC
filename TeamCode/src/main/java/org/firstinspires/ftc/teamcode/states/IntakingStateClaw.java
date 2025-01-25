@@ -19,9 +19,9 @@ public class IntakingStateClaw extends BaseState {
 
      double[] clawRotationPositions = new double[]{
          DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT,
-         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.25,
-         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.22,
-             DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.5,
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.16,
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.16,
+             DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.25,
 
      };
     public IntakingStateClaw(JoystickWrapper joystick) {
@@ -48,8 +48,8 @@ public class IntakingStateClaw extends BaseState {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createIntakeClawTask(robot, DriveTest.Params.INTAKE_CLAW_OPEN, 1, "INTAKE_CLAW_OPEN", false));
             transferSeries.add(createIntakeRotationTask(robot, DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "INTAKE_ROT_SERVO_DEFAULT", false));
+            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 1, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createClawSlideTask(robot, DriveTest.Params.CLAW_SLIDER_TRANSFER, 500, "CLAW_SLIDER_TRANSFER", false));
-            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_TRANSFER, 1, "CLAW_ANGLE_BACK", false));
 
             transferSeries.add(createIntakeClawAngleTask(robot, DriveTest.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createIntakeKnuckleTask(robot, DriveTest.Params.INTAKE_KNUCKLE_PICKUP, 1, "INTAKE_KNUCKLE_PICKUP", false));
@@ -139,8 +139,8 @@ public class IntakingStateClaw extends BaseState {
             transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "Claw", false));
             transferSeries.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_TRANSFER, 1, "ClawSlide", false));
 
-            transferSeries.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION, 1, "IntakeClawClose", false));
-            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_TRANSFER, 1000, "IntakeClawOpen", false));
+            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_TRANSFER, 500, "IntakeClawOpen", false));
+            transferSeries.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_TRANSFER_POSITION, 1000, "IntakeClawClose", false));
 
 
             transferSeries.add(createIntakeRotationTask(robot, DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT, 1000, "IntakeClawClose", false));

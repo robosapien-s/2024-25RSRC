@@ -299,14 +299,17 @@ public class Robot {
             telemetry.addData("Target X", targetX);
             telemetry.addData("Target Y", targetY);
 
+
 //            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
         } else {
             drive.update(telemetry, joystick, 1, .5);
         }
+        telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         dualServoSlideController.update(telemetry);
+        telemetry.update();
 
     }
     public State getCurrentState() {
@@ -351,7 +354,7 @@ public class Robot {
             telemetry.addData("Limelight", "No valid result.");
         }
 
-        telemetry.update();
+//        telemetry.update();
         return botPose;
 
 
