@@ -54,6 +54,7 @@ public class SpecimenHangState extends BaseState {
                 subState++;
                 //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
                 robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+                robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_FORWARD);
             } else {
                 robot.switchState(State.WALLPICKUP);
             }

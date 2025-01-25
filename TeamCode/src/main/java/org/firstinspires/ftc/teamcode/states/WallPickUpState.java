@@ -19,15 +19,26 @@ public class WallPickUpState extends BaseState {
     public void initialize(Robot robot, IRobot prevState) {
 
         RobotTaskSeries transferParallel = new RobotTaskSeries();
-
-        transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "Claw", false));
-        transferParallel.add(createHorizontalSlideTask(robot, 0, 500, "Horizontal", false));
-        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_WALL_POSITION, 1000, "Vertical", false));
-        transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 400, "ClawAngle", false));
-        transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
-        transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 400, "ClawAngle", false));
-        transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,100,"ClawRotation",false));
+        if(prevState.getState() == State.INTAKINGCLAW) {
+            transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 0, "Claw", false));
+            transferParallel.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", false));
+//            transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 300, "Vertical", false));
+            transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 200, "ClawAngle", false));
+            transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 500, "ClawSlide", false));
+            transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 600, "ClawAngle", false));
+            transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,200,"ClawRotation",false));
         transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
+        }
+        else {
+            transferParallel.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 0, "Claw", false));
+            transferParallel.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", false));
+            transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 300, "Vertical", false));
+            transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 200, "ClawAngle", false));
+            transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 650, "ClawSlide", false));
+            transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 650, "ClawAngle", false));
+            transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
+//        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
+        }
         taskArrayList.add(transferParallel);
     }
 
@@ -40,11 +51,11 @@ public class WallPickUpState extends BaseState {
             robot.switchState(State.INTAKINGCLAW);
         }
 
-        if(joystick.gamepad1GetLeftBumperRaw()) {
-            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-500));
-        } else {
-            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*500));
-        }
+//        if(joystick.gamepad1GetLeftBumperRaw()) {
+//            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-500));
+//        } else {
+//            robot.increseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*500));
+//        }
 
         if(joystick.gamepad1GetRightBumperRaw()) {
             robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
