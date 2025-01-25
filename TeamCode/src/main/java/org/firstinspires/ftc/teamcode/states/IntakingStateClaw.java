@@ -19,9 +19,9 @@ public class IntakingStateClaw extends BaseState {
 
      double[] clawRotationPositions = new double[]{
          DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT,
-         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.25,
-         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.22,
-             DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.5,
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.16,
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.16,
+             DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.25,
 
      };
     public IntakingStateClaw(JoystickWrapper joystick) {
