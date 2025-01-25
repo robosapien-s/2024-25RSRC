@@ -27,8 +27,8 @@ public class IntakingState extends BaseState {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createClawTask(robot, DriveTest.Params.CLAW_OPEN, 1, "ClawClose", false));
             transferSeries.add(createHorizontalSlideTask(robot, 0, 1, "HorizontalSlide", false));
+            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_DOWN, 300, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createClawSlideTask(robot, DriveTest.Params.CLAW_SLIDER_DOWN, 500, "CLAW_SLIDER_BACK", false));
-            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_DOWN, 1, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_DEFAULT, 1, "ROT_SERVO_BACK", false));
             transferSeries.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_POSITION, 500, "VerticalSlide", false));
             taskArrayList.add(transferSeries);

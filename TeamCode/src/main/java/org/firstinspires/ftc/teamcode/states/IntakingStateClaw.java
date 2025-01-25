@@ -18,9 +18,11 @@ public class IntakingStateClaw extends BaseState {
     int clawStateHack = 0; //0 = ready, 1 = pickup, 2 = transfer
 
      double[] clawRotationPositions = new double[]{
-            DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT,
-            DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.16,
-            DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.16
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT,
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.25,
+         DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.22,
+             DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT+.5,
+
      };
     public IntakingStateClaw(JoystickWrapper joystick) {
         super(joystick);
@@ -180,6 +182,8 @@ public class IntakingStateClaw extends BaseState {
             robot.setIntakeRotationServo(clawRotationPositions[1]);
         } else if(joystick.gamepad1GetDLeft()) {
             robot.setIntakeRotationServo(clawRotationPositions[2]);
+        } else if(joystick.gamepad1GetDDown()) {
+            robot.setIntakeRotationServo(clawRotationPositions[3]);
         }
 
         /*
