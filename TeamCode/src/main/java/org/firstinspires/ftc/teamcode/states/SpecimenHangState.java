@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class SpecimenHangState extends BaseState {
 
     boolean didLowerHeight = false;
-    int subState = 1;
+    int subState = 0;
     public SpecimenHangState(JoystickWrapper joystick) {
         super(joystick);
     }
@@ -45,12 +45,15 @@ public class SpecimenHangState extends BaseState {
         } else if(joystick.gamepad1GetB()) {
             if(subState == 0) {
                 subState++;
-                //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
-                robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+                robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
+
+
             }
             else if(subState == 1) {
+
                 subState++;
-                robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
+                //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+                robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
             } else {
                 robot.switchState(State.WALLPICKUP);
             }

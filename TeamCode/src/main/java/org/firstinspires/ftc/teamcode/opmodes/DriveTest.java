@@ -30,6 +30,7 @@ public class DriveTest extends LinearOpMode {
         public static double CLAW_ANGLE_DOWN = 0.96;
         public static double CLAW_ANGLE_BACK = 0.14;
 
+        public static double CLAW_ANGLE_PREP_BACK = 0.5;
         public static double CLAW_ANGLE_TRANSFER = .8;
 
         public static int CLAW_SLIDER_FORWARD = 12000;
@@ -44,19 +45,19 @@ public class DriveTest extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_TRANSFER_POSITION = 400;
 
-        public static int VERTICAL_SLIDE_WALL_POSITION = 275;
+        public static int VERTICAL_SLIDE_WALL_POSITION = 0;
 
         public static int VERTICAL_SLIDE_DOWN_POSITION = 120;
 
-        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1450;
+        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1112;
 
-        public static int VERTICAL_SLIDE_HANG_DROP_POSITION = 1175;
+        public static int VERTICAL_SLIDE_HANG_DROP_POSITION = 800;
 
-        public static int VERTICAL_SLIDE_DROP_L1 = 1800;
+        public static int VERTICAL_SLIDE_DROP_L1 = 2350;
 
         public static int VERTICAL_SLIDE_DROP_L2 = 4100;
 
-        public static int VERTICAL_SLIDE_MAX_POSITION = 2100;
+        public static int VERTICAL_SLIDE_MAX_POSITION = 2350;
 
         public static int HORIZONTAL_SLIDE_TRANSFER_POSITION = 0;
 
