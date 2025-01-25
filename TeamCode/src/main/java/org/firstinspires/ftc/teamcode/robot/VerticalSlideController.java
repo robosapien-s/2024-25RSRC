@@ -59,6 +59,7 @@ public class VerticalSlideController extends RobotPidMechanism {
     // Set power to both motors, adjusting direction for synchronization
     @Override
     public void onSetPower(double power) {
+
         if (isLeftMotorEncoded) {
           motorSlide1.setPower(-power);
           motorSlide2.setPower(power);

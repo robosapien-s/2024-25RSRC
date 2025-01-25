@@ -60,7 +60,7 @@ public class DriveTest extends LinearOpMode {
 
         public static int HORIZONTAL_SLIDE_TRANSFER_POSITION = 0;
 
-        public static int HORIZONTAL_SLIDE_MAX_POSITION = 400;
+        public static int HORIZONTAL_SLIDE_MAX_POSITION = 1650;
 
         public static double VERTICAL_SLIDE_PID_kp = 0.027;
         public static double VERTICAL_SLIDE_PID_kd = 0.027;

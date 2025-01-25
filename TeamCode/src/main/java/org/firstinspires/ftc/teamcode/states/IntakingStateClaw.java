@@ -191,9 +191,9 @@ public class IntakingStateClaw extends BaseState {
         */
 
         if(joystick.gamepad1GetLeftBumperRaw()) {
-            robot.increseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-20));
+            robot.increseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-100));
         } else {
-            robot.increseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*20));
+            robot.increseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*100));
         }
 
         if(joystick.gamepad1GetRightBumperRaw()) {

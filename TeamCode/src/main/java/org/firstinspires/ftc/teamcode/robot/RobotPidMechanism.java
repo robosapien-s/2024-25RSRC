@@ -13,7 +13,7 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     private int maxPostition;
     private int minPosition;
 
-    public boolean showTelemetry = false;
+    public boolean showTelemetry = true;
 
     public RobotPidMechanism(double kp, double ki, double kd, double minL, double maxL, double rampRate, int inMaxPostition, int inMinPosition) {
 
@@ -52,6 +52,14 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
         pidController = new PIDEx(pidCoefficients);
 
         targetPosition = 0;
+    }
+
+    public int getMaxPosition() {
+        return maxPostition;
+    }
+
+    public int getMinPosition() {
+        return minPosition;
     }
 
     public void update(Telemetry telemetry) {

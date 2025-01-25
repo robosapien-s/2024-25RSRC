@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class SpecimenHangState extends BaseState {
 
     boolean didLowerHeight = false;
-    int subState = 0;
+    int subState = 1;
     public SpecimenHangState(JoystickWrapper joystick) {
         super(joystick);
     }

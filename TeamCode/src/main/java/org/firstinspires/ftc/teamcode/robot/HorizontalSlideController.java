@@ -12,9 +12,9 @@ public class HorizontalSlideController extends RobotPidMechanism {
 
     private final DcMotorEx motorSlide1;
 
-    public static double kP = 0.05;
-    public static double kI = 0.0001;
-    public static double kD = 0.0003;
+    public static double kP = 0.015;
+    public static double kI = 0.000;
+    public static double kD = 0.002;
     public static int targetPosition = 0;
 
     // Constructor
@@ -59,6 +59,11 @@ public class HorizontalSlideController extends RobotPidMechanism {
         previousError = error;
 
         return output;
+    }
+
+    @Override
+    public String getName() {
+        return "Horizontal Slider";
     }
 
     public void resetPID() {
