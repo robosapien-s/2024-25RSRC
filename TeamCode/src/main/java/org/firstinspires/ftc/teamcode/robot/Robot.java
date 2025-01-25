@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
@@ -73,6 +74,8 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         this.hardwareMap = hardwareMap;
+
+
 
         horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
