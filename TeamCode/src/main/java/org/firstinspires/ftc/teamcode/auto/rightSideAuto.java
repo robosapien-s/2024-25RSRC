@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
+import java.util.Vector;
+
 @Autonomous
 public class rightSideAuto extends LinearOpMode {
 
@@ -41,8 +43,24 @@ public class rightSideAuto extends LinearOpMode {
                                 )
                 )
                 .waitSeconds(1)
-                .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND));
-
+                .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND))
+                .waitSeconds(.5)
+                .turn(Math.toRadians(-60))
+                .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
+                .waitSeconds(.1)
+                .strafeToLinearHeading(new Vector2d(32.5,-43), Math.toRadians(30))
+                .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND))
+                .waitSeconds(.5)
+                .turn(Math.toRadians(-60))
+                .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
+                .waitSeconds(.1)
+                .strafeToLinearHeading(new Vector2d(38.5,-43), Math.toRadians(30))
+                .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND))
+                .waitSeconds(.5)
+                .turn(Math.toRadians(-60))
+                .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
+                .waitSeconds(.1)
+                .stopAndAdd(robotAuto.setHorizontalSlidePosition(0));
 
         TrajectoryActionBuilder smallWait = drive.actionBuilder(initPose)
                 .waitSeconds(.1);
