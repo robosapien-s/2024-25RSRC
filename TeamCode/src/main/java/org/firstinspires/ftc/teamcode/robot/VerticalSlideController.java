@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -20,7 +21,7 @@ public class VerticalSlideController extends RobotPidMechanism {
     private boolean isLeftMotorEncoded = true;
 
     // Constructor
-    public VerticalSlideController(HardwareMap hardwareMap, String mainSlide, String secondSlide, boolean inIsLeftMotorEncoded, int inMaxPosition, int inMinPosition) {
+    public VerticalSlideController(HardwareMap hardwareMap, String mainSlide, String secondSlide, boolean inIsLeftMotorEncoded, int inMaxPosition, int inMinPosition, boolean isBreaking) {
         super(
                 kP,          // Proportional gain
                 kI,          // Integral gain
@@ -35,6 +36,10 @@ public class VerticalSlideController extends RobotPidMechanism {
         motorSlide1 = hardwareMap.get(DcMotorEx.class, mainSlide);
         motorSlide2 = hardwareMap.get(DcMotorEx.class, secondSlide);
 
+        if (isBreaking) {
+            motorSlide1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorSlide2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
         isLeftMotorEncoded = inIsLeftMotorEncoded;
 
         // Reverse the direction of the left motor if it's encoded

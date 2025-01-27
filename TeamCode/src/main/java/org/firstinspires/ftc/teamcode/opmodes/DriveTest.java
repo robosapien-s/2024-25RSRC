@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.wrappers.RevIMUv2;
 public class DriveTest extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = 0.36;
-        public static double CLAW_CLOSE = 0.66;
+        public static double CLAW_OPEN = 0.56;
+        public static double CLAW_CLOSE = 0.86;
 
         public static double ROT_SERVO_DEFAULT = .74;
         public static double ROT_SERVO_BACK = .08;

@@ -22,7 +22,7 @@ public class VerticalPidTest extends LinearOpMode {
         JoystickWrapper joystick = new JoystickWrapper(gamepad1, gamepad2);
         // Initialize the slide controller
 
-        slideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
+        slideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
 
         // Initialize the FTC Dashboard for real-time monitoring
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -33,7 +33,7 @@ public class VerticalPidTest extends LinearOpMode {
         while (opModeIsActive()) {
             // Check for changes in PID coefficients and reinitialize if needed
             if (coefficientsChanged()) {
-                slideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
+                slideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
 
             }
             int currentPosition = slideController.getCurrentPosition();

@@ -36,7 +36,7 @@ public class IntakingStateClaw extends BaseState {
             robot.setIntakeAngleServo(DriveTest.Params.INTAKE_ANGLE_READY);
             robot.setIntakeKnuckleServo(DriveTest.Params.INTAKE_KNUCKLE_PICKUP);
 
-            robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_FORWARD_SPECIMEN);
+            robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_FORWARD);
             robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
             robot.setClawRotationPosition(DriveTest.Params.ROT_SERVO_DEFAULT);
 
@@ -48,7 +48,7 @@ public class IntakingStateClaw extends BaseState {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createIntakeClawTask(robot, DriveTest.Params.INTAKE_CLAW_OPEN, 1, "INTAKE_CLAW_OPEN", false));
             transferSeries.add(createIntakeRotationTask(robot, DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "INTAKE_ROT_SERVO_DEFAULT", false));
-            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 1, "CLAW_ANGLE_BACK", false));
+            transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_FORWARD, 1, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createClawSlideTask(robot, DriveTest.Params.CLAW_SLIDER_TRANSFER, 500, "CLAW_SLIDER_TRANSFER", false));
 
             transferSeries.add(createIntakeClawAngleTask(robot, DriveTest.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));

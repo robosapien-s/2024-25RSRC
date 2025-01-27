@@ -69,16 +69,18 @@ public class Robot {
 
 
 
-
-
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
+        this(hardwareMap, gamepad1, gamepad2, telemetry, false);
+    }
+
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isAuto) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         this.hardwareMap = hardwareMap;
 
 
 
-        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
+        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, false);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
         clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
@@ -102,6 +104,7 @@ public class Robot {
         instanceStateMap.put(State.PID_TUNING, () -> new PidTuningState(joystick));
         instanceStateMap.put(State.INTAKINGCLAW, () -> new IntakingStateClaw(joystick));
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
+        instanceStateMap.put(State.PICKUP_GROUND, () -> new PickUpGroundState(joystick));
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -110,10 +113,17 @@ public class Robot {
         */
 
         switchState(State.INTAKINGCLAW);
-        drive = new AngleDrive(hardwareMap);
+        if (!isAuto) {
+            drive = new AngleDrive(hardwareMap);
+        } else {
+            drive = null;
+        }
+
 
         initPid();
     }
+
+
     public Robot setHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.setTargetPosition(target);
         return this;
@@ -230,7 +240,7 @@ public class Robot {
         return clawSlideController.getCurrentPosition();
     }
     public void newVerticalControlPidTuning() {
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0,false);
     }
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
@@ -312,6 +322,20 @@ public class Robot {
         telemetry.update();
 
     }
+
+
+
+    public void executeAuto(Telemetry telemetry) {
+        telemetry.addData("State:", getCurrentState().name());
+        currentState.execute(this, telemetry);
+        horizontalSlideController.update(telemetry);
+        verticalSlideController.update(telemetry);
+        dualServoSlideController.update(telemetry);
+        telemetry.update();
+    }
+
+
+
     public State getCurrentState() {
         if (currentState != null) {
             return currentState.getState();

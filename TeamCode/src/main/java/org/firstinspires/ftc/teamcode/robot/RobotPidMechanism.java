@@ -66,7 +66,7 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
         int currentPosition = getCurrentPosition();
         double power = pidController.calculate(currentPosition, targetPosition); //TODO: check if this is correct, I think it's backwards
 
-        if(showTelemetry) {
+        if(showTelemetry && telemetry != null) {
             //power = testCapPower(power, .6);
             telemetry.addData(getName() + ": currentPosition", currentPosition);
             telemetry.addData(getName() + ": targetPosition", targetPosition);

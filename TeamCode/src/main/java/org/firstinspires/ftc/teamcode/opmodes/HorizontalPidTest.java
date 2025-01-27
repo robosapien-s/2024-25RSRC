@@ -20,7 +20,8 @@ public class HorizontalPidTest extends LinearOpMode {
                 hardwareMap,
                 "horizontalSlide1",
                 2000, // Example max position
-                0     // Example min position
+                0 ,
+                false// Example min position
         );
 
         // Initialize FTC Dashboard
@@ -35,7 +36,8 @@ public class HorizontalPidTest extends LinearOpMode {
                         hardwareMap,
                         "horizontalSlide1",
                         2000, // Example max position
-                        0     // Example min position
+                        0,
+                        false// Example min position
                 );
             }
 

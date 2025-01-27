@@ -21,7 +21,7 @@ public abstract class BaseState implements IRobot {
     }
 
 
-    protected IRobotTask createClawRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createClawRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -36,7 +36,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createClawAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createClawAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -51,7 +51,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createClawTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createClawTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -66,7 +66,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createVerticalSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
+    public static IRobotTask createVerticalSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -83,7 +83,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createHorizontalSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
+    public static IRobotTask createHorizontalSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -100,7 +100,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createClawSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
+    public static IRobotTask createClawSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -119,7 +119,7 @@ public abstract class BaseState implements IRobot {
 
 
 
-    protected IRobotTask createIntakeClawTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createIntakeClawTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -135,7 +135,7 @@ public abstract class BaseState implements IRobot {
     }
 
 
-    protected IRobotTask createIntakeClawAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createIntakeClawAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -150,7 +150,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createIntakeRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createIntakeRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -165,7 +165,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    protected IRobotTask createIntakeKnuckleTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createIntakeKnuckleTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override

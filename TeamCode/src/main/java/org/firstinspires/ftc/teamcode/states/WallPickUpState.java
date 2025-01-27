@@ -24,9 +24,9 @@ public class WallPickUpState extends BaseState {
             transferParallel.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", false));
 //            transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 300, "Vertical", false));
             transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 200, "ClawAngle", false));
+            transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
             transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 500, "ClawSlide", false));
             transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 600, "ClawAngle", false));
-            transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,200,"ClawRotation",false));
         transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
         }
         else {
@@ -34,9 +34,9 @@ public class WallPickUpState extends BaseState {
             transferParallel.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", false));
             transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 300, "Vertical", false));
             transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_PREP_BACK, 200, "ClawAngle", false));
-            transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 650, "ClawSlide", false));
-            transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 650, "ClawAngle", false));
             transferParallel.add(createClawRotationTask(robot, DriveTest.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
+            transferParallel.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
+            transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_BACK, 0, "ClawAngle", false));
 //        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
         }
         taskArrayList.add(transferParallel);

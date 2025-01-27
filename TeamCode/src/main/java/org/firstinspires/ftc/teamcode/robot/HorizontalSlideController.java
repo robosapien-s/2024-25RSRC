@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,7 +19,7 @@ public class HorizontalSlideController extends RobotPidMechanism {
     public static int targetPosition = 0;
 
     // Constructor
-    public HorizontalSlideController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosition) {
+    public HorizontalSlideController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosition, boolean isBraking) {
         super(
                 kP,          // Proportional gain
                 kI,          // Integral gain
@@ -34,6 +35,10 @@ public class HorizontalSlideController extends RobotPidMechanism {
         motorSlide1.setDirection(DcMotorSimple.Direction.REVERSE);
         motorSlide1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motorSlide1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(isBraking) {
+            motorSlide1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
     }
 
     public int getCurrentPosition() {
