@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.controllers.CallBackTask;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
-import java.util.ArrayList;
 
 public class IntakingStateClaw extends BaseState {
 
@@ -39,6 +36,7 @@ public class IntakingStateClaw extends BaseState {
             robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_FORWARD);
             robot.setClawPosition(DriveTest.Params.CLAW_OPEN);
             robot.setClawRotationPosition(DriveTest.Params.ROT_SERVO_DEFAULT);
+            robot.setClawHorizontalAnglePosition(DriveTest.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
 
             robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_POSITION);
             robot.setHorizontalSlideTargetPosition(0);
@@ -48,6 +46,7 @@ public class IntakingStateClaw extends BaseState {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createIntakeClawTask(robot, DriveTest.Params.INTAKE_CLAW_OPEN, 1, "INTAKE_CLAW_OPEN", false));
             transferSeries.add(createIntakeRotationTask(robot, DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "INTAKE_ROT_SERVO_DEFAULT", false));
+            transferSeries.add(createClawHorizontalAngleTask(robot, DriveTest.Params.CLAW_HORIZONTAL_ANGLE_CENTER,1,"CLAW_HORIZONTAL_ANGLE_CENTER", false));
             transferSeries.add(createClawAngleTask(robot, DriveTest.Params.CLAW_ANGLE_FORWARD, 1, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createClawSlideTask(robot, DriveTest.Params.CLAW_SLIDER_TRANSFER, 500, "CLAW_SLIDER_TRANSFER", false));
 
@@ -61,6 +60,9 @@ public class IntakingStateClaw extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
+        if (joystick.gamepad2GetA()) {
+            robot.switchState(State.SERVO_TEST);
+        }
 
         if(joystick.gamepad1GetA()) {
             RobotTaskSeries transferSeries = new RobotTaskSeries();

@@ -88,6 +88,10 @@ public class DriveTest extends LinearOpMode {
         public static double INTAKE_KNUCKLE_PICKUP = 0.1789;//.1;
         public static double INTAKE_KNUCKLE_TRANSFER = .97;
 
+        public static double CLAW_HORIZONTAL_ANGLE_CENTER = 0.54;
+        public static double CLAW_HORIZONTAL_ANGLE_LEFT = 0.42;
+        public static double CLAW_HORIZONTAL_ANGLE_RIGHT = 0.66;
+
 
     }
 

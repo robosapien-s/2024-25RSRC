@@ -54,6 +54,7 @@ public class RobotAuto {
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
                 robot.setClawAnglePosition(DriveTest.Params.CLAW_ANGLE_FORWARD);
+                robot.setClawHorizontalAnglePosition(DriveTest.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
                 return false;
             }
         };

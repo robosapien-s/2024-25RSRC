@@ -62,6 +62,15 @@ public class WallPickUpState extends BaseState {
         } else {
             robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
         }
+
+        if (joystick.gamepad1GetDLeft()) {
+            robot.setClawHorizontalAnglePosition(DriveTest.Params.CLAW_HORIZONTAL_ANGLE_LEFT);
+        } else if (joystick.gamepad1GetDRight()) {
+            robot.setClawHorizontalAnglePosition(DriveTest.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        } else if (joystick.gamepad1GetDDown()) {
+            robot.setClawHorizontalAnglePosition(DriveTest.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
+        }
+
         executeTasks(telemetry);
     }
 

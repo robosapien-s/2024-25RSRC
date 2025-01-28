@@ -1,25 +1,17 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import android.graphics.Color;
-
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
-import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -46,6 +38,7 @@ public class Robot {
     private final Servo clawAngleServo;
     private final Servo clawRotationServo;
     private final Servo clawServo;
+    private final Servo clawHorizontalAngleServo;
     private final CRServo intakeServo;
     private final Servo intakeAngleServo;
     private final Servo intakeKnuckleServo;
@@ -83,9 +76,11 @@ public class Robot {
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
         clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
         dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawHorizontalAngleServo = hardwareMap.get(Servo.class, "clawHorizontalAngleServo");
 
         intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
@@ -144,7 +139,7 @@ public class Robot {
         return this;
     }
 
-    public Robot increseClawSlideTargetPosition(int target) {
+    public Robot increaseClawSlideTargetPosition(int target) {
         dualServoSlideController.increaseTargetPosition(target);
         return this;
     }
@@ -170,6 +165,15 @@ public class Robot {
 
     public double getClawAnglePosition() {
         return clawAngleServo.getPosition();
+    }
+
+    public Robot setClawHorizontalAnglePosition(double position) {
+        clawHorizontalAngleServo.setPosition(position);
+        return this;
+    }
+
+    public double getClawHorizontalAnglePostion() {
+        return clawHorizontalAngleServo.getPosition();
     }
 
     public Robot setClawRotationPosition(double position) {
@@ -245,6 +249,7 @@ public class Robot {
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
         servoHashMap.put("clawAngleServo", clawAngleServo);
+        servoHashMap.put("clawHorizontalAngleServo", clawHorizontalAngleServo);
         servoHashMap.put("clawRotationServo", clawRotationServo);
         servoHashMap.put("clawServo", clawServo);
         servoHashMap.put("intakeAngleServo", intakeAngleServo);
