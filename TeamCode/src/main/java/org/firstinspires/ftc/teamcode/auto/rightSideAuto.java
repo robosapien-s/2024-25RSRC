@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -12,10 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
-import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
-import java.util.Vector;
 
 @Autonomous
 public class rightSideAuto extends LinearOpMode {
@@ -29,7 +26,7 @@ public class rightSideAuto extends LinearOpMode {
 
         TrajectoryActionBuilder trajectory1 = drive.actionBuilder(initPose)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
-                .lineToY(-36.5)
+                .lineToY(-42.5)
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.openTopClawAction())
                 .waitSeconds(.5)
@@ -39,7 +36,7 @@ public class rightSideAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(26.25,-44), Math.toRadians(30))
                 .stopAndAdd(new ParallelAction(
                                         robotAuto.setHorizontalSlidePosition(1650),
-                                        robotAuto.setIntakeRotationServo(DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.16)
+                                        robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16)
                                 )
                 )
                 .waitSeconds(1)
@@ -48,7 +45,7 @@ public class rightSideAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(26.5, -45), Math.toRadians(-60))
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.1)
-                .stopAndAdd(robotAuto.setIntakeRotationServo(DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
+                .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
                 .strafeToLinearHeading(new Vector2d(34,-43), Math.toRadians(30))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND))
@@ -56,7 +53,7 @@ public class rightSideAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(34, -44), Math.toRadians(-60))
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.1)
-                .stopAndAdd(robotAuto.setIntakeRotationServo(DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
+                .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
                 .strafeToLinearHeading(new Vector2d(42,-41.5), Math.toRadians(30))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND))

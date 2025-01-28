@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -49,6 +51,12 @@ public class AngleDrive implements IDrive {
     double autoModeY = 0;
 
     double rotateAngleOffset = 180;
+
+//    PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
+//            0.1, 0, 0, 0, 0, 0
+//    );
+//
+//    PIDEx anglePID = new PIDEx(pidCoefficients);
 
 
     public AngleDrive(HardwareMap hardwareMap) {
@@ -187,6 +195,7 @@ public class AngleDrive implements IDrive {
             cosineThing = !cosineThing;
         }2
         */
+
 
         if (cosineThing) {
             MoveMecanum(-translation2d.getX(),translation2d.getY()*Math.cos(Math.toRadians(headingError)),Range.clip(headingError * PGain, -1, 1));

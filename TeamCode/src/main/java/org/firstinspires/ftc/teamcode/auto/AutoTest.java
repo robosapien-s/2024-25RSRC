@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.HorizontalSlideController;
 import org.firstinspires.ftc.teamcode.robot.VerticalSlideController;
 
@@ -24,7 +24,7 @@ public class AutoTest extends LinearOpMode {
         private int targetPos = 0;
 
         public HorizontalSlide(HardwareMap hardwareMap) {
-            horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, true);
+            horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, true);
         }
 
         public class HorizontalSlideAction implements Action {
@@ -69,7 +69,7 @@ public class AutoTest extends LinearOpMode {
         private int targetPos = 0;
 
         public VerticalSlide(HardwareMap hardwareMap) {
-            verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0, true);
+            verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MAX_POSITION, 0, true);
         }
 
         public class VerticalSlideAction implements Action {

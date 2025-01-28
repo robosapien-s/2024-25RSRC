@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
-import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.states.*;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
@@ -72,10 +72,10 @@ public class Robot {
 
 
 
-        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, false);
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
-        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
-        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, false);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
+        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
+        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
 
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
@@ -244,7 +244,7 @@ public class Robot {
         return clawSlideController.getCurrentPosition();
     }
     public void newVerticalControlPidTuning() {
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0,false);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DROP_L2, 0,false);
     }
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();

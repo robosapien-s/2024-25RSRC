@@ -5,21 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.firstinspires.ftc.teamcode.wrappers.FCDrivingWrapper;
-import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-import org.firstinspires.ftc.teamcode.wrappers.RevIMUv2;
 
 @Config
 
 @TeleOp(name="Robot Linear OpMode", group="test")
-public class DriveTest extends LinearOpMode {
+public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = 0.56;
-        public static double CLAW_CLOSE = 0.86;
+        public static double CLAW_OPEN = 0.76;
+        public static double CLAW_CLOSE = 1;
 
         public static double ROT_SERVO_DEFAULT = .74;
         public static double ROT_SERVO_BACK = .08;
@@ -49,7 +44,7 @@ public class DriveTest extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_DOWN_POSITION = 0;
 
-        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1112;
+        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1362;
 
         public static int VERTICAL_SLIDE_HANG_DROP_POSITION = 800;
 
@@ -95,7 +90,7 @@ public class DriveTest extends LinearOpMode {
 
     }
 
-    public static DriveTest.Params PARAMS = new DriveTest.Params();
+    public static RoboSapiensTeleOp.Params PARAMS = new RoboSapiensTeleOp.Params();
 
     @Override
     public void runOpMode() {

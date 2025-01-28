@@ -3,11 +3,9 @@ package org.firstinspires.ftc.teamcode.states;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
-import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
-import java.util.ArrayList;
 
 public class PickUpGroundState extends BaseState {
 
@@ -19,12 +17,12 @@ public class PickUpGroundState extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         RobotTaskSeries transferSeries = new RobotTaskSeries();
-        transferSeries.add(BaseState.createIntakeClawAngleTask(robot, DriveTest.Params.INTAKE_ANGLE_PICKUP, 100, "IntakeAngle", false));
-        transferSeries.add(BaseState.createIntakeKnuckleTask(robot, DriveTest.Params.INTAKE_KNUCKLE_PICKUP, 100, "KnucklePickUp", false));
-        transferSeries.add(BaseState.createIntakeClawTask(robot, DriveTest.Params.INTAKE_CLAW_CLOSE, 500, "IntakeClawClose", false));
+        transferSeries.add(BaseState.createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 100, "IntakeAngle", false));
+        transferSeries.add(BaseState.createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 100, "KnucklePickUp", false));
+        transferSeries.add(BaseState.createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_CLOSE, 500, "IntakeClawClose", false));
         //transferSeries.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "IntakeClawClose", false));
-        transferSeries.add(BaseState.createIntakeRotationTask(robot, DriveTest.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "IntakeClawClose", false));
-        transferSeries.add(BaseState.createIntakeClawAngleTask(robot, DriveTest.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));
+        transferSeries.add(BaseState.createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "IntakeClawClose", false));
+        transferSeries.add(BaseState.createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));
         taskArrayList.add(transferSeries);
     }
 
