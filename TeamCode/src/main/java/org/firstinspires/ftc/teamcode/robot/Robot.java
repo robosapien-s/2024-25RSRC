@@ -109,7 +109,7 @@ public class Robot {
 
         switchState(State.INTAKINGCLAW);
         if (!isAuto) {
-            drive = new AngleDrive(hardwareMap);
+            drive = new AngleDrive(hardwareMap, true);
         } else {
             drive = null;
         }

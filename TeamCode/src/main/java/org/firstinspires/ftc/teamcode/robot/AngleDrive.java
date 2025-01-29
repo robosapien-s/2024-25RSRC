@@ -15,39 +15,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
-@Disabled
 public class AngleDrive implements IDrive {
 
     double normalizedHeadingError = 0;
-
     IMU imu;
-
     boolean cosineThing = false;
-
     HardwareMap hardwareMap;
-
     double pitch;
     double roll;
     double yaw;
-
     double PGain = .03;
-
     double targetHeading;
-
     DcMotorEx frontLeftMotor;
     DcMotorEx backLeftMotor;
     DcMotorEx frontRightMotor;
     DcMotorEx backRightMotor;
-
     boolean isAutoMode = false;
     double autoModeX = 0;
     double autoModeY = 0;
-
     double rotateAngleOffset = 180;
 
-    public AngleDrive(HardwareMap hardwareMap) {
+    boolean isLerpEnabled;
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled) {
         InitializeResetImu(hardwareMap);
+        this.isLerpEnabled = isLerpEnabled;
     }
 
     public void Initialize(HardwareMap hardwareMap) {
@@ -94,7 +85,7 @@ public class AngleDrive implements IDrive {
         }
 
         double smoothingFactor = 0.1;
-        double smoothedYaw = lerp(yaw, targetHeading, smoothingFactor);
+        double smoothedYaw = this.isLerpEnabled ? lerp(yaw, targetHeading, smoothingFactor) : targetHeading;
 
         double headingError = normalize((smoothedYaw - yaw) + rotateAngleOffset);
 
@@ -109,7 +100,6 @@ public class AngleDrive implements IDrive {
         telemetry.update();
     }
 
-    // Linear interpolation method
     public double lerp(double current, double target, double t) {
         return current + (target - current) * t;
     }
