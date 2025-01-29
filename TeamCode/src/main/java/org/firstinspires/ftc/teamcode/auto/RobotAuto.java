@@ -76,6 +76,16 @@ public class RobotAuto {
         };
     }
 
+    public Action setClawHorizontalAnglePosition(double pos) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.setClawHorizontalAnglePosition(pos);
+                return false;
+            }
+        };
+    }
+
     public Action setIntakeRotationServo(double pos) {
         return new Action() {
             @Override
