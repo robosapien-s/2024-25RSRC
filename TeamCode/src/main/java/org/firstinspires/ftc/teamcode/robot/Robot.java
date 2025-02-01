@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import android.graphics.Point;
-
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -11,6 +9,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -133,12 +132,12 @@ public class Robot {
         return this;
     }
 
-    public Robot increseVerticalSlideTargetPosition(int target) {
+    public Robot increaseVerticalSlideTargetPosition(int target) {
         verticalSlideController.increaseTargetPosition(target);
         return this;
     }
 
-    public Robot increseHorizontalSlideTargetPosition(int target) {
+    public Robot increaseHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.increaseTargetPosition(target);
         return this;
     }
@@ -173,6 +172,30 @@ public class Robot {
 
     public Robot setClawHorizontalAnglePosition(double position) {
         clawHorizontalAngleServo.setPosition(position);
+        return this;
+    }
+
+    public Robot autoHorizontalPosWall(Telemetry telemetry) {
+        double angle = drive.getYaw();
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
+        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        telemetry.addData("clawHorizontalAngleServo min", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT+intercept);
+        telemetry.addData("clawHorizontalAngleServo max", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT+intercept);
+        telemetry.addData("clawHorizontalAngleServo attempted pos", slope*angle+intercept);
+        telemetry.addData("clawHorizontalAngleServo actual pos", pos);
+
+        clawHorizontalAngleServo.setPosition(pos);
+        return this;
+    }
+
+    public Robot autoHorizontalPosHang() {
+        double angle = drive.getYaw();
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
+        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+
+        clawHorizontalAngleServo.setPosition(pos);
         return this;
     }
 

@@ -19,6 +19,11 @@ public class FCDrive implements IDrive {
         private FCDrivingWrapper drivingWrapper;
         private RevIMUv3 imu;
 
+        @Override
+        public double getYaw() {
+                return 0;
+        }
+
         public FCDrive(HardwareMap hardwareMap) {
                 //Default Control Hub orientation (main bot)
                 drivingWrapper = new FCDrivingWrapper(hardwareMap);

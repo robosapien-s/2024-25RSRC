@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -64,14 +65,13 @@ public class rightSideAuto extends LinearOpMode {
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
                 .strafeToLinearHeading(new Vector2d(31,-56),Math.toRadians(110))
-                .stopAndAdd(robotAuto.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT))
+//                .stopAndAdd(robotAuto.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT))
                 .waitSeconds(.1)
                 .strafeToLinearHeading(new Vector2d(31,-62.5),Math.toRadians(110))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.5)
-                .strafeToConstantHeading(new Vector2d(19,-41))
-                .stopAndAdd(robotAuto.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT));
+                .strafeToConstantHeading(new Vector2d(19,-41));
 
         TrajectoryActionBuilder smallWait = drive.actionBuilder(initPose)
                 .waitSeconds(.1);

@@ -175,12 +175,14 @@ public class AngleDrive implements IDrive {
             MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(newRx, -1, 1));
         }
 
-        telemetry.update();
+//        telemetry.update();
     }
 
     public double lerp(double current, double target, double t) {
         return current + (target - current) * t;
     }
+
+
 
     double length(double x, double y) {
         return Math.sqrt(x * x + y * y);
@@ -201,6 +203,7 @@ public class AngleDrive implements IDrive {
         return new Translation2d(rotatedX, rotatedY);
     }
 
+    @Override
     public double getYaw() {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }

@@ -105,6 +105,28 @@ public class RobotAuto {
         robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
     }
 
+    private long waitTime = 0;
+    private long lastWaitTime = 0;
+    private boolean isWaitInit = false;
+    public Action waitAction(int durationInMillis) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                if (!isWaitInit) {
+                    isWaitInit = true;
+                    lastWaitTime = System.currentTimeMillis();
+                }
+
+                if (isWaitInit) {
+                    waitTime = System.currentTimeMillis()-lastWaitTime;
+                    if (waitTime > durationInMillis)
+                        isWaitInit = false;
+                }
+                return isWaitInit;
+            }
+        };
+    }
+
 //    public Action setHorizontalSlidePos(int pos) {
 //
 //        return new Action() {

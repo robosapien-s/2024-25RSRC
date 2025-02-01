@@ -64,6 +64,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
+
     public static IRobotTask createClawTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {

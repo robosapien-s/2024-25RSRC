@@ -19,4 +19,6 @@ public interface IDrive {
 
     public void setAutoMode(double inX, double inY);
 
+    public double getYaw();
+
 }

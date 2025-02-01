@@ -15,6 +15,10 @@ import org.firstinspires.ftc.teamcode.wrappers.RevIMUv3;
 
 public class MecanumDrive implements IDrive {
 
+    @Override
+    public double getYaw() {
+        return 0;
+    }
 
     final DcMotor frontLeftMotor;
     final DcMotor backLeftMotor;

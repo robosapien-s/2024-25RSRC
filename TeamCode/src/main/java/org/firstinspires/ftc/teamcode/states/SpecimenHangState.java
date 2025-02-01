@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskParallel;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class SpecimenHangState extends BaseState {
-
+    boolean angle_ready = false;
     boolean didLowerHeight = false;
     int subState = 0;
     public SpecimenHangState(JoystickWrapper joystick) {
@@ -17,6 +18,17 @@ public class SpecimenHangState extends BaseState {
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
+
+        taskArrayList.add(
+                new ExecuteOnceTask(
+                        new ExecuteOnceTask.ExecuteListener() {
+                            @Override
+                            public void execute() {
+                                angle_ready = false;
+                            }
+                        }, "Substate Transition"
+                )
+        );
 
         if (prevState.getState() == State.INTAKINGCLAW) {
             taskArrayList.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_PREP_POSITION, 100, "Vertical", false));
@@ -32,13 +44,24 @@ public class SpecimenHangState extends BaseState {
             taskArrayList.add(transferParallel);
         } else {
             taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 250, "Claw", false));
-            taskArrayList.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_PREP_POSITION, 300, "Vertical", false));
             taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER,1,"ClawHorizontalAngle",false));
+            taskArrayList.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_PREP_POSITION, 300, "Vertical", false));
             taskArrayList.add(createClawRotationTask( robot, RoboSapiensTeleOp.Params.ROT_SERVO_DEFAULT, 1, "ClawRotation", false));
             taskArrayList.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD, 200, "ClawAngle", false));
             taskArrayList.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, 0, "ClawSlide", false));
-            taskArrayList.add(createHorizontalSlideTask(robot, 0, 0, "Horizontal", true));
+            taskArrayList.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", true));
         }
+
+        taskArrayList.add(
+                new ExecuteOnceTask(
+                        new ExecuteOnceTask.ExecuteListener() {
+                            @Override
+                            public void execute() {
+                                angle_ready = true;
+                            }
+                        }, "Substate Transition"
+                )
+        );
     }
 
     @Override
@@ -55,6 +78,7 @@ public class SpecimenHangState extends BaseState {
             else if(subState == 1) {
 
                 subState++;
+                angle_ready = false;
                 //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
                 robot.setVerticalSlideTargetPosition(RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
                 robot.setClawAnglePosition(RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD);
@@ -69,13 +93,18 @@ public class SpecimenHangState extends BaseState {
 //        } else if(joystick.gamepad1GetDDown()) {
 //            robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
 //        }
-        } else if (joystick.gamepad1GetDLeft() && subState == 0) {
-            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT);
-        } else if (joystick.gamepad1GetDRight() && subState == 0) {
-            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
-        } else if (joystick.gamepad1GetDDown() && subState == 0) {
-            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
+//        } else if (joystick.gamepad1GetDLeft() && subState == 0) {
+//            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT);
+//        } else if (joystick.gamepad1GetDRight() && subState == 0) {
+//            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+//        } else if (joystick.gamepad1GetDDown() && subState == 0) {
+//            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
         }
+
+
+        if (angle_ready)
+            robot.autoHorizontalPosHang();
+
 
         if(joystick.gamepad1GetLeftBumperRaw()) {
             robot.increaseClawSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-500));
@@ -84,9 +113,9 @@ public class SpecimenHangState extends BaseState {
         }
 
         if(joystick.gamepad1GetRightBumperRaw()) {
-            robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
+            robot.increaseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
         } else {
-            robot.increseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
+            robot.increaseVerticalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
         }
 
         executeTasks(telemetry);

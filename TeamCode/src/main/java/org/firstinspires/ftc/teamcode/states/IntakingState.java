@@ -45,9 +45,9 @@ public class IntakingState extends BaseState {
         }
 
         if(joystick.gamepad1GetRightBumperRaw()) {
-            robot.increseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-400));
+            robot.increaseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-400));
         } else {
-            robot.increseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*400));
+            robot.increaseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*400));
         }
 
 
