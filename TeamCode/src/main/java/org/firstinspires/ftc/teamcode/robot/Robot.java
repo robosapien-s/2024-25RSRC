@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.auto.RobotAuto;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -28,6 +29,11 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class Robot {
+
+
+    public interface YawOverrride {
+        double getYaw();
+    }
 
     private IRobot currentState;
     private final IDrive drive;
@@ -62,6 +68,8 @@ public class Robot {
     private double targetY;
     private double targetHeading;
 
+
+    private YawOverrride doOverrideYaw = null;
 
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
@@ -121,7 +129,9 @@ public class Robot {
         initPid();
     }
 
-
+    public void setYawOverride(YawOverrride inOverride) {
+        doOverrideYaw = inOverride;
+    }
     public Robot setHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.setTargetPosition(target);
         return this;
@@ -176,7 +186,14 @@ public class Robot {
     }
 
     public Robot autoHorizontalPosWall(Telemetry telemetry) {
-        double angle = drive.getYaw();
+    double angle = 0;
+
+        if(doOverrideYaw == null) {
+            angle = drive.getYaw();
+        } else {
+            angle = doOverrideYaw.getYaw();
+        }
+
         double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
         double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
         double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
@@ -190,7 +207,14 @@ public class Robot {
     }
 
     public Robot autoHorizontalPosHang() {
-        double angle = drive.getYaw();
+        double angle = 0;
+
+        if(doOverrideYaw == null) {
+            angle = drive.getYaw();
+        } else {
+            angle = doOverrideYaw.getYaw();
+        }
+
         double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
         double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
         double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);

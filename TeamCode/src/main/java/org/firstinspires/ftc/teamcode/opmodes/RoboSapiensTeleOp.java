@@ -40,6 +40,8 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_TRANSFER_POSITION = 400;
 
+        public static int VERTICAL_SLIDE_MIDDLE_POSITION = 500;
+
         public static int VERTICAL_SLIDE_WALL_POSITION = 200;
 
         public static int VERTICAL_SLIDE_DOWN_POSITION = 0;
@@ -66,8 +68,8 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
 
 
-        public static double INTAKE_CLAW_OPEN = .48;
-        public static double INTAKE_CLAW_CLOSE = .53;
+        public static double INTAKE_CLAW_OPEN = .49;
+        public static double INTAKE_CLAW_CLOSE = .55;
         public static double INTAKE_CLAW_LOOSE = .5175;
 
 

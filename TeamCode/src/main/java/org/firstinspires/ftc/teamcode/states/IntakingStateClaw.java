@@ -42,7 +42,20 @@ public class IntakingStateClaw extends BaseState {
             robot.setHorizontalSlideTargetPosition(0);
             robot.setDualSlideTargetPosition(RoboSapiensTeleOp.Params.CLAW_SLIDER_TRANSFER);
 
-        } else {
+        } else if (prevState.getState() == State.SPECIMEN_HANG) {
+            RobotTaskSeries transferSeries = new RobotTaskSeries();
+            transferSeries.add(createClawSlideTask(robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_TRANSFER, 0, "CLAW_SLIDER_TRANSFER", false));
+            transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_OPEN, 1, "INTAKE_CLAW_OPEN", false));
+            transferSeries.add(createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "INTAKE_ROT_SERVO_DEFAULT", false));
+            transferSeries.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER,1,"CLAW_HORIZONTAL_ANGLE_CENTER", false));
+            transferSeries.add(createClawAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD, 200, "CLAW_ANGLE_BACK", false));
+
+
+            transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));
+            transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 1, "INTAKE_KNUCKLE_PICKUP", false));
+            transferSeries.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_POSITION, 0, "VerticalSlide", false));
+            taskArrayList.add(transferSeries);
+        }else {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
             transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_OPEN, 1, "INTAKE_CLAW_OPEN", false));
             transferSeries.add(createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "INTAKE_ROT_SERVO_DEFAULT", false));
@@ -52,7 +65,7 @@ public class IntakingStateClaw extends BaseState {
 
             transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));
             transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 1, "INTAKE_KNUCKLE_PICKUP", false));
-            transferSeries.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_POSITION, 500, "VerticalSlide", false));
+            transferSeries.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_POSITION, 0, "VerticalSlide", false));
             taskArrayList.add(transferSeries);
         }
     }

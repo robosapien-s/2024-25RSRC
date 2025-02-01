@@ -17,9 +17,9 @@ public class PickUpGroundState extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         RobotTaskSeries transferSeries = new RobotTaskSeries();
-        transferSeries.add(BaseState.createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 100, "IntakeAngle", false));
-        transferSeries.add(BaseState.createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 100, "KnucklePickUp", false));
-        transferSeries.add(BaseState.createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_CLOSE, 500, "IntakeClawClose", false));
+        transferSeries.add(BaseState.createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 1, "IntakeAngle", false));
+        transferSeries.add(BaseState.createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 50, "KnucklePickUp", false));
+        transferSeries.add(BaseState.createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_CLOSE, 250, "IntakeClawClose", false));
         //transferSeries.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "IntakeClawClose", false));
         transferSeries.add(BaseState.createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "IntakeClawClose", false));
         transferSeries.add(BaseState.createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));

@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -16,11 +19,33 @@ public class RobotAuto {
     private long lastTime = 0;
     final private Robot robot;
     final private Telemetry telemetry;
+    IMU imu;
+    RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+    RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+    RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+
     public RobotAuto(HardwareMap inHardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry inTelemetry) {
         robot = new Robot(inHardwareMap, gamepad1, gamepad2, inTelemetry, true);
+        robot.setYawOverride(new Robot.YawOverrride() {
+            @Override
+            public double getYaw() {
+                return getAutoYaw();
+            }
+        });
         telemetry = inTelemetry;
+
+        imu = inHardwareMap.get(IMU .class, "imu");
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+        imu.resetYaw();
 //        robot.initPid();
     }
+
+    public double getAutoYaw() {
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
+
 
     public Action robotExecute() {
         return new Action() {
