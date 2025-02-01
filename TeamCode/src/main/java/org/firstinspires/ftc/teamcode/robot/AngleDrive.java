@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.graphics.Point;
+
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -9,11 +13,14 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
+
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class AngleDrive implements IDrive {
 
@@ -36,9 +43,55 @@ public class AngleDrive implements IDrive {
     double rotateAngleOffset = 180;
 
     boolean isLerpEnabled;
+
+    private final PIDEx pidController;
+
+    private final PIDEx pidXController;
+    private final PIDEx pidYController;
     public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled) {
         InitializeResetImu(hardwareMap);
         this.isLerpEnabled = isLerpEnabled;
+
+        PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KP,     // Proportional gain
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KI,    // Integral gain
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KD,    // Derivative gain
+                -1.0,      // Minimum output limit
+                1.0,       // Maximum output limit
+                0.1       // Output ramp rate (optional)
+                // Integral wind-up limit (optional)
+        );
+
+        pidController = new PIDEx(pidCoefficients);
+
+
+
+        PIDCoefficientsEx pidCoefficientsX = new PIDCoefficientsEx(
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KP,     // Proportional gain
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KI,    // Integral gain
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KD,    // Derivative gain
+                -1.0,      // Minimum output limit
+                1.0,       // Maximum output limit
+                0.1       // Output ramp rate (optional)
+                // Integral wind-up limit (optional)
+        );
+
+        pidXController = new PIDEx(pidCoefficientsX);
+
+
+        PIDCoefficientsEx pidCoefficientsY = new PIDCoefficientsEx(
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KP,     // Proportional gain
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KI,    // Integral gain
+                RoboSapiensTeleOp.Params.ANGLE_DRIVE_KD,    // Derivative gain
+                -1.0,      // Minimum output limit
+                1.0,       // Maximum output limit
+                0.1       // Output ramp rate (optional)
+                // Integral wind-up limit (optional)
+        );
+
+        pidYController = new PIDEx(pidCoefficientsY);
+
+
     }
 
     public void Initialize(HardwareMap hardwareMap) {
@@ -65,6 +118,19 @@ public class AngleDrive implements IDrive {
     }
 
     @Override
+    public Vector3D getRobotPosition() {
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
+
+        return new Vector3D(backLeftMotor.getCurrentPosition(), frontRightMotor.getCurrentPosition(), currentYaw);
+    }
+
+    @Override
+    public void setTargetHeading(double heading) {
+        targetHeading = heading;
+    }
+
+    @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
         updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetExponentialLeftStickX(1), joystickWrapper.gamepad1GetExponentialLeftStickY(1), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
     }
@@ -84,6 +150,15 @@ public class AngleDrive implements IDrive {
             targetHeading = normalize(Math.toDegrees(Math.atan2(-rightStickY, rightStickX)) - 90);
         }
 
+        if(length(rightStickX, rightStickY) > 0) {
+            isAutoMode = false;
+        }
+
+        if(isAutoMode) {
+            leftStickX =  Range.clip( pidXController.calculate( autoModeX, frontRightMotor.getCurrentPosition()), -1, 1 );
+            leftStickY=  Range.clip( pidXController.calculate( autoModeY, frontLeftMotor.getCurrentPosition()), -1, 1 );
+        }
+
         double smoothingFactor = 0.1;
         double smoothedYaw = this.isLerpEnabled ? lerp(yaw, targetHeading, smoothingFactor) : targetHeading;
 
@@ -91,10 +166,13 @@ public class AngleDrive implements IDrive {
 
         Translation2d translation2d = RotateAngle(leftStickX * Math.abs(leftStickX), leftStickY * Math.abs(leftStickY), yaw);
 
+        double newRx = pidController.calculate( yaw+headingError, yaw);
+
         if (cosineThing) {
             MoveMecanum(-translation2d.getX(), translation2d.getY() * Math.cos(Math.toRadians(headingError)), Range.clip(headingError * PGain, -1, 1));
         } else {
-            MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(headingError * PGain, -1, 1));
+           // MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(headingError * PGain, -1, 1));
+            MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(newRx, -1, 1));
         }
 
         telemetry.update();
@@ -127,6 +205,7 @@ public class AngleDrive implements IDrive {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
+    @Override
     public void setAutoMode(double inX, double inY) {
         isAutoMode = true;
         autoModeX = inX;

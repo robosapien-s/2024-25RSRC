@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.graphics.Point;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.wrappers.FCDrivingWrapper;
@@ -37,6 +40,20 @@ public class MecanumDrive implements IDrive {
 //    public void init() {
 //
 //    }
+
+    @Override
+    public void setTargetHeading(double heading) {
+
+    }
+
+    @Override
+    public Vector3D getRobotPosition() {
+        return null;
+    }
+
+    @Override
+    public void setAutoMode(double inX, double inY) {
+    }
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {

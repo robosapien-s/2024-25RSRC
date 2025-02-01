@@ -18,7 +18,8 @@ public interface IRobot {
         FIELD_CENTRIC_DRIVE,
         SERVO_TEST,
         GO_TO_APRIL_TAG, PID_TUNING,
-        PICKUP_GROUND
+        PICKUP_GROUND,
+        AUTO_DRIVE_TEST,
     }
 
 

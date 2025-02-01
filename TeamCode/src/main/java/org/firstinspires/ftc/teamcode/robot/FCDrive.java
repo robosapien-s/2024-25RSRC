@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.graphics.Point;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.wrappers.FCDrivingWrapper;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 import org.firstinspires.ftc.teamcode.wrappers.RevIMUv2;
 import org.firstinspires.ftc.teamcode.wrappers.RevIMUv3;
+
+import kotlin.NotImplementedError;
 
 public class FCDrive implements IDrive {
         private FCDrivingWrapper drivingWrapper;
@@ -27,6 +32,20 @@ public class FCDrive implements IDrive {
                 drivingWrapper = new FCDrivingWrapper(hardwareMap, demoBot);
                 imu = new RevIMUv3(hardwareMap, "imu");
                 imu.init(logoDirection, usbDirection);
+        }
+
+        @Override
+        public void setTargetHeading(double heading) {
+
+        }
+
+        @Override
+        public Vector3D getRobotPosition() {
+                return null;
+        }
+
+        @Override
+        public void setAutoMode(double inX, double inY) {
         }
 
         public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {

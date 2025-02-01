@@ -88,6 +88,13 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_HORIZONTAL_ANGLE_RIGHT = 0.66;
 
 
+
+        public static double ANGLE_DRIVE_KP = 0.02;
+        public static double ANGLE_DRIVE_KD = .00004;
+        public static double ANGLE_DRIVE_KI = 0.0;
+
+        public static double ANGLE_DRIVE_TARGET_TEST = 0.0;
+
     }
 
     public static RoboSapiensTeleOp.Params PARAMS = new RoboSapiensTeleOp.Params();

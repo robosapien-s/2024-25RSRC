@@ -13,7 +13,7 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     private int maxPostition;
     private int minPosition;
 
-    public boolean showTelemetry = true;
+    public boolean showTelemetry = false;
 
     public RobotPidMechanism(double kp, double ki, double kd, double minL, double maxL, double rampRate, int inMaxPostition, int inMinPosition) {
 

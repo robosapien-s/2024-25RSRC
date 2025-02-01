@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import android.graphics.Point;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
@@ -100,6 +103,7 @@ public class Robot {
         instanceStateMap.put(State.INTAKINGCLAW, () -> new IntakingStateClaw(joystick));
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
         instanceStateMap.put(State.PICKUP_GROUND, () -> new PickUpGroundState(joystick));
+        instanceStateMap.put(State.AUTO_DRIVE_TEST, () -> new AutoDriveTestState(joystick));
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -109,7 +113,7 @@ public class Robot {
 
         switchState(State.INTAKINGCLAW);
         if (!isAuto) {
-            drive = new AngleDrive(hardwareMap, true);
+            drive = new AngleDrive(hardwareMap, false);
         } else {
             drive = null;
         }
@@ -246,6 +250,10 @@ public class Robot {
     public void newVerticalControlPidTuning() {
         verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DROP_L2, 0,false);
     }
+
+    public Vector3D getDeadWheelLocation() {
+        return drive.getRobotPosition();
+    }
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
         servoHashMap.put("clawAngleServo", clawAngleServo);
@@ -271,6 +279,10 @@ public class Robot {
     }
 
     public void setAutoTarget(double targetX, double targetY, double targetHeading) {
+
+        drive.setAutoMode(targetX, targetY);
+        drive.setTargetHeading(targetHeading);
+
         isAutoMode = true;
         this.targetX = targetX;
         this.targetY= targetY;
@@ -280,6 +292,11 @@ public class Robot {
     public void disableAutoMode() {
         isAutoMode = false;
     }
+
+    public void setTargetHeading(double heading) {
+        drive.setTargetHeading(heading);
+    }
+
 
 
     public void execute(Telemetry telemetry) {
