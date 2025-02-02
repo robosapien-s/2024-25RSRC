@@ -26,10 +26,10 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_ANGLE_BACK = 0.14;
 
         public static double CLAW_ANGLE_PREP_BACK = 0.5;
-        public static double CLAW_ANGLE_TRANSFER = .8;
+        public static double CLAW_ANGLE_TRANSFER = .765;
 
         public static int CLAW_SLIDER_FORWARD = 12000;
-        public static int CLAW_SLIDER_TRANSFER = 2650;
+        public static int CLAW_SLIDER_TRANSFER = 0;
         public static int CLAW_SLIDER_DOWN = 6000;
         public static int CLAW_SLIDER_BACK = 0;
 
@@ -38,7 +38,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double INTAKE_ANGLE_DOWN = .51;
         public static int VERTICAL_SLIDE_POSITION = 140;
 
-        public static int VERTICAL_SLIDE_TRANSFER_POSITION = 400;
+        public static int VERTICAL_SLIDE_TRANSFER_POSITION = 0;
 
         public static int VERTICAL_SLIDE_MIDDLE_POSITION = 500;
 
@@ -50,7 +50,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_HANG_DROP_POSITION = 800;
 
-        public static int VERTICAL_SLIDE_DROP_L1 = 2350;
+        public static int VERTICAL_SLIDE_DROP_L1 = 2450;
 
         public static int VERTICAL_SLIDE_DROP_L2 = 4100;
 
@@ -70,7 +70,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double INTAKE_CLAW_OPEN = .49;
         public static double INTAKE_CLAW_CLOSE = .55;
-        public static double INTAKE_CLAW_LOOSE = .5175;
+        public static double INTAKE_CLAW_LOOSE = .53;
 
 
         public static double INTAKE_ROT_SERVO_DEFAULT = .2393;
@@ -80,10 +80,10 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         //public static double INTAKE_ANGLE_READY_LOW = .3394;//.6183;
         public static double INTAKE_ANGLE_PICKUP =  .43;//.68;
 
-        public static double INTAKE_ANGLE_TRANSFER = .255;
+        public static double INTAKE_ANGLE_TRANSFER = .16;
 
         public static double INTAKE_KNUCKLE_PICKUP = 0.1789;//.1;
-        public static double INTAKE_KNUCKLE_TRANSFER = .97;
+        public static double INTAKE_KNUCKLE_TRANSFER = .975;
 
         public static double CLAW_HORIZONTAL_ANGLE_CENTER = 0.54;
         public static double CLAW_HORIZONTAL_ANGLE_LEFT = 0.42;

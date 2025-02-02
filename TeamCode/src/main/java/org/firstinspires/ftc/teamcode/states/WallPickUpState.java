@@ -42,31 +42,43 @@ public class WallPickUpState extends BaseState {
             transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_PREP_BACK, 200, "ClawAngle", false));
             transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
             transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 500, "ClawSlide", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 600, "ClawAngle", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 500, "ClawAngle", false));
+            transferParallel.add(
+                    new ExecuteOnceTask(
+                            new ExecuteOnceTask.ExecuteListener() {
+                                @Override
+                                public void execute() {
+                                    angle_ready = true;
+                                }
+                            }, "Substate Transition"
+                    )
+            );
         transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
         }
         else {
-            transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "Claw", false));
-            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MIDDLE_POSITION, 100, "Vertical", false));
-            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 500, "ClawSlide", false));
-            transferParallel.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", false));
-            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 100, "Vertical", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_PREP_BACK, 100, "ClawAngle", false));
             transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 0, "ClawAngle", false));
+            transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "Claw", false));
+            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MIDDLE_POSITION, 0, "Vertical", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_PREP_BACK, 0, "ClawAngle", false));
+            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 850, "ClawSlide", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 200, "ClawAngle", false));
+            transferParallel.add(
+                    new ExecuteOnceTask(
+                            new ExecuteOnceTask.ExecuteListener() {
+                                @Override
+                                public void execute() {
+                                    angle_ready = true;
+                                }
+                            }, "Substate Transition"
+                    )
+            );
+            transferParallel.add(createHorizontalSlideTask(robot, 0, 0, "Horizontal", false));
+            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 100, "Vertical", false));
+//            transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
+
 //        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
         }
 
-        transferParallel.add(
-            new ExecuteOnceTask(
-                    new ExecuteOnceTask.ExecuteListener() {
-                        @Override
-                        public void execute() {
-                            angle_ready = true;
-                        }
-                    }, "Substate Transition"
-            )
-        );
 
         taskArrayList.add(transferParallel);
     }

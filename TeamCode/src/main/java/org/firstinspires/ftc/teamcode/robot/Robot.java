@@ -111,6 +111,7 @@ public class Robot {
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
         instanceStateMap.put(State.PICKUP_GROUND, () -> new PickUpGroundState(joystick));
         instanceStateMap.put(State.AUTO_DRIVE_TEST, () -> new AutoDriveTestState(joystick));
+        instanceStateMap.put(State.PICKUP_GROUND_LEFT, () -> new PickUpGroundStateLeft(joystick));
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -218,6 +219,27 @@ public class Robot {
         double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
         double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
         double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+
+        clawHorizontalAngleServo.setPosition(pos);
+        return this;
+    }
+
+    public Robot autoHorizontalPosBucket(Telemetry telemetry) {
+        double angle = 0;
+
+        if(doOverrideYaw == null) {
+            angle = drive.getYaw()+45;
+        } else {
+            angle = doOverrideYaw.getYaw()+45;
+        }
+
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
+        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        telemetry.addData("clawHorizontalAngleServo min", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT+intercept);
+        telemetry.addData("clawHorizontalAngleServo max", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT+intercept);
+        telemetry.addData("clawHorizontalAngleServo attempted pos", slope*angle+intercept);
+        telemetry.addData("clawHorizontalAngleServo actual pos", pos);
 
         clawHorizontalAngleServo.setPosition(pos);
         return this;
