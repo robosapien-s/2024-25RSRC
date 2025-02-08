@@ -60,8 +60,8 @@ public class WallPickUpState extends BaseState {
             transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "Claw", false));
             transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MIDDLE_POSITION, 0, "Vertical", false));
             transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_PREP_BACK, 0, "ClawAngle", false));
-            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 850, "ClawSlide", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 200, "ClawAngle", false));
+            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 50, "ClawAngle", false));
             transferParallel.add(
                     new ExecuteOnceTask(
                             new ExecuteOnceTask.ExecuteListener() {

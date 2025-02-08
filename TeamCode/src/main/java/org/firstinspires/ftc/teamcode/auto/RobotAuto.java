@@ -27,6 +27,7 @@ public class RobotAuto {
 
     public RobotAuto(HardwareMap inHardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry inTelemetry) {
         robot = new Robot(inHardwareMap, gamepad1, gamepad2, inTelemetry, true);
+        Robot.resetIMU = false;
         robot.setYawOverride(new Robot.YawOverrride() {
             @Override
             public double getYaw() {

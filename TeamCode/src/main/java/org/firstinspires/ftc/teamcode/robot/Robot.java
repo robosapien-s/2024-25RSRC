@@ -30,6 +30,7 @@ import java.util.function.Supplier;
 
 public class Robot {
 
+    public static boolean resetIMU = true;
 
     public interface YawOverrride {
         double getYaw();

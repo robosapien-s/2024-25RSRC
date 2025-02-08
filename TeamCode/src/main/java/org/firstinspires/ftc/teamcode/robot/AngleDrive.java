@@ -40,7 +40,7 @@ public class AngleDrive implements IDrive {
     boolean isAutoMode = false;
     double autoModeX = 0;
     double autoModeY = 0;
-    double rotateAngleOffset = 180;
+    double rotateAngleOffset = 0;
 
     boolean isLerpEnabled;
 
@@ -49,7 +49,12 @@ public class AngleDrive implements IDrive {
     private final PIDEx pidXController;
     private final PIDEx pidYController;
     public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled) {
-        InitializeResetImu(hardwareMap);
+        if (Robot.resetIMU) {
+            InitializeResetImu(hardwareMap);
+        } else {
+            Initialize(hardwareMap);
+            Robot.resetIMU = false;
+        }
         this.isLerpEnabled = isLerpEnabled;
 
         PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
