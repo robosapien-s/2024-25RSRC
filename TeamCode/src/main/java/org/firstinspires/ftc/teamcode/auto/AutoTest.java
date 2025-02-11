@@ -69,7 +69,7 @@ public class AutoTest extends LinearOpMode {
         private int targetPos = 0;
 
         public VerticalSlide(HardwareMap hardwareMap) {
-            verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MAX_POSITION, 0, true);
+            verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MAX_POSITION, 0, true);
         }
 
         public class VerticalSlideAction implements Action {

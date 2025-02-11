@@ -12,6 +12,8 @@ public class VerticalSlideController extends RobotPidMechanism {
     private final DcMotorEx motorSlide1;
     private final DcMotorEx motorSlide2;
 
+    private DcMotorEx motorSlide3 = null;
+
     // Dashboard-configurable PID coefficients and target position
     public static double kP = 0.0056;
     public static double kI = 0.0000;
@@ -21,7 +23,7 @@ public class VerticalSlideController extends RobotPidMechanism {
     private boolean isLeftMotorEncoded = true;
 
     // Constructor
-    public VerticalSlideController(HardwareMap hardwareMap, String mainSlide, String secondSlide, boolean inIsLeftMotorEncoded, int inMaxPosition, int inMinPosition, boolean isBreaking) {
+    public VerticalSlideController(HardwareMap hardwareMap, String mainSlide, String secondSlide, String thridSlide, boolean inIsLeftMotorEncoded, int inMaxPosition, int inMinPosition, boolean isBreaking) {
         super(
                 kP,          // Proportional gain
                 kI,          // Integral gain
@@ -36,9 +38,17 @@ public class VerticalSlideController extends RobotPidMechanism {
         motorSlide1 = hardwareMap.get(DcMotorEx.class, mainSlide);
         motorSlide2 = hardwareMap.get(DcMotorEx.class, secondSlide);
 
+        if(thridSlide != null &&  !thridSlide.isEmpty()) {
+            motorSlide3 = hardwareMap.get(DcMotorEx.class, thridSlide);
+        }
+
         if (isBreaking) {
             motorSlide1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             motorSlide2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            if(motorSlide3 != null) {
+                motorSlide3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
         }
         isLeftMotorEncoded = inIsLeftMotorEncoded;
 
@@ -46,6 +56,10 @@ public class VerticalSlideController extends RobotPidMechanism {
         if (isLeftMotorEncoded) {
             motorSlide1.setDirection(DcMotorSimple.Direction.REVERSE);
             motorSlide2.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            if(motorSlide3 != null) {
+                motorSlide3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
         }
 
         // Reset and configure encoders
@@ -54,6 +68,11 @@ public class VerticalSlideController extends RobotPidMechanism {
 
         motorSlide1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorSlide2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(motorSlide3 != null) {
+            motorSlide3.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            motorSlide3.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        }
     }
 
     // Get the current position from the main motor's encoder
@@ -68,6 +87,10 @@ public class VerticalSlideController extends RobotPidMechanism {
         if (isLeftMotorEncoded) {
           motorSlide1.setPower(-power);
           motorSlide2.setPower(power);
+
+          if(motorSlide3 != null) {
+              motorSlide3.setPower(-power);
+          }
         } else {
            //motorSlide1.setPower(-power);
            //motorSlide2.setPower(power);
