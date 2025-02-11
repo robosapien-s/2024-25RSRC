@@ -1,29 +1,24 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import android.graphics.Color;
-
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
-import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
+import com.qualcomm.robotcore.util.Range;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.teamcode.auto.RobotAuto;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
-import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.states.*;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
@@ -34,6 +29,12 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class Robot {
+
+    public static boolean resetIMU = true;
+
+    public interface YawOverrride {
+        double getYaw();
+    }
 
     private IRobot currentState;
     private final IDrive drive;
@@ -46,6 +47,7 @@ public class Robot {
     private final Servo clawAngleServo;
     private final Servo clawRotationServo;
     private final Servo clawServo;
+    private final Servo clawHorizontalAngleServo;
     private final CRServo intakeServo;
     private final Servo intakeAngleServo;
     private final Servo intakeKnuckleServo;
@@ -68,22 +70,28 @@ public class Robot {
     private double targetHeading;
 
 
-
+    private YawOverrride doOverrideYaw = null;
 
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
+        this(hardwareMap, gamepad1, gamepad2, telemetry, false);
+    }
+
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isAuto) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         this.hardwareMap = hardwareMap;
 
 
 
-        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", DriveTest.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0);
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, DriveTest.Params.VERTICAL_SLIDE_MAX_POSITION, 0);
-        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
-        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", DriveTest.Params.CLAW_SLIDER_FORWARD, DriveTest.Params.CLAW_SLIDER_BACK);
+        horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, false);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
+        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
+        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
+
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawHorizontalAngleServo = hardwareMap.get(Servo.class, "clawHorizontalAngleServo");
 
         intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
@@ -102,6 +110,9 @@ public class Robot {
         instanceStateMap.put(State.PID_TUNING, () -> new PidTuningState(joystick));
         instanceStateMap.put(State.INTAKINGCLAW, () -> new IntakingStateClaw(joystick));
         instanceStateMap.put(State.GO_TO_APRIL_TAG, () -> new GoToAprilTag(joystick));
+        instanceStateMap.put(State.PICKUP_GROUND, () -> new PickUpGroundState(joystick));
+        instanceStateMap.put(State.AUTO_DRIVE_TEST, () -> new AutoDriveTestState(joystick));
+        instanceStateMap.put(State.PICKUP_GROUND_LEFT, () -> new PickUpGroundStateLeft(joystick));
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -110,9 +121,18 @@ public class Robot {
         */
 
         switchState(State.INTAKINGCLAW);
-        drive = new AngleDrive(hardwareMap);
+        if (!isAuto) {
+            drive = new AngleDrive(hardwareMap, false);
+        } else {
+            drive = null;
+        }
+
 
         initPid();
+    }
+
+    public void setYawOverride(YawOverrride inOverride) {
+        doOverrideYaw = inOverride;
     }
     public Robot setHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.setTargetPosition(target);
@@ -124,17 +144,17 @@ public class Robot {
         return this;
     }
 
-    public Robot increseVerticalSlideTargetPosition(int target) {
+    public Robot increaseVerticalSlideTargetPosition(int target) {
         verticalSlideController.increaseTargetPosition(target);
         return this;
     }
 
-    public Robot increseHorizontalSlideTargetPosition(int target) {
+    public Robot increaseHorizontalSlideTargetPosition(int target) {
         horizontalSlideController.increaseTargetPosition(target);
         return this;
     }
 
-    public Robot increseClawSlideTargetPosition(int target) {
+    public Robot increaseClawSlideTargetPosition(int target) {
         dualServoSlideController.increaseTargetPosition(target);
         return this;
     }
@@ -160,6 +180,74 @@ public class Robot {
 
     public double getClawAnglePosition() {
         return clawAngleServo.getPosition();
+    }
+
+    public Robot setClawHorizontalAnglePosition(double position) {
+        clawHorizontalAngleServo.setPosition(position);
+        return this;
+    }
+
+    public Robot autoHorizontalPosWall(Telemetry telemetry) {
+    double angle = 0;
+
+        if(doOverrideYaw == null) {
+            angle = drive.getYaw();
+        } else {
+            angle = doOverrideYaw.getYaw();
+        }
+
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
+        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        telemetry.addData("clawHorizontalAngleServo min", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT+intercept);
+        telemetry.addData("clawHorizontalAngleServo max", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT+intercept);
+        telemetry.addData("clawHorizontalAngleServo attempted pos", slope*angle+intercept);
+        telemetry.addData("clawHorizontalAngleServo actual pos", pos);
+
+        clawHorizontalAngleServo.setPosition(pos);
+        return this;
+    }
+
+    public Robot autoHorizontalPosHang() {
+        double angle = 0;
+
+        if(doOverrideYaw == null) {
+            angle = drive.getYaw();
+        } else {
+            angle = doOverrideYaw.getYaw();
+        }
+
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
+        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+
+        clawHorizontalAngleServo.setPosition(pos);
+        return this;
+    }
+
+    public Robot autoHorizontalPosBucket(Telemetry telemetry) {
+        double angle = 0;
+
+        if(doOverrideYaw == null) {
+            angle = drive.getYaw()+45;
+        } else {
+            angle = doOverrideYaw.getYaw()+45;
+        }
+
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
+        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        telemetry.addData("clawHorizontalAngleServo min", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT+intercept);
+        telemetry.addData("clawHorizontalAngleServo max", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT+intercept);
+        telemetry.addData("clawHorizontalAngleServo attempted pos", slope*angle+intercept);
+        telemetry.addData("clawHorizontalAngleServo actual pos", pos);
+
+        clawHorizontalAngleServo.setPosition(pos);
+        return this;
+    }
+
+    public double getClawHorizontalAnglePostion() {
+        return clawHorizontalAngleServo.getPosition();
     }
 
     public Robot setClawRotationPosition(double position) {
@@ -230,11 +318,16 @@ public class Robot {
         return clawSlideController.getCurrentPosition();
     }
     public void newVerticalControlPidTuning() {
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, DriveTest.Params.VERTICAL_SLIDE_DROP_L2, 0);
+        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DROP_L2, 0,false);
+    }
+
+    public Vector3D getDeadWheelLocation() {
+        return drive.getRobotPosition();
     }
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
         servoHashMap.put("clawAngleServo", clawAngleServo);
+        servoHashMap.put("clawHorizontalAngleServo", clawHorizontalAngleServo);
         servoHashMap.put("clawRotationServo", clawRotationServo);
         servoHashMap.put("clawServo", clawServo);
         servoHashMap.put("intakeAngleServo", intakeAngleServo);
@@ -256,6 +349,10 @@ public class Robot {
     }
 
     public void setAutoTarget(double targetX, double targetY, double targetHeading) {
+
+        drive.setAutoMode(targetX, targetY);
+        drive.setTargetHeading(targetHeading);
+
         isAutoMode = true;
         this.targetX = targetX;
         this.targetY= targetY;
@@ -265,6 +362,11 @@ public class Robot {
     public void disableAutoMode() {
         isAutoMode = false;
     }
+
+    public void setTargetHeading(double heading) {
+        drive.setTargetHeading(heading);
+    }
+
 
 
     public void execute(Telemetry telemetry) {
@@ -299,16 +401,33 @@ public class Robot {
             telemetry.addData("Target X", targetX);
             telemetry.addData("Target Y", targetY);
 
+
 //            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
         } else {
             drive.update(telemetry, joystick, 1, .5);
         }
+        telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         dualServoSlideController.update(telemetry);
+        telemetry.update();
 
     }
+
+
+
+    public void executeAuto(Telemetry telemetry) {
+        telemetry.addData("State:", getCurrentState().name());
+        currentState.execute(this, telemetry);
+        horizontalSlideController.update(telemetry);
+        verticalSlideController.update(telemetry);
+        dualServoSlideController.update(telemetry);
+        telemetry.update();
+    }
+
+
+
     public State getCurrentState() {
         if (currentState != null) {
             return currentState.getState();
@@ -351,7 +470,7 @@ public class Robot {
             telemetry.addData("Limelight", "No valid result.");
         }
 
-        telemetry.update();
+//        telemetry.update();
         return botPose;
 
 

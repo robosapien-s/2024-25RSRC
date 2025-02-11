@@ -9,16 +9,14 @@ package org.firstinspires.ftc.teamcode.states;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.opmodes.DriveTest;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 public class ServoTestState extends BaseState {
 
@@ -83,7 +81,7 @@ public class ServoTestState extends BaseState {
         }
 
         if (joystick.gamepad1GetA()) {
-            robot.setDualSlideTargetPosition(DriveTest.Params.CLAW_SLIDER_FORWARD);
+            robot.setDualSlideTargetPosition(RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD);
         }
         if (joystick.gamepad1GetB()) {
             robot.setDualSlideTargetPosition(0);
