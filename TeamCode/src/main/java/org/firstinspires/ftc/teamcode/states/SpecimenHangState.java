@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class SpecimenHangState extends BaseState {
     boolean angle_ready = false;
     boolean didLowerHeight = false;
-    int subState = 0;
+//    int subState = 0;
     public SpecimenHangState(JoystickWrapper joystick) {
         super(joystick);
     }
@@ -39,7 +39,7 @@ public class SpecimenHangState extends BaseState {
 
             //transferParallel.add(createClawAngleTask( robot, DriveTest.Params.CLAW_ANGLE_FORWARD_SPECIMEN, 1000, "ClawAngle", true));
             transferParallel.add(createClawRotationTask( robot, RoboSapiensTeleOp.Params.ROT_SERVO_DEFAULT, 1, "ClawRotation", false));
-            transferParallel.add(createHorizontalSlideTask(robot, 0, 1, "Horizontal", true));
+            transferParallel.add(createHorizontalSlideTask(robot, 0, 500, "Horizontal", true));
 
             taskArrayList.add(transferParallel);
         } else {
@@ -49,7 +49,7 @@ public class SpecimenHangState extends BaseState {
             taskArrayList.add(createClawRotationTask( robot, RoboSapiensTeleOp.Params.ROT_SERVO_DEFAULT, 1, "ClawRotation", false));
             taskArrayList.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD, 200, "ClawAngle", false));
             taskArrayList.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, 0, "ClawSlide", false));
-            taskArrayList.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", true));
+            taskArrayList.add(createHorizontalSlideTask(robot, 0, 500, "Horizontal", true));
         }
 
         taskArrayList.add(
@@ -71,21 +71,24 @@ public class SpecimenHangState extends BaseState {
             //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
             robot.switchState(State.INTAKINGCLAW);
         } else if(joystick.gamepad1GetB()) {
-            if(subState == 0) {
-                subState++;
-                robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
-            }
-            else if(subState == 1) {
+//            if(subState == 0) {
+//                subState++;
+//                robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
+//            }
+//            else if(subState == 1) {
+//
+//                subState++;
+//                angle_ready = false;
+//                //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+//
+//            } else {
+//
+//            }
 
-                subState++;
-                angle_ready = false;
-                //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
-                robot.setVerticalSlideTargetPosition(RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
-                robot.setClawAnglePosition(RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD);
-                robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
-            } else {
-                robot.switchState(State.WALLPICKUP);
-            }
+
+
+            robot.switchState(State.WALLPICKUP);
+
         } else if(joystick.gamepad1GetY()) {
             robot.switchState(State.DROPPING_L1);
 //        } else if(joystick.gamepad1GetDUp()) {

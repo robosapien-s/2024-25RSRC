@@ -39,10 +39,10 @@ public class WallPickUpState extends BaseState {
             transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "Claw", false));
             transferParallel.add(createHorizontalSlideTask(robot, 0, 300, "Horizontal", false));
 //            transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 300, "Vertical", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_PREP_BACK, 200, "ClawAngle", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 0, "ClawAngle", false));
             transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
-            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 500, "ClawSlide", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 500, "ClawAngle", false));
+            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 250, "ClawSlide", false));
+//            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 500, "ClawAngle", false));
             transferParallel.add(
                     new ExecuteOnceTask(
                             new ExecuteOnceTask.ExecuteListener() {
@@ -54,14 +54,20 @@ public class WallPickUpState extends BaseState {
                     )
             );
         transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));
-        }
-        else {
+        } else if (prevState.getState() == State.SPECIMEN_HANG) {
+            transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "claw open", false));//robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
+            transferParallel.add(createVerticalSlideTask(robot,RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_DROP_POSITION,0, "slide halfway down", false));//robot.setVerticalSlideTargetPosition(RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+            transferParallel.add(createClawAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD, 0, "angle position", false));//robot.setClawAnglePosition(RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD);
+            transferParallel.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER, 200, "horizontal angle center", false));//robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
             transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
             transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "Claw", false));
             transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MIDDLE_POSITION, 0, "Vertical", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_PREP_BACK, 0, "ClawAngle", false));
-            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 1000, "ClawSlide", false));
-            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 50, "ClawAngle", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 0, "ClawAngle", false));
+
+            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 375, "ClawSlide", false));
+            transferParallel.add(createHorizontalSlideTask(robot, 0, 0, "Horizontal", false));
+            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 375, "Vertical", false));
+//            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 50, "ClawAngle", false));
             transferParallel.add(
                     new ExecuteOnceTask(
                             new ExecuteOnceTask.ExecuteListener() {
@@ -72,8 +78,28 @@ public class WallPickUpState extends BaseState {
                             }, "Substate Transition"
                     )
             );
+        } else {
+            transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
+            transferParallel.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "Claw", false));
+            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MIDDLE_POSITION, 0, "Vertical", false));
+            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 0, "ClawAngle", false));
+            transferParallel.add(createClawSlideTask( robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 375, "ClawSlide", false));
             transferParallel.add(createHorizontalSlideTask(robot, 0, 0, "Horizontal", false));
-            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 100, "Vertical", false));
+            transferParallel.add(createVerticalSlideTask(robot, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DOWN_POSITION, 375, "Vertical", false));
+//            transferParallel.add(createClawAngleTask( robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 50, "ClawAngle", false));
+
+            transferParallel.add(
+                    new ExecuteOnceTask(
+                            new ExecuteOnceTask.ExecuteListener() {
+                                @Override
+                                public void execute() {
+                                    angle_ready = true;
+                                }
+                            }, "Substate Transition"
+                    )
+            );
+
+
 //            transferParallel.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK,0,"ClawRotation",false));
 
 //        transferParallel.add(createVerticalSlideTask(robot, DriveTest.Params.VERTICAL_SLIDE_DOWN_POSITION, 0, "Vertical", false));

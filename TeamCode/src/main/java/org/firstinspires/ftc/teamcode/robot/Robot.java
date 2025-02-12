@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.util.Range;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.auto.RobotAuto;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -30,7 +29,8 @@ import java.util.function.Supplier;
 
 public class Robot {
 
-    public static boolean resetIMU = true;
+    public static boolean resetEncoders = true;
+
 
     public interface YawOverrride {
         double getYaw();
@@ -126,6 +126,8 @@ public class Robot {
         } else {
             drive = null;
         }
+
+        resetEncoders=true;
 
 
         initPid();

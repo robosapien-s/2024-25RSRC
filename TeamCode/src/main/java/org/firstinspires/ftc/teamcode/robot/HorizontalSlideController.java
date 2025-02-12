@@ -33,7 +33,7 @@ public class HorizontalSlideController extends RobotPidMechanism {
 
         motorSlide1 = hardwareMap.get(DcMotorEx.class, mainSlide);
         motorSlide1.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorSlide1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        if (Robot.resetEncoders) motorSlide1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         motorSlide1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         if(isBraking) {

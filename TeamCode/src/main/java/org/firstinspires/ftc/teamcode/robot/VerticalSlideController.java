@@ -63,14 +63,17 @@ public class VerticalSlideController extends RobotPidMechanism {
         }
 
         // Reset and configure encoders
-        motorSlide1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        motorSlide2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        if (Robot.resetEncoders) {
+            motorSlide1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            motorSlide2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        }
 
         motorSlide1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         motorSlide2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         if(motorSlide3 != null) {
-            motorSlide3.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            if (Robot.resetEncoders) motorSlide3.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             motorSlide3.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
