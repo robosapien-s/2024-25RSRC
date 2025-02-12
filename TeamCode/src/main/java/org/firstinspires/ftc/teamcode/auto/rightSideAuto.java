@@ -29,12 +29,12 @@ public class rightSideAuto extends LinearOpMode {
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .strafeToConstantHeading(new Vector2d(-2, -42))
                 .waitSeconds(.05)
-                .stopAndAdd(robotAuto.openTopClawAction())
-                .waitSeconds(.1)
+//                .stopAndAdd(robotAuto.openTopClawAction())
+//                .waitSeconds(.1)
 //                .stopAndAdd(robotAuto.specimenHangSubstate1())
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
 //                .lineToY(-44)
-                .strafeToLinearHeading(new Vector2d(26,-43.5), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(26,-42.5), Math.toRadians(30))
                 .stopAndAdd(new ParallelAction(
                                         robotAuto.setHorizontalSlidePosition(1650),
                                         robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16)
@@ -43,11 +43,11 @@ public class rightSideAuto extends LinearOpMode {
                 .waitSeconds(.75)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND)) //first
                 .waitSeconds(.6)
-                .strafeToLinearHeading(new Vector2d(26.5, -45), Math.toRadians(-50))
+                .strafeToLinearHeading(new Vector2d(26.5, -45), Math.toRadians(-54))
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
-                .strafeToLinearHeading(new Vector2d(32,-39), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(31.5,-38.25), Math.toRadians(30))
 //                .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND)) //second
                 .waitSeconds(.5)
@@ -55,7 +55,7 @@ public class rightSideAuto extends LinearOpMode {
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
-                .strafeToLinearHeading(new Vector2d(42.15,-39.5), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(42,-39.5), Math.toRadians(30))
 //                .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND)) //third
                 .waitSeconds(.5)
@@ -66,33 +66,33 @@ public class rightSideAuto extends LinearOpMode {
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
                 .strafeToLinearHeading(new Vector2d(32,-56),Math.toRadians(110))
 //                .stopAndAdd(robotAuto.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT))
-                .waitSeconds(.2)
+                .waitSeconds(.1)
                 .strafeToLinearHeading(new Vector2d(32.5,-62.5),Math.toRadians(110))
+                .waitSeconds(.05)
+                .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
+                .waitSeconds(.2)
+                .strafeToConstantHeading(new Vector2d(7,-40.25))//1st drop
+                .waitSeconds(.2)
+                .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
+                .strafeToConstantHeading(new Vector2d(32.5,-63))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)
-                .strafeToConstantHeading(new Vector2d(8,-40))//1st drop
+                .strafeToConstantHeading(new Vector2d(8.6,-40.25))//2nd drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(31.5,-62.8))
+                .strafeToConstantHeading(new Vector2d(32.5,-63))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)
-                .strafeToConstantHeading(new Vector2d(9.1,-40))//2nd drop
+                .strafeToConstantHeading(new Vector2d(10.35,-40.25))//3rd drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(31.5,-62.8))
-                .waitSeconds(.1)
-                .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
-                .waitSeconds(.25)
-                .strafeToConstantHeading(new Vector2d(10.6,-40))//3rd drop
-                .waitSeconds(.2)
-                .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(31.5,-62.8))
+                .strafeToConstantHeading(new Vector2d(32.5,-63))
                 .waitSeconds(.15)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)
-                .strafeToConstantHeading(new Vector2d(12.1,-40))//4th drop
+                .strafeToConstantHeading(new Vector2d(11.85,-40.25))//4th drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
                 .strafeToConstantHeading(new Vector2d(33,-62.5));
