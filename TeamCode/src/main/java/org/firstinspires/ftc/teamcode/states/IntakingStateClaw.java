@@ -177,6 +177,15 @@ public class IntakingStateClaw extends BaseState {
             transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngleDown", false));
             transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 250, "IntakeKnuckleDown", false));
 
+
+            transferSeries.add(new ExecuteOnceTask(
+                    new ExecuteOnceTask.ExecuteListener() {
+                        @Override
+                        public void execute() {
+                            robot.setTargetHeading(-45);
+                        }
+                    }, "set heading"
+            ));
             transferSeries.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
                 @Override
                 public void execute() {
@@ -217,7 +226,7 @@ public class IntakingStateClaw extends BaseState {
         */
 
 
-            robot.increaseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-100)+joystick.gamepad1GetRightTrigger()*100));
+            robot.increaseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-65)+joystick.gamepad1GetRightTrigger()*65));
 
 
 

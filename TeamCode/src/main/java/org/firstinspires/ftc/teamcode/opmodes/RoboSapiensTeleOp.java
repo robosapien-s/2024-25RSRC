@@ -23,6 +23,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double CLAW_ANGLE_FORWARD_SPECIMEN = .48;
         public static double CLAW_ANGLE_DOWN = 0.96;
+        public static double CLAW_ANGLE_BUCKET = 0.23;
         public static double CLAW_ANGLE_BACK = 0.14;
 
         public static double CLAW_ANGLE_PREP_BACK = 0.5;
@@ -91,7 +92,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
 
 
-        public static double ANGLE_DRIVE_KP = 0.02;
+        public static double ANGLE_DRIVE_KP = 0.026;
         public static double ANGLE_DRIVE_KD = .00004;
         public static double ANGLE_DRIVE_KI = 0.0;
 

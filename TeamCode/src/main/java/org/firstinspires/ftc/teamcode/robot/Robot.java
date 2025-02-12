@@ -369,7 +369,8 @@ public class Robot {
         drive.setTargetHeading(heading);
     }
 
-
+    long dTime = System.currentTimeMillis();
+    long minTime = dTime;
 
     public void execute(Telemetry telemetry) {
 //        if (!isAprilTagDetected) {
@@ -413,6 +414,15 @@ public class Robot {
         horizontalSlideController.update(telemetry);
         verticalSlideController.update(telemetry);
         dualServoSlideController.update(telemetry);
+
+        telemetry.addData("Delta Time", System.currentTimeMillis()-dTime);
+        dTime=System.currentTimeMillis();
+        if (dTime<minTime) {
+            minTime=dTime;
+        }
+
+        telemetry.addData("Min Time", minTime);
+
         telemetry.update();
 
     }

@@ -12,7 +12,7 @@ public class DroppingL1State extends BaseState {
     boolean angle_ready = false;
 
 
-    int substate = 0;
+//    int substate = 0;
 
     public DroppingL1State(JoystickWrapper joystick) {
         super(joystick);
@@ -42,7 +42,7 @@ public class DroppingL1State extends BaseState {
         transferSeries.add(createHorizontalSlideTask(robot, RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "HorizontalSlide", false));
         transferSeries.add(createVerticalSlideTask(robot, getHeight(), 1, "VerticalSlide", false));
         transferSeries.add(createClawSlideTask(robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, getWait(), "CLAW_SLIDER_BACK", false));
-        transferSeries.add(createClawAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 200, "CLAW_ANGLE_BACK", false));
+        transferSeries.add(createClawAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BUCKET, 200, "CLAW_ANGLE_BACK", false));
         transferSeries.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK, 100, "ROT_SERVO_BACK", false));
 
 
@@ -64,14 +64,25 @@ public class DroppingL1State extends BaseState {
 
         if(joystick.gamepad1GetX()) {
 
-            if(substate == 0) {
-                substate++;
-                robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
-            } else {
-                angle_ready = false;
-                robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
-                robot.switchState(State.INTAKINGCLAW);
-            }
+            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "claw open", false));
+            taskArrayList.add(new ExecuteOnceTask(
+                    new ExecuteOnceTask.ExecuteListener() {
+                        @Override
+                        public void execute() {
+                            angle_ready = false;
+                        }
+                    }, "Substate Transition"
+            ));
+            taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER, 0, "horizontal claw center", false));
+            taskArrayList.add(new ExecuteOnceTask(
+                    new ExecuteOnceTask.ExecuteListener() {
+                        @Override
+                        public void execute() {
+                            robot.switchState(State.INTAKINGCLAW);
+                        }
+                    }, "Substate Transition"
+            ));
+
         } else if(joystick.gamepad1GetA()) {
             angle_ready = false;
             robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
