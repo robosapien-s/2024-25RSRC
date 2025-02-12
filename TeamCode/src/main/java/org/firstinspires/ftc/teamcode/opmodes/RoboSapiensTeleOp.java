@@ -26,7 +26,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_ANGLE_BACK = 0.14;
 
         public static double CLAW_ANGLE_PREP_BACK = 0.5;
-        public static double CLAW_ANGLE_TRANSFER = .765;
+        public static double CLAW_ANGLE_TRANSFER = .76;
 
         public static int CLAW_SLIDER_FORWARD = 12000;
         public static int CLAW_SLIDER_TRANSFER = 0;
@@ -80,10 +80,10 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         //public static double INTAKE_ANGLE_READY_LOW = .3394;//.6183;
         public static double INTAKE_ANGLE_PICKUP =  .43;//.68;
 
-        public static double INTAKE_ANGLE_TRANSFER = .16;
+        public static double INTAKE_ANGLE_TRANSFER = .14;
 
         public static double INTAKE_KNUCKLE_PICKUP = 0.1789;//.1;
-        public static double INTAKE_KNUCKLE_TRANSFER = .975;
+        public static double INTAKE_KNUCKLE_TRANSFER = 1;
 
         public static double CLAW_HORIZONTAL_ANGLE_CENTER = 0.54;
         public static double CLAW_HORIZONTAL_ANGLE_LEFT = 0.42;

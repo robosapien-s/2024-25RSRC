@@ -21,6 +21,8 @@ public class DroppingL1State extends BaseState {
     public int getHeight() {
         return RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DROP_L1;
     }
+
+    public int getWait() {return 1000;}
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
@@ -39,7 +41,7 @@ public class DroppingL1State extends BaseState {
         transferSeries.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 1, "ClawClose", false));
         transferSeries.add(createHorizontalSlideTask(robot, RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "HorizontalSlide", false));
         transferSeries.add(createVerticalSlideTask(robot, getHeight(), 1, "VerticalSlide", false));
-        transferSeries.add(createClawSlideTask(robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, 1000, "CLAW_SLIDER_BACK", false));
+        transferSeries.add(createClawSlideTask(robot, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK, getWait(), "CLAW_SLIDER_BACK", false));
         transferSeries.add(createClawAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_ANGLE_BACK, 200, "CLAW_ANGLE_BACK", false));
         transferSeries.add(createClawRotationTask(robot, RoboSapiensTeleOp.Params.ROT_SERVO_BACK, 100, "ROT_SERVO_BACK", false));
 

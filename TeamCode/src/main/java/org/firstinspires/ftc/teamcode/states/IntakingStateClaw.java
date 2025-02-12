@@ -165,9 +165,9 @@ public class IntakingStateClaw extends BaseState {
 
             transferSeries.add(createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, (int) ((250)*(((double) robot.getHorizontalSlidePosition())/ ((double) RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION))), "IntakeClawClose", false));
 
-            transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_TRANSFER, 0, "IntakeClawClose", false));
+            transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_TRANSFER, 200, "IntakeClawClose", false));
             transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER, 300, "IntakeClawClose", false));
-            transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_LOOSE, 250, "IntakeClawLoose", false));
+            transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_LOOSE, 300, "IntakeClawLoose", false));
 
 
 
@@ -180,7 +180,7 @@ public class IntakingStateClaw extends BaseState {
             transferSeries.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
                 @Override
                 public void execute() {
-                    robot.switchState(State.DROPPING_L1);
+                    robot.switchState(State.DROPPING_L2);
                 }
             }, "Set Drop State"));
 

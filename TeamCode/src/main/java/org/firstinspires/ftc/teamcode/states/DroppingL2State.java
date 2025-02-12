@@ -19,4 +19,7 @@ public class DroppingL2State extends DroppingL1State {
         return State.DROPPING_L2;
     }
 
+    @Override
+    public int getWait() {return 1500;}
+
 }

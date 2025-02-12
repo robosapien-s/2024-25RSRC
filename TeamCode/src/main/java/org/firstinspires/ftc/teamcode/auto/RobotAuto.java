@@ -102,6 +102,16 @@ public class RobotAuto {
         };
     }
 
+    public Action setVerticalSlidePosition(int pos) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.setVerticalSlideTargetPosition(pos);
+                return false;
+            }
+        };
+    }
+
     public Action setClawHorizontalAnglePosition(double pos) {
         return new Action() {
             @Override
