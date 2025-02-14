@@ -22,7 +22,7 @@ public class rightSideAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
         RobotAuto robotAuto = new RobotAuto(hardwareMap, gamepad1, gamepad2, telemetry);
-        Pose2d initPose = new Pose2d(-4.4,-64,Math.toRadians(90));
+        Pose2d initPose = new Pose2d(-4.4,-63.5,Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
 
         TrajectoryActionBuilder trajectory1 = drive.actionBuilder(initPose)
@@ -55,7 +55,7 @@ public class rightSideAuto extends LinearOpMode {
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
-                .strafeToLinearHeading(new Vector2d(42,-39.5), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(42,-38.75), Math.toRadians(30))
 //                .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND)) //third
                 .waitSeconds(.5)
