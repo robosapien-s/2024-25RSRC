@@ -1,20 +1,27 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Config
 public class DualServoSlideController extends RobotPidMechanism{
 
     private final CRServo servo1;
     private final CRServo servo2;
     private final DcMotorEx servoEncoder;
 
+    public static double kP = 0.00044;
+    public static double kI = 0.000;
+    public static double kD = 0.0046;
+    public static int targetPosition = 0;
+
     public DualServoSlideController(HardwareMap hardwareMap, String servo1Name, String servo2name, String encoderName, int inMaxPosition, int inMinPosition) {
 
-        super(  0.00044,     // Proportional gain
-                0.0,    // Integral gain
-                0.004,    // Derivative gain
+        super(  kP,     // Proportional gain
+                kI,    // Integral gain
+                kD,    // Derivative gain
                 -1.0,      // Minimum output limit
                 1.0,       // Maximum output limit
                 0.1,  // Output ramp rate (optional)

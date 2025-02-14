@@ -55,7 +55,7 @@ public class leftSideAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(-59, -51), Math.toRadians(108))
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND_LEFT))//third
-                .waitSeconds(1)
+                .waitSeconds(2.5)
                 .strafeToLinearHeading(new Vector2d(-61.5, -54), Math.toRadians(90))
                 .waitSeconds(0.5)
                 .stopAndAdd(robotAuto.setState(IRobot.State.DROPPING_L2))
