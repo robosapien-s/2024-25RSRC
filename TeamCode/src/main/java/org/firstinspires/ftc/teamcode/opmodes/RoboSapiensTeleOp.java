@@ -47,7 +47,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_DOWN_POSITION = 0;
 
-        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1010;
+        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1030;
 
         public static int VERTICAL_SLIDE_HANG_DROP_POSITION = 600;
 
@@ -67,15 +67,11 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int VERTICAL_SLIDE_PID_target = 400;
 
-
-
         public static double INTAKE_CLAW_OPEN = .49;
         public static double INTAKE_CLAW_CLOSE = .55;
         public static double INTAKE_CLAW_LOOSE = .53;
 
-
         public static double INTAKE_ROT_SERVO_DEFAULT = .2393;
-
 
         public static double INTAKE_ANGLE_READY = .3;//.6183;
         //public static double INTAKE_ANGLE_READY_LOW = .3394;//.6183;
