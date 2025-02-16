@@ -34,7 +34,7 @@ public class rightSideAuto extends LinearOpMode {
 //                .stopAndAdd(robotAuto.specimenHangSubstate1())
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
 //                .lineToY(-44)
-                .strafeToLinearHeading(new Vector2d(26,-42.5), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(26,-42), Math.toRadians(30))
                 .stopAndAdd(new ParallelAction(
                                         robotAuto.setHorizontalSlidePosition(1650),
                                         robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16)
@@ -47,7 +47,7 @@ public class rightSideAuto extends LinearOpMode {
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
-                .strafeToLinearHeading(new Vector2d(31.5,-38.75), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(31.5,-38.25), Math.toRadians(30))
 //                .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND)) //second
                 .waitSeconds(.5)
@@ -55,7 +55,7 @@ public class rightSideAuto extends LinearOpMode {
                 .stopAndAdd(robotAuto.setState(IRobot.State.INTAKINGCLAW))
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setIntakeRotationServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16))
-                .strafeToLinearHeading(new Vector2d(42,-38.75), Math.toRadians(30))
+                .strafeToLinearHeading(new Vector2d(42,-38.25), Math.toRadians(30))
 //                .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.PICKUP_GROUND)) //third
                 .waitSeconds(.5)

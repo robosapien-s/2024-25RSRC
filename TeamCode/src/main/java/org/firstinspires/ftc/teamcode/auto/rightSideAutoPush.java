@@ -51,28 +51,28 @@ public class rightSideAutoPush extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(32.5,-56),Math.toRadians(110))
 //                .stopAndAdd(robotAuto.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT))
                 .waitSeconds(.1)
-                .strafeToLinearHeading(new Vector2d(32.5,-63),Math.toRadians(110))
+                .strafeToLinearHeading(new Vector2d(34.5,-63),Math.toRadians(110))
                 .waitSeconds(.05)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.2)
                 .strafeToConstantHeading(new Vector2d(7,-40.25))//1st drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(32.5,-63.25))
+                .strafeToConstantHeading(new Vector2d(34.5,-63.25))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)
                 .strafeToConstantHeading(new Vector2d(8.6,-40.25))//2nd drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(32.5,-63.25))
+                .strafeToConstantHeading(new Vector2d(34.5,-63.25))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)
                 .strafeToConstantHeading(new Vector2d(10.35,-40.25))//3rd drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(33,-63));
+                .strafeToConstantHeading(new Vector2d(34.5,-63));
 
         TrajectoryActionBuilder smallWait = drive.actionBuilder(initPose)
                 .waitSeconds(.1);

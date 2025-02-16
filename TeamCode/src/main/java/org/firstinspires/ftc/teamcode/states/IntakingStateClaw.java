@@ -82,7 +82,7 @@ public class IntakingStateClaw extends BaseState {
             robot.switchState(State.SERVO_TEST);
         }
 
-        if(joystick.gamepad1GetY()) {
+        if(joystick.gamepad1GetRightBumperDown()) {
             robot.toggleRobotSpeedMode();
         }
 
