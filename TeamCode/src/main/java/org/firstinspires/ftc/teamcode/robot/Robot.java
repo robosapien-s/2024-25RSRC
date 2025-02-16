@@ -72,6 +72,8 @@ public class Robot {
 
     private YawOverrride doOverrideYaw = null;
 
+    private boolean isSlowMode = false;
+
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         this(hardwareMap, gamepad1, gamepad2, telemetry, false);
@@ -152,7 +154,7 @@ public class Robot {
     }
 
     public Robot increaseHorizontalSlideTargetPosition(int target) {
-        horizontalSlideController.increaseTargetPosition(target);
+        horizontalSlideController.increaseTargetPosition(isSlowMode ? (int) (target * .3) : target);
         return this;
     }
 
@@ -326,6 +328,18 @@ public class Robot {
     public Vector3D getDeadWheelLocation() {
         return drive.getRobotPosition();
     }
+
+    public void toggleRobotSpeedMode() {
+        isSlowMode = !isSlowMode;
+    }
+    public void setRobotSpeedSlow() {
+        isSlowMode = true;
+    }
+
+    public void setRobotSpeedNormal() {
+        isSlowMode = false;
+    }
+
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
         servoHashMap.put("clawAngleServo", clawAngleServo);
@@ -407,7 +421,7 @@ public class Robot {
 
 //            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
         } else {
-            drive.update(telemetry, joystick, 1, .5);
+            drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
         }
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);

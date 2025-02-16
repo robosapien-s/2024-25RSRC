@@ -168,10 +168,10 @@ public class AngleDrive implements IDrive {
         double newRx = pidController.calculate( yaw+headingError, yaw);
 
         if (cosineThing) {
-            MoveMecanum(-translation2d.getX(), translation2d.getY() * Math.cos(Math.toRadians(headingError)), Range.clip(headingError * PGain, -1, 1));
+            MoveMecanum(-translation2d.getX() * speed,  (translation2d.getY()*speed) * Math.cos(Math.toRadians(headingError)), speed * Range.clip(headingError * PGain, -1, 1));
         } else {
            // MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(headingError * PGain, -1, 1));
-            MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(newRx, -1, 1));
+            MoveMecanum(-translation2d.getX() * speed, translation2d.getY() * speed, Range.clip(newRx, -1, 1) * speed);
         }
 
 //        telemetry.update();

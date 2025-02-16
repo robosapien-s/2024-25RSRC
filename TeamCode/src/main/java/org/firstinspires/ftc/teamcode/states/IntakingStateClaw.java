@@ -82,7 +82,14 @@ public class IntakingStateClaw extends BaseState {
             robot.switchState(State.SERVO_TEST);
         }
 
+        if(joystick.gamepad1GetY()) {
+            robot.toggleRobotSpeedMode();
+        }
+
         if(joystick.gamepad1GetA()) {
+
+            robot.setRobotSpeedNormal();
+
             RobotTaskSeries transferSeries = new RobotTaskSeries();
 
 
@@ -146,13 +153,13 @@ public class IntakingStateClaw extends BaseState {
         }
 
         if(joystick.gamepad1GetB()) {
-
-           robot.switchState(State.WALLPICKUP);
+            robot.setRobotSpeedNormal();
+            robot.switchState(State.WALLPICKUP);
         }
 
         if(joystick.gamepad1GetX()) {
 
-
+            robot.setRobotSpeedNormal();
             RobotTaskSeries transferSeries = new RobotTaskSeries();
 
             transferSeries.add(createHorizontalSlideTask(robot, RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "Claw", false));
