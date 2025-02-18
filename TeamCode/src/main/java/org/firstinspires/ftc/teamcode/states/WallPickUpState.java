@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class WallPickUpState extends BaseState {
 
     boolean angle_ready = false;
+    boolean isDriftModeEnabled = false;
     public WallPickUpState(JoystickWrapper joystick) {
         super(joystick);
     }
@@ -111,7 +112,7 @@ public class WallPickUpState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-        if(robot.isDrifting() && !joystick.gamepad1GetBRaw()) {
+        if(isDriftModeEnabled && robot.isDrifting() && !joystick.gamepad1GetBRaw()) {
             angle_ready = false;
             robot.setDriftMode(false, 0, 0);
             robot.switchState(State.SPECIMEN_HANG);
@@ -120,13 +121,17 @@ public class WallPickUpState extends BaseState {
 
             if (joystick.gamepad1GetB()) {
                 //angle_ready = false;
-                robot.setDriftMode(true, 0, .7);
+                if(isDriftModeEnabled) {
+                    robot.setDriftMode(true, 0, .7);
+                } else {
+                    robot.switchState(State.SPECIMEN_HANG);
+                }
                 //robot.switchState(State.SPECIMEN_HANG);
             } else if (joystick.gamepad1GetA()) {
                 //robot.setDriftMode(false, 0, 0);
                 robot.switchState(State.INTAKINGCLAW);
             } else if (joystick.gamepad1GetY()) {
-                robot.setDriftMode(true, 0, .7);
+                isDriftModeEnabled = !isDriftModeEnabled;
             }
         }
 
