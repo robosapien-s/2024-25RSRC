@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class WallPickUpState extends BaseState {
 
     boolean angle_ready = false;
-
     public WallPickUpState(JoystickWrapper joystick) {
         super(joystick);
     }
@@ -112,11 +111,23 @@ public class WallPickUpState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-        if(joystick.gamepad1GetB()) {
+        if(robot.isDrifting() && !joystick.gamepad1GetBRaw()) {
             angle_ready = false;
+            robot.setDriftMode(false, 0, 0);
             robot.switchState(State.SPECIMEN_HANG);
-        } else if(joystick.gamepad1GetA())  {
-            robot.switchState(State.INTAKINGCLAW);
+        } else {
+
+
+            if (joystick.gamepad1GetB()) {
+                //angle_ready = false;
+                robot.setDriftMode(true, 0, .7);
+                //robot.switchState(State.SPECIMEN_HANG);
+            } else if (joystick.gamepad1GetA()) {
+                //robot.setDriftMode(false, 0, 0);
+                robot.switchState(State.INTAKINGCLAW);
+            } else if (joystick.gamepad1GetY()) {
+                robot.setDriftMode(true, 0, .7);
+            }
         }
 
 //        if(joystick.gamepad1GetLeftBumperRaw()) {

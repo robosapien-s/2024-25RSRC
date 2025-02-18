@@ -69,6 +69,7 @@ public class SpecimenHangState extends BaseState {
 
         if(joystick.gamepad1GetA()) {
             //robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
+            robot.setDriftMode(false, 0, 0);
             robot.switchState(State.INTAKINGCLAW);
         } else if(joystick.gamepad1GetB()) {
 //            if(subState == 0) {
@@ -85,12 +86,13 @@ public class SpecimenHangState extends BaseState {
 //
 //            }
 
-
-
+            robot.setDriftMode(false, 0, 0);
             robot.switchState(State.WALLPICKUP);
 
         } else if(joystick.gamepad1GetY()) {
-            robot.switchState(State.DROPPING_L1);
+
+            robot.setDriftMode(true, 0, -.6);
+
 //        } else if(joystick.gamepad1GetDUp()) {
 //            robot.setVerticalSlideTargetPosition(DriveTest.Params.VERTICAL_SLIDE_HANG_PREP_POSITION);
 //        } else if(joystick.gamepad1GetDDown()) {

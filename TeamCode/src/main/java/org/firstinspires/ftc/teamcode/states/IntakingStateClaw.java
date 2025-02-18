@@ -97,12 +97,12 @@ public class IntakingStateClaw extends BaseState {
 
                 double intakeClawServo = robot.getIntakeClawServo();
                 if(Math.abs(  intakeClawServo - RoboSapiensTeleOp.Params.INTAKE_CLAW_OPEN ) > .02) {
-                    transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_OPEN, 500, "IntakeClawOpen", false));
+                    transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_OPEN, 250, "IntakeClawOpen", false));
                 }
 
-                transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 100, "IntakeAngle", false));
-                transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 100, "KnucklePickUp", false));
-                transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_CLOSE, 500, "IntakeClawClose", false));
+                transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 50, "IntakeAngle", false));
+                transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_PICKUP, 50, "KnucklePickUp", false));
+                transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_CLOSE, 300, "IntakeClawClose", false));
                 //transferSeries.add(createHorizontalSlideTask(robot, DriveTest.Params.HORIZONTAL_SLIDE_TRANSFER_POSITION, 1, "IntakeClawClose", false));
                 transferSeries.add(createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, 1, "IntakeClawClose", false));
                 transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 1, "CLAW_ANGLE_BACK", false));

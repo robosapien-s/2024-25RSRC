@@ -74,6 +74,10 @@ public class Robot {
 
     private boolean isSlowMode = false;
 
+    private boolean isDriftMode = false;
+    private double driftXValue = 0;
+    private double driftYValue = 0;
+
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         this(hardwareMap, gamepad1, gamepad2, telemetry, false);
@@ -340,6 +344,16 @@ public class Robot {
         isSlowMode = false;
     }
 
+    public void setDriftMode(boolean enabled, double driftX, double driftY) {
+        isDriftMode = enabled;
+        driftXValue = driftX;
+        driftYValue = driftY;
+    }
+
+    public boolean isDrifting() {
+        return isDriftMode;
+    }
+
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
         servoHashMap.put("clawAngleServo", clawAngleServo);
@@ -421,7 +435,18 @@ public class Robot {
 
 //            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
         } else {
-            drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
+
+            boolean tempIgnoreDrift = false;
+            if( Math.abs( joystick.gamepad1GetLeftStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetLeftStickY() ) > 0) {
+                tempIgnoreDrift = true;
+                //setDriftMode(false, 0, 0);
+            }
+
+            if(isDriftMode &&  !tempIgnoreDrift) {
+                drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+            } else {
+                drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
+            }
         }
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);

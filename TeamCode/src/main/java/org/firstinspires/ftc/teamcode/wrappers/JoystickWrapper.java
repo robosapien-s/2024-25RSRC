@@ -122,6 +122,10 @@ public class JoystickWrapper {
         }
     }
 
+    public boolean gamepad1GetBRaw() {
+        return gamepad1.b;
+    }
+
     public boolean gamepad1GetDUp() {
         if (!gamepad1dUpPressed && gamepad1.dpad_up) {
             gamepad1dUpPressed = true;
