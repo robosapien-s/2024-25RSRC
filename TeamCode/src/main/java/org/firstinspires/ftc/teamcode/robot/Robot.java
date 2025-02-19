@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.TwoDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -406,35 +407,35 @@ public class Robot {
 //        } else {
 //            switchState(State.GO_TO_APRIL_TAG);
 //        }
-        if (isAutoMode && limelight != null) {
-            Pose3D robotPos = pollForAprilTag(telemetry);
-            double xPower = 0;
-            double yPower = 0;
-            if (robotPos != null) {
-                xPower = xPid.calculate(targetX, robotPos.getPosition().x);
-                yPower = yPid.calculate(targetY, robotPos.getPosition().y);
-
-                if (xPower*xPower+yPower*yPower > 1) {
-                    double mag = Math.sqrt(xPower*xPower+yPower*yPower);
-                    xPower = xPower/mag;
-                    yPower = yPower/mag;
-                }
-            }
-
-            double rightStickX = Math.cos(targetHeading);
-            double rightStickY = -Math.sin(targetHeading);
-
-            telemetry.addData("X Power", xPower);
-            telemetry.addData("Y Power", yPower);
-            telemetry.addData("Right Stick X", rightStickX);
-            telemetry.addData("Right Stick Y", rightStickY);
-            telemetry.addData("Current Pos", robotPos);
-            telemetry.addData("Target X", targetX);
-            telemetry.addData("Target Y", targetY);
-
-
-//            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
-        } else {
+//        if (isAutoMode && limelight != null) {
+//            Pose3D robotPos = pollForAprilTag(telemetry);
+//            double xPower = 0;
+//            double yPower = 0;
+//            if (robotPos != null) {
+//                xPower = xPid.calculate(targetX, robotPos.getPosition().x);
+//                yPower = yPid.calculate(targetY, robotPos.getPosition().y);
+//
+//                if (xPower*xPower+yPower*yPower > 1) {
+//                    double mag = Math.sqrt(xPower*xPower+yPower*yPower);
+//                    xPower = xPower/mag;
+//                    yPower = yPower/mag;
+//                }
+//            }
+//
+//            double rightStickX = Math.cos(targetHeading);
+//            double rightStickY = -Math.sin(targetHeading);
+//
+//            telemetry.addData("X Power", xPower);
+//            telemetry.addData("Y Power", yPower);
+//            telemetry.addData("Right Stick X", rightStickX);
+//            telemetry.addData("Right Stick Y", rightStickY);
+//            telemetry.addData("Current Pos", robotPos);
+//            telemetry.addData("Target X", targetX);
+//            telemetry.addData("Target Y", targetY);
+//
+//
+////            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
+//        } else {
 
             boolean tempIgnoreDrift = false;
             if( Math.abs( joystick.gamepad1GetLeftStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetLeftStickY() ) > 0) {
@@ -447,7 +448,7 @@ public class Robot {
             } else {
                 drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
             }
-        }
+
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
         horizontalSlideController.update(telemetry);
