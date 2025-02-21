@@ -172,10 +172,12 @@ public class IntakingStateClaw extends BaseState {
 
             transferSeries.add(createIntakeRotationTask(robot, RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT, (int) ((250)*(((double) robot.getHorizontalSlidePosition())/ ((double) RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION))), "IntakeClawClose", false));
 
+            transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PRE_TRANSFER, 1, "IntakeClawClose", false));
             transferSeries.add(createIntakeKnuckleTask(robot, RoboSapiensTeleOp.Params.INTAKE_KNUCKLE_TRANSFER, 200, "IntakeClawClose", false));
-            transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER, 300, "IntakeClawClose", false));
             transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_LOOSE, 300, "IntakeClawLoose", false));
 
+
+            transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER, 300, "IntakeClawClose", false));
 
 
             //transferSeries.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_TRANSFER+800, 200, "ClawSlide", false));
