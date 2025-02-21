@@ -1,6 +1,7 @@
 package com.example.meepmeep;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 import org.rowlandhall.meepmeep.MeepMeep;
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder;
@@ -14,13 +15,16 @@ public class rightSideAutoVisualizer {
                 .setDimensions(16,16.5)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(8,-63.5,Math.toRadians(90)))
-                        .forward(27)
-                        .waitSeconds(.6)
-                        .back(7.5)
-                        .lineToLinearHeading(new Pose2d(26.5,-43,Math.toRadians(30)))
-                        .waitSeconds(1)
-                        .turn(Math.toRadians(-60))
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-40,-62.5,Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-60, -55,Math.toRadians(72)))
+                        .lineToConstantHeading(new Vector2d(-57.25,-54))
+                        .lineToLinearHeading(new Pose2d(-59.75, -56,Math.toRadians(93.5)))
+                        .lineToLinearHeading(new Pose2d(-59.75, -55,Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-59.75, -56,Math.toRadians(93.5)))//second
+                        .lineToLinearHeading(new Pose2d(-52, -45,Math.toRadians(132)))
+                        .lineToLinearHeading(new Pose2d(-61.5, -57,Math.toRadians(90)))
+                        .lineToLinearHeading(new Pose2d(-40, -10,0))
+                        .lineToConstantHeading(new Vector2d(-23,-10))
                         .build());
 
 
