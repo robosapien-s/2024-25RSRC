@@ -14,15 +14,21 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class DriveToPointController {
 
     public static double xKp = .11;
-    public static double xKd = 6.5;
+    public static double xKd = 10;
+    //public static double xKp = .22;
+    //public static double xKd = 18;
     public static double xKi = 0;
 
     public static double yKp = .11;
-    public static double yKd = 6.5;
+    public static double yKd = 10;
+    //public static double yKp = .22;
+    //public static double yKd = 18;
     public static double yKi = 0;
 
-    public static double angleKp = 2.1;
-    public static double angleKd = 0.04;
+    public static double angleKp = 1.3;
+    public static double angleKd = 0.47;
+    //public static double angleKp = .75;
+    //public static double angleKd = 40;
     public static double angleKi = 0;
 
 
@@ -31,10 +37,11 @@ public class DriveToPointController {
     final BasicPID anglePidInner;
     final AngleController anglePid;
 
+    /*
     final SquidController xSquid;
     final SquidController ySquid;
     final SquidController angleSquid;
-
+*/
 
     public DriveToPointController() {
 
@@ -42,10 +49,12 @@ public class DriveToPointController {
         yPid = new BasicPID(new PIDCoefficients(yKp,yKi,yKd));
         anglePidInner = new BasicPID(new PIDCoefficients(angleKp,angleKi,angleKd));
         anglePid = new AngleController(anglePidInner);
+/*
+        xSquid = new SquidController(xKp, xKd);
+        ySquid = new SquidController(yKp, yKd);
+        angleSquid = new SquidController(angleKp, angleKd);
 
-        xSquid = new SquidController(xKp);
-        ySquid = new SquidController(yKp);
-        angleSquid = new SquidController(angleKp);
+ */
     }
 
     public Vector3D calculate(double xTarget, double yTarget, double angleTarget, Pose2d current, Telemetry telemetry) {
@@ -54,9 +63,9 @@ public class DriveToPointController {
 
         double angle = angleWrap(current.heading.toDouble());
 
-        double xPower = xSquid.calculate(xTarget, current.position.x);
-        double yPower = -ySquid.calculate(yTarget, current.position.y);
-        double anglePower = -angleSquid.calculate(angleTarget, angle);
+        double xPower = xPid.calculate(xTarget, current.position.x);
+        double yPower = -yPid.calculate(yTarget, current.position.y);
+        double anglePower = -anglePid.calculate(angleTarget, angle);
 
         double xRotated = xPower*Math.cos(angle) - yPower*Math.sin(angle);
         double yRotated = xPower*Math.sin(angle) + yPower*Math.cos(angle);

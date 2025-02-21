@@ -138,8 +138,8 @@ public class SpecimenHangState extends BaseState {
 //            }
 
 
-            _lastPose = robot.getPose();
-            _lastPose = new Pose2d(_lastPose.position.x, _lastPose.position.y, _lastPose.heading.toDouble());
+           // _lastPose = robot.getPose();
+           // _lastPose = new Pose2d(_lastPose.position.x+.5, _lastPose.position.y-2, _lastPose.heading.toDouble());
             robot.switchState(State.WALLPICKUP);
 
         } else if(joystick.gamepad1GetY()) {

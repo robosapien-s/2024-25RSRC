@@ -71,7 +71,7 @@ public class WallPickUpState extends BaseState {
             RobotTaskParallel subParallel = new RobotTaskParallel();
 
             if(_lastPose != null) {
-                subParallel.add(new DriveToPointTask(robot, new Vector3D(_lastPose.position.x, _lastPose.position.y+8, _lastPose.heading.toDouble()), 2000, 2, 200));
+                subParallel.add(new DriveToPointTask(robot, new Vector3D(_lastPose.position.x, _lastPose.position.y+4, _lastPose.heading.toDouble()), 2000, 2, 200));
 
             }
 
@@ -111,7 +111,7 @@ public class WallPickUpState extends BaseState {
 
             if(_lastPose != null){
 //                transferMainSeries.add(createWaitTask(robot , 200, "Wait for final move" ));
-                transferMainSeries.add(new DriveToPointTask(robot, new Vector3D(_lastPose.position.x, _lastPose.position.y, _lastPose.heading.toDouble()), 2000, 1, 0));
+                transferMainSeries.add(new DriveToPointTask(robot, new Vector3D(_lastPose.position.x, _lastPose.position.y-1.2, _lastPose.heading.toDouble()), 2000, 1, 0));
             }
 
 
@@ -173,7 +173,7 @@ public class WallPickUpState extends BaseState {
                 //angle_ready = false;
 
 
-                _lastPose = robot.getPose();
+               // _lastPose = robot.getPose();
 
 
                 if(isDriftModeEnabled) {
