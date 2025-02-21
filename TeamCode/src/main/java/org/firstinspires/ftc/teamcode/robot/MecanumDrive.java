@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import android.graphics.Point;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,6 +19,16 @@ public class MecanumDrive implements IDrive {
     @Override
     public double getYaw() {
         return 0;
+    }
+
+    @Override
+    public void setPose(Pose2d pose) {
+
+    }
+
+    @Override
+    public Pose2d getPose() {
+        return null;
     }
 
     final DcMotor frontLeftMotor;
@@ -57,6 +68,11 @@ public class MecanumDrive implements IDrive {
 
     @Override
     public void setAutoMode(double inX, double inY) {
+    }
+
+    @Override
+    public void disableAutoMode() {
+
     }
 
     @Override

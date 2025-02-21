@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.states;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
@@ -10,6 +12,8 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class DroppingL1State extends BaseState {
     boolean angle_ready = false;
+
+    public static Pose2d _lastPose = null;
 
 
 //    int substate = 0;

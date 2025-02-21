@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -14,6 +15,9 @@ import com.qualcomm.robotcore.util.Range;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.Localizer;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.TwoDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
@@ -79,6 +83,7 @@ public class Robot {
     private double driftXValue = 0;
     private double driftYValue = 0;
 
+    DriveToPointController driveController = new DriveToPointController();
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         this(hardwareMap, gamepad1, gamepad2, telemetry, false);
@@ -127,9 +132,17 @@ public class Robot {
         limelight.start();
         */
 
+
+        WallPickUpState._lastPose = null;
+        SpecimenHangState._lastPose = null;
+        DroppingL1State._lastPose = null;
+
+
         switchState(State.INTAKINGCLAW);
         if (!isAuto) {
-            drive = new AngleDrive(hardwareMap, false);
+            double startingHeading = Math.toRadians(90);
+            Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
+            drive = new AngleDrive(hardwareMap, false, localizer);
         } else {
             drive = null;
         }
@@ -381,21 +394,35 @@ public class Robot {
 
     public void setAutoTarget(double targetX, double targetY, double targetHeading) {
 
-        drive.setAutoMode(targetX, targetY);
-        drive.setTargetHeading(targetHeading);
+        //drive.setAutoMode(targetX, targetY);
+       // drive.setTargetHeading(targetHeading);
 
         isAutoMode = true;
         this.targetX = targetX;
         this.targetY= targetY;
         this.targetHeading= targetHeading; //IN RADIANS
+        drive.setAutoMode(targetX, targetY);
     }
 
     public void disableAutoMode() {
         isAutoMode = false;
+        drive.disableAutoMode();
+    }
+
+    public boolean isAutoMode() {
+        return isAutoMode;
     }
 
     public void setTargetHeading(double heading) {
         drive.setTargetHeading(heading);
+    }
+
+    public void setPose(Pose2d pose) {
+        drive.setPose(pose);
+    }
+
+    public Pose2d getPose() {
+        return drive.getPose();
     }
 
     long dTime = System.currentTimeMillis();
@@ -438,13 +465,32 @@ public class Robot {
 //        } else {
 
             boolean tempIgnoreDrift = false;
-            if( Math.abs( joystick.gamepad1GetLeftStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetLeftStickY() ) > 0) {
+            if( Math.abs( joystick.gamepad1GetLeftStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetLeftStickY() ) > 0 ||
+                    Math.abs( joystick.gamepad1GetRightStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetRightStickY() ) > 0) {
                 tempIgnoreDrift = true;
-                //setDriftMode(false, 0, 0);
+                setDriftMode(false, 0, 0);
+                disableAutoMode();
             }
 
-            if(isDriftMode &&  !tempIgnoreDrift) {
-                drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+            if(isAutoMode) {
+
+                Vector3D powers = driveController.calculate( targetX, targetY, targetHeading, drive.getPose(), telemetry);
+
+                telemetry.addData("POSE Heading: ", Math.toDegrees(drive.getPose().heading.toDouble()));
+                telemetry.addData("POSE Heading Power: ", powers.getZ());
+
+                telemetry.addData("POSE x: ", drive.getPose().position.x);
+                telemetry.addData("POSE x Power: ", powers.getX());
+
+                telemetry.addData("POSE y: ", drive.getPose().position.y);
+                telemetry.addData("POSE t Power: ", powers.getY());
+
+                AngleDrive angleDrive = (AngleDrive)drive;
+                angleDrive.MoveMecanumPidToPoint(powers.getX(), powers.getY(), powers.getZ());
+                //drive.updateRaw(telemetry, false, powers.getX(), powers.getY(), powers.getZ(), 0, 1, 1);
+
+            } else if(isDriftMode &&  !tempIgnoreDrift) {
+               drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
             } else {
                 drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
             }

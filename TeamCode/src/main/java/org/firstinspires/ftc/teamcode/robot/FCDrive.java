@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import android.graphics.Point;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -22,6 +23,16 @@ public class FCDrive implements IDrive {
         @Override
         public double getYaw() {
                 return 0;
+        }
+
+        @Override
+        public void setPose(Pose2d pose) {
+
+        }
+
+        @Override
+        public Pose2d getPose() {
+                return null;
         }
 
         public FCDrive(HardwareMap hardwareMap) {
@@ -51,6 +62,11 @@ public class FCDrive implements IDrive {
 
         @Override
         public void setAutoMode(double inX, double inY) {
+        }
+
+        @Override
+        public void disableAutoMode() {
+
         }
 
         public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {

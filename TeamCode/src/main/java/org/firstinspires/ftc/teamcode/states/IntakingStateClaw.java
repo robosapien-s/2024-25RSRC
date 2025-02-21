@@ -233,7 +233,7 @@ public class IntakingStateClaw extends BaseState {
         */
 
 
-            robot.increaseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-65)+joystick.gamepad1GetRightTrigger()*65));
+            robot.increaseHorizontalSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-100)+joystick.gamepad1GetRightTrigger()*100));
 
 
 

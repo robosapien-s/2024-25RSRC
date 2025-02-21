@@ -19,6 +19,20 @@ public abstract class BaseState implements IRobot {
     }
 
 
+    public static IRobotTask createWaitTask(Robot robot, int duration, String name) {
+
+        return new CallBackTask(new CallBackTask.CallBackListener() {
+            @Override
+            public void setPosition(double value) {
+            }
+
+            @Override
+            public double getPosition() {
+                return 0;
+            }
+        }, 0, duration, name, false);
+    }
+
     public static IRobotTask createClawRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {

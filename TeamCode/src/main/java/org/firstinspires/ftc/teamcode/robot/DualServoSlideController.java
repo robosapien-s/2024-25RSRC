@@ -12,9 +12,9 @@ public class DualServoSlideController extends RobotPidMechanism{
     private final CRServo servo2;
     private final DcMotorEx servoEncoder;
 
-    public static double kP = 0.00044;
+    public static double kP = 0.00027;
     public static double kI = 0.000;
-    public static double kD = 0.0046;
+    public static double kD = 0.00485;
     public static int targetPosition = 0;
 
     public DualServoSlideController(HardwareMap hardwareMap, String servo1Name, String servo2name, String encoderName, int inMaxPosition, int inMinPosition) {

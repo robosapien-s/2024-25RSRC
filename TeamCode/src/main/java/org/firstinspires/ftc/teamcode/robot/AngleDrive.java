@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -14,6 +15,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Localizer;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -37,12 +39,19 @@ public class AngleDrive implements IDrive {
     double autoModeY = 0;
     double rotateAngleOffset = 0;
 
+
+    Localizer localizer = null;
     boolean isLerpEnabled;
 
     private final PIDEx pidController;
 
     private final PIDEx pidXController;
     private final PIDEx pidYController;
+
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Localizer localizer) {
+        this(hardwareMap, isLerpEnabled);
+        this.localizer = localizer;
+    }
     public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled) {
         if (Robot.resetEncoders) {
             InitializeResetImu(hardwareMap);
@@ -102,12 +111,28 @@ public class AngleDrive implements IDrive {
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
+    }
+
+    public void setPose(Pose2d pose) {
+        if(localizer != null) {
+            localizer.setPose(pose);
+        }
+    }
+
+    public Pose2d getPose() {
+        if(localizer != null) {
+            localizer.update();
+            return localizer.getPose();
+        } else {
+            return new Pose2d(0,0,0);
+        }
     }
 
     public void InitializeResetImu(HardwareMap hardwareMap) {
@@ -136,6 +161,11 @@ public class AngleDrive implements IDrive {
 
     @Override
     public void updateRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
+
+        if(localizer != null) {
+            localizer.update();
+        }
+
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
 
@@ -187,6 +217,12 @@ public class AngleDrive implements IDrive {
         return Math.sqrt(x * x + y * y);
     }
 
+    void MoveMecanumPidToPoint(double xRotated, double yRotated, double anglePower) {
+        frontLeftMotor.setPower(xRotated + yRotated + anglePower);
+        backLeftMotor.setPower(xRotated - yRotated + anglePower);
+        frontRightMotor.setPower(xRotated - yRotated - anglePower);
+        backRightMotor.setPower(xRotated + yRotated - anglePower);
+    }
     void MoveMecanum(double x, double y, double rx) {
         frontLeftMotor.setPower(y + x + rx);
         backLeftMotor.setPower(y - x + rx);
@@ -212,12 +248,26 @@ public class AngleDrive implements IDrive {
         isAutoMode = true;
         autoModeX = inX;
         autoModeY = inY;
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
+        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
     }
 
     public void disableAutoMode() {
         isAutoMode = false;
         autoModeX = 0;
         autoModeY = 0;
+
+        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public double getNormalizedHeadingError() {

@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.interfaces;
 
 import android.graphics.Point;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -19,6 +21,12 @@ public interface IDrive {
 
     public void setAutoMode(double inX, double inY);
 
+    public void disableAutoMode();
+
     public double getYaw();
+
+    public void setPose(Pose2d pose);
+
+    public Pose2d getPose() ;
 
 }
