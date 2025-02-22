@@ -180,7 +180,9 @@ public class IntakingStateClaw extends BaseState {
             transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER, 300, "IntakeClawClose", false));
 
 
-            //transferSeries.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_TRANSFER+800, 200, "ClawSlide", false));
+//            transferSeries.add(createClawSlideTask( robot, DriveTest.Params.CLAW_SLIDER_TRANSFER+800, 200, "ClawSlide", false)); //don't uncomment this line
+
+
             transferSeries.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 200, "Claw", false));
             transferSeries.add(createIntakeClawTask(robot, RoboSapiensTeleOp.Params.INTAKE_CLAW_OPEN, 100, "IntakeClawOpen", false));
             transferSeries.add(createIntakeClawAngleTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngleDown", false));
