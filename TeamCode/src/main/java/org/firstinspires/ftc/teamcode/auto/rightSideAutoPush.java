@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -13,9 +14,11 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
+@Config
 @Autonomous
 public class rightSideAutoPush extends LinearOpMode {
+
+    public static double pickUpWallX = 33.75;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -48,24 +51,24 @@ public class rightSideAutoPush extends LinearOpMode {
 //                .strafeToConstantHeading(new Vector2d(48, -55))//third push back
 
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToLinearHeading(new Vector2d(32.5,-56),Math.toRadians(110))
+                .strafeToLinearHeading(new Vector2d(32,-56),Math.toRadians(110))
 //                .stopAndAdd(robotAuto.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT))
                 .waitSeconds(.1)
-                .strafeToLinearHeading(new Vector2d(34.5,-63),Math.toRadians(110))
+                .strafeToLinearHeading(new Vector2d(34.25,-63),Math.toRadians(110))
                 .waitSeconds(.05)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.2)
                 .strafeToConstantHeading(new Vector2d(7,-40.25))//1st drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(34.5,-63.25))
+                .strafeToConstantHeading(new Vector2d(33.65,-63.25))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)
                 .strafeToConstantHeading(new Vector2d(8.6,-40.25))//2nd drop
                 .waitSeconds(.2)
                 .stopAndAdd(robotAuto.setState(IRobot.State.WALLPICKUP))
-                .strafeToConstantHeading(new Vector2d(34.5,-63.25))
+                .strafeToConstantHeading(new Vector2d(35,-63.25))
                 .waitSeconds(.1)
                 .stopAndAdd(robotAuto.setState(IRobot.State.SPECIMEN_HANG))
                 .waitSeconds(.25)

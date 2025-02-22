@@ -31,7 +31,7 @@ public class rightSideAuto extends LinearOpMode {
 //    public static double pickup2angle;
 
     public static double pickup3x = 42;
-    public static double pickup3y = -36;
+    public static double pickup3y = -35.75;
 //    public static double pickup3angle;
 
     public static double wallPickup1x = 33;
