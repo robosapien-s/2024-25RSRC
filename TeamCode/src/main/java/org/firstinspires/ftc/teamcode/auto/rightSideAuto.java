@@ -128,7 +128,9 @@ public class rightSideAuto extends LinearOpMode {
 //        TrajectoryActionBuilder pickUpGround1
 
         boolean isClawClosed = false;
+
         while (!isStopRequested() && !opModeIsActive()) {
+            robotAuto.setIntakeClawAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER);
             if (joystickWrapper.gamepad1GetA()) {
                 if (!isClawClosed) {
                     robotAuto.closeTopClaw();

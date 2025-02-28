@@ -87,6 +87,7 @@ public class rightSideAutoPush extends LinearOpMode {
 
         boolean isClawClosed = false;
         while (!isStopRequested() && !opModeIsActive()) {
+            robotAuto.setIntakeClawAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER);
             if (joystickWrapper.gamepad1GetA()) {
                 if (!isClawClosed) {
                     robotAuto.closeTopClaw();
