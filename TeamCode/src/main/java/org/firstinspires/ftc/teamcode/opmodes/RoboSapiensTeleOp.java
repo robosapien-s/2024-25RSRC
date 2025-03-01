@@ -1,16 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.Localizer;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.ThreeDeadWheelLocalizer;
-import org.firstinspires.ftc.teamcode.TwoDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @Config

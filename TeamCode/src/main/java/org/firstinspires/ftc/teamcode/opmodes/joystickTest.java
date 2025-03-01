@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.gamepad.KeyReader;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
