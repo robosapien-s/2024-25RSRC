@@ -169,7 +169,7 @@ public class rightSideAutoPedro extends LinearOpMode {
 
                 case 4:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.PICKUP_GROUND);
+                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //first pickup
                         robotAuto.startWait(400);
                         setPathState(pathState+1);
                     }
@@ -178,21 +178,21 @@ public class rightSideAutoPedro extends LinearOpMode {
                 case 5:
                     if (robotAuto.checkWait()) {
                         follower.followPath(dropoff1, true);
-                        robotAuto.startWait(550);
                         setPathState(pathState+1);
                     }
                     break;
 
 
                 case 6:
-                    if (robotAuto.checkWait()) {
+                    if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 7:
-                    if (!follower.isBusy()) {
+                    if (robotAuto.checkWait()) {
                         follower.followPath(pickup2, true);
                         robotAuto.startWait(100);
                         setPathState(pathState+1);
@@ -216,7 +216,7 @@ public class rightSideAutoPedro extends LinearOpMode {
 
                 case 10:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.PICKUP_GROUND);
+                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup 2
                         robotAuto.startWait(400);
                         setPathState(pathState+1);
                     }
@@ -225,20 +225,20 @@ public class rightSideAutoPedro extends LinearOpMode {
                 case 11:
                     if (robotAuto.checkWait()) {
                         follower.followPath(dropoff2, true);
-                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 12:
-                    if (robotAuto.checkWait()) {
+                    if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 13:
-                    if (!follower.isBusy()) {
+                    if (robotAuto.checkWait()) {
                         follower.followPath(pickup3, true);
                         robotAuto.startWait(100);
                         setPathState(pathState+1);
@@ -261,7 +261,7 @@ public class rightSideAutoPedro extends LinearOpMode {
 
                 case 16:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.PICKUP_GROUND);
+                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup3
                         robotAuto.startWait(400);
                         setPathState(pathState+1);
                     }
@@ -271,20 +271,20 @@ public class rightSideAutoPedro extends LinearOpMode {
                     if (robotAuto.checkWait()) {
                         robotAuto.setHorizontalSlidePos(1150);
                         follower.followPath(dropoff3, true);
-                        robotAuto.startWait(500);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 18:
-                    if (robotAuto.checkWait()) {
+                    if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 19:
-                    if (!follower.isBusy()) {
+                    if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
                         follower.followPath(pickUpWall1);
                         setPathState(pathState+1);
