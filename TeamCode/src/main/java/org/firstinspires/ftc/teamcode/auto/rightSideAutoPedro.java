@@ -29,29 +29,33 @@ public class rightSideAutoPedro extends LinearOpMode {
 
     private final Pose preloadHangPose = new Pose(30.25, 74, Math.toRadians(0));
 
-    private final Pose pickup1Pose = new Pose(31, 47.75, Math.toRadians(-60));
+    private final Pose pickup1Pose = new Pose(30.5, 48.25, Math.toRadians(-60));
 
     private final Pose dropoff1Pose = new Pose(29, 45.5, Math.toRadians(-144));
 
-    private final Pose pickup2pose = new Pose(28, 40.5, Math.toRadians(-60));
+    private final Pose pickup2pose = new Pose(29.5, 41, Math.toRadians(-60));
 
-    private final Pose dropoff2pose = new Pose(29, 39, Math.toRadians(-150));
+    private final Pose dropoff2pose = new Pose(29, 39, Math.toRadians(-144));
 
-    private final Pose pickup3pose = new Pose(30, 30, Math.toRadians(-60));
+    private final Pose pickup3pose = new Pose(29.5, 30.5, Math.toRadians(-60));
 
     private final Pose dropoff3pose = new Pose(28, 31, Math.toRadians(-160));
 
-    private final Pose lineUpWall = new Pose(14, 38.8, Math.toRadians(20));
+    private final Pose lineUpWallPose = new Pose(19, 37.5, Math.toRadians(20));
 
-    private final Pose pickUpWallPose = new Pose(10.24, 38.8, Math.toRadians(20));
+    private final Pose pickUpWallPose = new Pose(10.24, 37.5, Math.toRadians(20));
 
-    private final Pose hang1Pose = new Pose(31.75, 65, Math.toRadians(20));
+    private final Pose lineUpWall2Pose = new Pose(20, 45.3, Math.toRadians(20));
 
-    private final Pose hang2Pose = new Pose(30.15, 65, Math.toRadians(20));
+    private final Pose pickUpWall2Pose = new Pose(12, 42, Math.toRadians(20));
 
-    private final Pose hang3Pose = new Pose(28.4, 65, Math.toRadians(20));
+    private final Pose hang1Pose = new Pose(31.5, 63.5, Math.toRadians(20));
 
-    private final Pose hang4Pose = new Pose(26.9, 65, Math.toRadians(20));
+    private final Pose hang2Pose = new Pose(31.5, 61.9, Math.toRadians(20));
+
+    private final Pose hang3Pose = new Pose(31.5, 60.15, Math.toRadians(20));
+
+    private final Pose hang4Pose = new Pose(31.5, 58.65, Math.toRadians(20));
 
     private boolean clawOpen = false;
 
@@ -90,23 +94,24 @@ public class rightSideAutoPedro extends LinearOpMode {
 
 
 
-        PathChain pickUpWall1 = follower.pathBuilder()
-            .addPath(new BezierLine(new Point(dropoff3pose), new Point(lineUpWall)))
-            .setLinearHeadingInterpolation(dropoff3pose.getHeading(), lineUpWall.getHeading())
-            .addPath(new BezierLine(new Point(lineUpWall), new Point(pickUpWallPose)))
-            .setConstantHeadingInterpolation(lineUpWall.getHeading())
-            .build();
+        PathChain lineUpWall1 = lineToLinearHeading(dropoff3pose, lineUpWallPose);
+        PathChain pickUpWall = lineToConstantHeading(lineUpWallPose, pickUpWallPose);
+
+//        PathChain pickUpWall2 = lineToConstantHeading(lineUpWall2Pose, pickUpWall2Pose);
 
         PathChain hang1 = lineToConstantHeading(pickUpWallPose, hang1Pose);
-        PathChain pickUpWall2 = lineToConstantHeading(hang1Pose, pickUpWallPose);
+//        PathChain lineUpWall2 = lineToConstantHeading(hang1Pose, lineUpWall2Pose);
+        PathChain pickUpWall2 = lineToConstantHeading(hang1Pose, pickUpWall2Pose,1.5);
 
-        PathChain hang2 = lineToConstantHeading(pickUpWallPose, hang2Pose);
-        PathChain pickUpWall3 = lineToConstantHeading(hang2Pose, pickUpWallPose);
+        PathChain hang2 = lineToConstantHeading(pickUpWall2Pose, hang2Pose);
+//        PathChain lineUpWall3 = lineToConstantHeading(hang2Pose, lineUpWall2Pose);
+        PathChain pickUpWall3 = lineToConstantHeading(hang2Pose, pickUpWall2Pose,1.5);
 
-        PathChain hang3 = lineToConstantHeading(pickUpWallPose, hang3Pose);
-        PathChain pickUpWall4 = lineToConstantHeading(hang3Pose, pickUpWallPose);
+        PathChain hang3 = lineToConstantHeading(pickUpWall2Pose, hang3Pose);
+//        PathChain lineUpWall4 = lineToConstantHeading(hang3Pose, lineUpWall2Pose);
+        PathChain pickUpWall4 = lineToConstantHeading(hang3Pose, pickUpWall2Pose,1.5);
 
-        PathChain hang4 = lineToConstantHeading(pickUpWallPose, hang4Pose);
+        PathChain hang4 = lineToConstantHeading(pickUpWall2Pose, hang4Pose);
         PathChain park = lineToConstantHeading(hang4Pose, pickUpWallPose);
 
         robotAuto.setIntakeClawAnglePos(RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER);
@@ -217,7 +222,7 @@ public class rightSideAutoPedro extends LinearOpMode {
                 case 10:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup 2
-                        robotAuto.startWait(400);
+                        robotAuto.startWait(500);
                         setPathState(pathState+1);
                     }
                     break;
@@ -232,7 +237,7 @@ public class rightSideAutoPedro extends LinearOpMode {
                 case 12:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(50);
+                        robotAuto.startWait(100);
                         setPathState(pathState+1);
                     }
                     break;
@@ -286,27 +291,38 @@ public class rightSideAutoPedro extends LinearOpMode {
                 case 19:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        follower.followPath(pickUpWall1);
+                        follower.followPath(lineUpWall1, true);
                         setPathState(pathState+1);
                     }
                     break;
-
                 case 20:
                     if (!follower.isBusy()) {
-                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
                         robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
                     break;
-
                 case 21:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(hang1);
+                        follower.followPath(pickUpWall, true);
+                        setPathState(pathState+1);
+                    }
+                    break;
+                case 22:
+                    if (!follower.isBusy()) {
+                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
+                        robotAuto.startWait(300);
                         setPathState(pathState+1);
                     }
                     break;
 
-                case 22:
+                case 23:
+                    if (robotAuto.checkWait()) {
+                        follower.followPath(hang1, true);
+                        setPathState(pathState+1);
+                    }
+                    break;
+
+                case 24:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
                         robotAuto.startWait(50);
@@ -315,29 +331,41 @@ public class rightSideAutoPedro extends LinearOpMode {
                     break;
                     //first hang done
 
-                case 23:
-                    if (robotAuto.checkWait()) {
-                        follower.followPath(pickUpWall2);
-                        setPathState(pathState+1);
-                    }
-                    break;
-
-                case 24:
-                    if (!follower.isBusy()) {
-                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
-                        robotAuto.startWait(50);
-                        setPathState(pathState+1);
-                    }
-                    break;
-
                 case 25:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(hang2);
+                        follower.followPath(pickUpWall2, true);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 26:
+                    if (!follower.isBusy()) {
+                        robotAuto.startWait(50);
+                        setPathState(pathState+1);
+                    }
+                    break;
+//                case 27:
+//                    if (robotAuto.checkWait()) {
+//                        follower.followPath(pickUpWall2, true);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+                case 27:
+                    if (robotAuto.checkWait()) {
+                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
+                        robotAuto.startWait(300);
+                        setPathState(pathState+1);
+                    }
+                    break;
+
+                case 28:
+                    if (robotAuto.checkWait()) {
+                        follower.followPath(hang2, true);
+                        setPathState(pathState+1);
+                    }
+                    break;
+
+                case 29:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
                         robotAuto.startWait(50);
@@ -347,29 +375,41 @@ public class rightSideAutoPedro extends LinearOpMode {
 
                 //hang 2 done
 
-                case 27:
+                case 30:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(pickUpWall3);
+                        follower.followPath(pickUpWall3, true);
                         setPathState(pathState+1);
                     }
                     break;
 
-                case 28:
+                case 31:
                     if (!follower.isBusy()) {
-                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
                         robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
                     break;
-
-                case 29:
+//                case 32:
+//                    if (robotAuto.checkWait()) {
+//                        follower.followPath(pickUpWall2, true);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+                case 32:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(hang3);
+                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
+                        robotAuto.startWait(300);
                         setPathState(pathState+1);
                     }
                     break;
 
-                case 30:
+                case 33:
+                    if (robotAuto.checkWait()) {
+                        follower.followPath(hang3, true);
+                        setPathState(pathState+1);
+                    }
+                    break;
+
+                case 34:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
                         robotAuto.startWait(50);
@@ -379,29 +419,41 @@ public class rightSideAutoPedro extends LinearOpMode {
 
                 //hang 3 done
 
-                case 31:
+                case 35:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(pickUpWall4);
+                        follower.followPath(pickUpWall4, true);
                         setPathState(pathState+1);
                     }
                     break;
 
-                case 32:
+                case 36:
                     if (!follower.isBusy()) {
-                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
                         robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
                     break;
-
-                case 33:
+//                case 39:
+//                    if (robotAuto.checkWait()) {
+//                        follower.followPath(pickUpWall2, true);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+                case 37:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(hang4);
+                        robotAuto.setState(IRobot.State.SPECIMEN_HANG);
+                        robotAuto.startWait(300);
                         setPathState(pathState+1);
                     }
                     break;
 
-                case 34:
+                case 38:
+                    if (robotAuto.checkWait()) {
+                        follower.followPath(hang4, true);
+                        setPathState(pathState+1);
+                    }
+                    break;
+
+                case 39:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
                         robotAuto.startWait(50);
@@ -411,9 +463,9 @@ public class rightSideAutoPedro extends LinearOpMode {
 
                 //hang 4 done
 
-                case 35:
+                case 40:
                     if (robotAuto.checkWait()) {
-                        follower.followPath(park);
+                        follower.followPath(park, true);
                         setPathState(pathState+1);
                     }
                     break;
@@ -451,6 +503,14 @@ public class rightSideAutoPedro extends LinearOpMode {
         return follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
                 .setConstantHeadingInterpolation(endPose.getHeading())
+                .build();
+    }
+
+    public PathChain lineToConstantHeading(Pose startPose, Pose endPose, double zeroPowerAccelerationMultiplier) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .setZeroPowerAccelerationMultiplier(zeroPowerAccelerationMultiplier)
                 .build();
     }
 
