@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @Config
-public class RotationalController extends RobotPidMechanism {
+public class SlideRotationController extends RobotPidMechanism {
 
     private final DcMotorEx motorSlide1;
 
@@ -17,7 +17,7 @@ public class RotationalController extends RobotPidMechanism {
     public static int targetPosition = 0;
 
     // Constructor
-    public RotationalController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosition, boolean isBraking) {
+    public SlideRotationController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosition, boolean isBraking) {
         super(
                 kP,          // Proportional gain
                 kI,          // Integral gain

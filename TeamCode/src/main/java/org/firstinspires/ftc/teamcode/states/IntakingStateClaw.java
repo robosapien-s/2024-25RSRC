@@ -26,9 +26,14 @@ public class IntakingStateClaw extends BaseState {
     public void initialize(Robot robot, IRobot prevState) {
         if(prevState == null) {
             //use robot.set directly, not a task series
+            robot.setSlideTargetPosition(0);
+            robot.setSlideRotationPosition(0);
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);
 
         } else if (prevState.getState() == State.SPECIMEN_HANG) {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
+
+            transferSeries.add();
 
             taskArrayList.add(transferSeries);
         }else {

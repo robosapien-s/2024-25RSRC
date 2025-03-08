@@ -85,7 +85,7 @@ public class RobotAuto {
     }
 
     public void setRotationalPos(int pos) {
-        robot.setRotationalTargetPosition(pos);
+        robot.setSlideRotationTargetPosition(pos);
     }
 
 

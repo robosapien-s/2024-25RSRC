@@ -42,12 +42,12 @@ public class Robot {
     private IRobot currentState;
     private final IDrive drive;
     private final JoystickWrapper joystick;
-    private final RotationalController rotationalController;
+    private final SlideRotationController slideRotationController;
     private SlideController slideController;
 
 
-    private final Servo clawAngleServo;
-    private final Servo clawRotationServo;
+    private final Servo clawRotAndAngleServoRight;
+    private final Servo clawRotAndAngleServoLeft;
     private final Servo clawServo;
     private final Servo clawHorizontalAngleServo;
 
@@ -85,18 +85,14 @@ public class Robot {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         this.hardwareMap = hardwareMap;
 
+        slideRotationController = new SlideRotationController(hardwareMap, "slideRotationController", RoboSapiensTeleOp.Params.SLIDE_ROTATION_MAX_POSITION, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIN_POSITION, false);
 
-        if (isAuto) {
-            rotationalController = new RotationalController(hardwareMap, "rotationalController", RoboSapiensTeleOp.Params.ROTATIONAL_MAX_POSITION, 0, false);
-        } else {
-            rotationalController = new RotationalController(hardwareMap, "rotationalController", RoboSapiensTeleOp.Params.ROTATIONAL_MAX_POSITION-50, 0, false);
-        }
 
         slideController = new SlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION, 0, false);
 //        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
 
-        clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
-        clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
+        clawRotAndAngleServoRight = hardwareMap.get(Servo.class, "clawAndAngleServoRight");
+        clawRotAndAngleServoLeft = hardwareMap.get(Servo.class, "clawRotAndAngleServoLeft");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHorizontalAngleServo = hardwareMap.get(Servo.class, "clawHorizontalAngleServo");
 
@@ -150,8 +146,8 @@ public class Robot {
     public void setYawOverride(YawOverrride inOverride) {
         doOverrideYaw = inOverride;
     }
-    public Robot setRotationalTargetPosition(int target) {
-        rotationalController.setTargetPosition(target);
+    public Robot setSlideRotationTargetPosition(int target) {
+        slideRotationController.setTargetPosition(target);
         return this;
     }
 
@@ -165,19 +161,20 @@ public class Robot {
         return this;
     }
 
-    public Robot increaseRotationalTargetPosition(int target) {
-        rotationalController.increaseTargetPosition(isSlowMode ? (int) (target * .3) : target);
+    public Robot increaseSlideRotationTargetPosition(int target) {
+        slideRotationController.increaseTargetPosition(isSlowMode ? (int) (target * .3) : target);
         return this;
     }
 
 
-    public Robot setClawAnglePosition(double position) {
-        clawAngleServo.setPosition(position);
+    public Robot setRotAndAnglePosition(double[] positions) {
+        clawRotAndAngleServoRight.setPosition(positions[0]);
+        clawRotAndAngleServoLeft.setPosition(positions[1]);
         return this;
     }
 
-    public double getClawAnglePosition() {
-        return clawAngleServo.getPosition();
+    public double[] getClawAnglePosition() {
+        return new double[] {clawRotAndAngleServoRight.getPosition(), clawRotAndAngleServoLeft.getPosition()};
     }
 
     public Robot setClawHorizontalAnglePosition(double position) {
@@ -248,14 +245,6 @@ public class Robot {
         return clawHorizontalAngleServo.getPosition();
     }
 
-    public Robot setClawRotationPosition(double position) {
-        clawRotationServo.setPosition(position);
-        return this;
-    }
-
-    public double getClawRotationPosition() {
-        return clawRotationServo.getPosition();
-    }
 
     public Robot setClawPosition(double position) {
         clawServo.setPosition(position);
@@ -267,8 +256,13 @@ public class Robot {
         return slideController.getCurrentPosition();
     }
 
-    public int getRotationalPosition() {
-        return rotationalController.getCurrentPosition();
+    public int getSlideRotationPosition() {
+        return slideRotationController.getCurrentPosition();
+    }
+
+    public Robot setSlideRotationPosition(int pos) {
+        slideRotationController.setTargetPosition(pos);
+        return this;
     }
 
     public void newVerticalControlPidTuning() {
@@ -302,9 +296,9 @@ public class Robot {
 
     public HashMap<String, Servo> getServoForTesting() {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
-        servoHashMap.put("clawAngleServo", clawAngleServo);
+        servoHashMap.put("clawRotAndAngleServoRight", clawRotAndAngleServoRight);
+        servoHashMap.put("clawRotAndAngleServoLeft", clawRotAndAngleServoLeft);
         servoHashMap.put("clawHorizontalAngleServo", clawHorizontalAngleServo);
-        servoHashMap.put("clawRotationServo", clawRotationServo);
         servoHashMap.put("clawServo", clawServo);
 //        servoHashMap.put("intakeAngleServo", intakeAngleServo);
 //        servoHashMap.put("intakeKnuckleServo", intakeKnuckleServo);
@@ -429,7 +423,7 @@ public class Robot {
 
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
-        rotationalController.update(telemetry);
+        slideRotationController.update(telemetry);
         slideController.update(telemetry);
 //        dualServoSlideController.update(telemetry);
 
@@ -450,7 +444,7 @@ public class Robot {
     public void executeAuto(Telemetry telemetry) {
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
-        rotationalController.update(telemetry);
+        slideRotationController.update(telemetry);
         slideController.update(telemetry);
 //        dualServoSlideController.update(telemetry);
         telemetry.update();

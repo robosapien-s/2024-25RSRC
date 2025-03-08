@@ -16,21 +16,19 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_OPEN = 0.76;
         public static double CLAW_CLOSE = 1;
 
-        public static double ROT_SERVO_DEFAULT = .74;
-        public static double ROT_SERVO_BACK = .08;
+        public static double[] ROT_AND_ANGLE_BACK = {1.0, 0.0};
 
-        public static double CLAW_ANGLE_FORWARD = .66;
+        public static double[] ROT_AND_ANGLE_PREP = {0.55, 0.45};
 
-        public static double CLAW_ANGLE_FORWARD_SPECIMEN = .48;
-        public static double CLAW_ANGLE_DOWN = 0.96;
-        public static double CLAW_ANGLE_BUCKET = 0.23;
-        public static double CLAW_ANGLE_BACK = 0.14;
+        public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.4, 0.6};
 
-        public static double CLAW_ANGLE_PREP_BACK = 0.5;
-        public static double CLAW_ANGLE_TRANSFER = .76;
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {0.1, 0.9};
 
+        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.55, 0.75};
 
-        public static int ROTATIONAL_INTAKE_INITIAL = 200;
+        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.25, 0.45};
+
+        public static int SLIDE_ROTATION_INTAKE_INITIAL = 200;
 
         public static int SLIDE_POSITION = 140;
 
@@ -46,15 +44,17 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_HANG_DROP_POSITION = 600;
 
-        public static int SLIDE_DROP_L1 = 2450;
+        public static int SLIDE_DROP_L1 = 2000;
 
-        public static int SLIDE_DROP_L2 = 3000;
+        public static int SLIDE_DROP_L2 = 2500;
 
-        public static int SLIDE_MAX_POSITION = 3000;
+        public static int SLIDE_MAX_POSITION = 2500;
 
-        public static int ROTATIONAL_TRANSFER_POSITION = 0;
+        public static int SLIDE_ROTATION_TRANSFER_POSITION = 0;
 
-        public static int ROTATIONAL_MAX_POSITION = 1650;
+        public static int SLIDE_ROTATION_MIN_POSITION = -1400;
+
+        public static int SLIDE_ROTATION_MAX_POSITION = 0;
 
         public static double SLIDE_PID_kp = 0.027;
         public static double SLIDE_PID_kd = 0.027;

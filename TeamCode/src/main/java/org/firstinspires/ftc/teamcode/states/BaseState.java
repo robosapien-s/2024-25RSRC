@@ -33,34 +33,19 @@ public abstract class BaseState implements IRobot {
         }, 0, duration, name, false);
     }
 
-    public static IRobotTask createClawRotationTask(Robot robot, double position, int duration, String name, boolean steps) {
+    public static IRobotTask createRotationAndAngleTask(Robot robot, double[] positions, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
             public void setPosition(double value) {
-                robot.setClawRotationPosition(value);
+                robot.setRotAndAnglePosition(positions);
             }
 
             @Override
             public double getPosition() {
-                return position;
+                return 0;
             }
-        }, position, duration, name, steps);
-    }
-
-    public static IRobotTask createClawAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
-
-        return new CallBackTask(new CallBackTask.CallBackListener() {
-            @Override
-            public void setPosition(double value) {
-                robot.setClawAnglePosition(value);
-            }
-
-            @Override
-            public double getPosition() {
-                return position;
-            }
-        }, position, duration, name, steps);
+        }, 0, duration, name, steps);
     }
 
     public static IRobotTask createClawHorizontalAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
@@ -116,14 +101,14 @@ public abstract class BaseState implements IRobot {
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
             public void setPosition(double value) {
-                robot.setRotationalTargetPosition((int) value);
+                robot.setSlideRotationTargetPosition((int) value);
 
             }
 
             @Override
             public double getPosition() {
 
-                return robot.getRotationalPosition();
+                return robot.getSlideRotationPosition();
             }
         }, position, duration, name, steps);
     }
