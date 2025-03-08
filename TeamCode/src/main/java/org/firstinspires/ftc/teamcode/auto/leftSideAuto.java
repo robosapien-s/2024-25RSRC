@@ -7,13 +7,14 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-
+@Disabled
 @Autonomous
 public class leftSideAuto extends LinearOpMode {
 
@@ -81,7 +82,9 @@ public class leftSideAuto extends LinearOpMode {
 //        TrajectoryActionBuilder pickUpGround1
 
         boolean isClawClosed = false;
+
         while (!isStopRequested() && !opModeIsActive()) {
+            robotAuto.setIntakeClawAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER);
             if (joystickWrapper.gamepad1GetA()) {
                 if (!isClawClosed) {
                     robotAuto.closeTopClaw();

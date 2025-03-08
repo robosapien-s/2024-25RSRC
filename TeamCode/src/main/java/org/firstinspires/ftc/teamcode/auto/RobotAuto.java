@@ -92,6 +92,24 @@ public class RobotAuto {
         };
     }
 
+    public Action moveIntakeAngle(double pos) {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                robot.setIntakeAngleServo(pos);
+                return false;
+            }
+        };
+
+    }
+
+
+
+    public void setIntakeClawAnglePosition(double pos) {
+        robot.setIntakeAngleServo(pos);
+
+    }
+
     public Action setHorizontalSlidePosition(int pos) {
         return new Action() {
             @Override
