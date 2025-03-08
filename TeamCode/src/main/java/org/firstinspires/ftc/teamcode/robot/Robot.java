@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -43,20 +42,14 @@ public class Robot {
     private IRobot currentState;
     private final IDrive drive;
     private final JoystickWrapper joystick;
-    private final HorizontalSlideController horizontalSlideController;
-    private VerticalSlideController verticalSlideController;
-    private final ClawSlideController clawSlideController;
-    private final DualServoSlideController dualServoSlideController;
+    private final RotationalController rotationalController;
+    private SlideController slideController;
+
 
     private final Servo clawAngleServo;
     private final Servo clawRotationServo;
     private final Servo clawServo;
     private final Servo clawHorizontalAngleServo;
-    private final CRServo intakeServo;
-    private final Servo intakeAngleServo;
-    private final Servo intakeKnuckleServo;
-    private final Servo intakeRotationServo;
-    private final Servo intakeClawServo;
 
     private final HardwareMap hardwareMap;
 
@@ -94,29 +87,27 @@ public class Robot {
 
 
         if (isAuto) {
-            horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION, 0, false);
+            rotationalController = new RotationalController(hardwareMap, "rotationalController", RoboSapiensTeleOp.Params.ROTATIONAL_MAX_POSITION, 0, false);
         } else {
-            horizontalSlideController = new HorizontalSlideController(hardwareMap, "horizontalSlide1", RoboSapiensTeleOp.Params.HORIZONTAL_SLIDE_MAX_POSITION-50, 0, false);
+            rotationalController = new RotationalController(hardwareMap, "rotationalController", RoboSapiensTeleOp.Params.ROTATIONAL_MAX_POSITION-50, 0, false);
         }
 
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_MAX_POSITION, 0, false);
-        clawSlideController = new ClawSlideController(hardwareMap, "clawSliderCR", "verticalSlide2", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
-        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
+        slideController = new SlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION, 0, false);
+//        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
 
         clawAngleServo = hardwareMap.get(Servo.class, "clawAngleServo");
         clawRotationServo = hardwareMap.get(Servo.class, "clawRotationServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHorizontalAngleServo = hardwareMap.get(Servo.class, "clawHorizontalAngleServo");
 
-        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+//        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
-        intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
-        intakeKnuckleServo = hardwareMap.get(Servo.class, "intakeKnuckleServo");
-        intakeRotationServo = hardwareMap.get(Servo.class, "intakeRotationServo");
-        intakeClawServo = hardwareMap.get(Servo.class, "intakeClawServo");
+//        intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
+//        intakeKnuckleServo = hardwareMap.get(Servo.class, "intakeKnuckleServo");
+//        intakeRotationServo = hardwareMap.get(Servo.class, "intakeRotationServo");
+//        intakeClawServo = hardwareMap.get(Servo.class, "intakeClawServo");
 
-        instanceStateMap.put(State.INITIAL, () -> new InitialState(joystick));
-        instanceStateMap.put(State.INTAKING, () -> new IntakingState(joystick));
+
         instanceStateMap.put(State.DROPPING_L1, () -> new DroppingL1State(joystick));
         instanceStateMap.put(State.DROPPING_L2, () -> new DroppingL2State(joystick));
         instanceStateMap.put(State.WALLPICKUP, () -> new WallPickUpState(joystick));
@@ -159,44 +150,26 @@ public class Robot {
     public void setYawOverride(YawOverrride inOverride) {
         doOverrideYaw = inOverride;
     }
-    public Robot setHorizontalSlideTargetPosition(int target) {
-        horizontalSlideController.setTargetPosition(target);
+    public Robot setRotationalTargetPosition(int target) {
+        rotationalController.setTargetPosition(target);
         return this;
     }
 
-    public Robot setVerticalSlideTargetPosition(int target) {
-        verticalSlideController.setTargetPosition(target);
+    public Robot setSlideTargetPosition(int target) {
+        slideController.setTargetPosition(target);
         return this;
     }
 
-    public Robot increaseVerticalSlideTargetPosition(int target) {
-        verticalSlideController.increaseTargetPosition(target);
+    public Robot increaseSlideTargetPosition(int target) {
+        slideController.increaseTargetPosition(target);
         return this;
     }
 
-    public Robot increaseHorizontalSlideTargetPosition(int target) {
-        horizontalSlideController.increaseTargetPosition(isSlowMode ? (int) (target * .3) : target);
+    public Robot increaseRotationalTargetPosition(int target) {
+        rotationalController.increaseTargetPosition(isSlowMode ? (int) (target * .3) : target);
         return this;
     }
 
-    public Robot increaseClawSlideTargetPosition(int target) {
-        dualServoSlideController.increaseTargetPosition(target);
-        return this;
-    }
-
-    public Robot setClawSlideTargetPosition(int target) {
-        clawSlideController.setTargetPosition(target);
-        return this;
-    }
-
-    public Robot setDualSlideTargetPosition(int target) {
-        dualServoSlideController.setTargetPosition(target);
-        return this;
-    }
-
-    public int getDualSlideTargetPosition() {
-        return dualServoSlideController.getCurrentPosition();
-    }
 
     public Robot setClawAnglePosition(double position) {
         clawAngleServo.setPosition(position);
@@ -290,60 +263,16 @@ public class Robot {
     }
 
 
-
-    public Robot setIntakeKnuckleServo(double position) {
-        intakeKnuckleServo.setPosition(position);
-        return this;
-    }
-    public double getIntakeKnuckleServo() {
-        return intakeKnuckleServo.getPosition();
+    public int getSlidePosition() {
+        return slideController.getCurrentPosition();
     }
 
-
-    public Robot setIntakeRotationServo(double position) {
-        intakeRotationServo.setPosition(position);
-        return this;
-    }
-    public double getIntakeRotationServo() {
-        return intakeRotationServo.getPosition();
+    public int getRotationalPosition() {
+        return rotationalController.getCurrentPosition();
     }
 
-    public Robot setIntakeClawServo(double position) {
-        intakeClawServo.setPosition(position);
-        return this;
-    }
-    public double getIntakeClawServo() {
-        return intakeClawServo.getPosition();
-    }
-
-
-    public Robot setIntakePower(double power) {
-        intakeServo.setPower(power);
-        return this;
-    }
-
-    public Robot setIntakeAngleServo(double position) {
-        intakeAngleServo.setPosition(position);
-        return this;
-    }
-
-    public double getIntakeAngleServo() {
-        return intakeAngleServo.getPosition();
-    }
-
-    public int getVerticalSlidePosition() {
-        return verticalSlideController.getCurrentPosition();
-    }
-
-    public int getHorizontalSlidePosition() {
-        return horizontalSlideController.getCurrentPosition();
-    }
-
-    public int getClawSlidePosition() {
-        return clawSlideController.getCurrentPosition();
-    }
     public void newVerticalControlPidTuning() {
-        verticalSlideController = new VerticalSlideController(hardwareMap, "verticalSlide2", "verticalSlide1", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DROP_L2, 0,false);
+        slideController = new SlideController(hardwareMap, "slide2", "slide1", "sliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_DROP_L2, 0,false);
     }
 
     public Vector3D getDeadWheelLocation() {
@@ -377,10 +306,10 @@ public class Robot {
         servoHashMap.put("clawHorizontalAngleServo", clawHorizontalAngleServo);
         servoHashMap.put("clawRotationServo", clawRotationServo);
         servoHashMap.put("clawServo", clawServo);
-        servoHashMap.put("intakeAngleServo", intakeAngleServo);
-        servoHashMap.put("intakeKnuckleServo", intakeKnuckleServo);
-        servoHashMap.put("intakeRotationServo", intakeRotationServo);
-        servoHashMap.put("intakeClawServo", intakeClawServo);
+//        servoHashMap.put("intakeAngleServo", intakeAngleServo);
+//        servoHashMap.put("intakeKnuckleServo", intakeKnuckleServo);
+//        servoHashMap.put("intakeRotationServo", intakeRotationServo);
+//        servoHashMap.put("intakeClawServo", intakeClawServo);
 
         return servoHashMap;
     }
@@ -500,9 +429,9 @@ public class Robot {
 
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
-        horizontalSlideController.update(telemetry);
-        verticalSlideController.update(telemetry);
-        dualServoSlideController.update(telemetry);
+        rotationalController.update(telemetry);
+        slideController.update(telemetry);
+//        dualServoSlideController.update(telemetry);
 
         telemetry.addData("Delta Time", System.currentTimeMillis()-dTime);
         dTime=System.currentTimeMillis();
@@ -521,9 +450,9 @@ public class Robot {
     public void executeAuto(Telemetry telemetry) {
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
-        horizontalSlideController.update(telemetry);
-        verticalSlideController.update(telemetry);
-        dualServoSlideController.update(telemetry);
+        rotationalController.update(telemetry);
+        slideController.update(telemetry);
+//        dualServoSlideController.update(telemetry);
         telemetry.update();
     }
 

@@ -38,7 +38,7 @@ public class PidTuningState extends BaseState {
     public void execute(Robot robot, Telemetry telemetry) {
 
         if (joystick.gamepad1GetDUp()) {
-            robot.setVerticalSlideTargetPosition(RoboSapiensTeleOp.Params.VERTICAL_SLIDE_PID_target);
+            robot.setSlideTargetPosition(RoboSapiensTeleOp.Params.SLIDE_PID_target);
         }
     }
 

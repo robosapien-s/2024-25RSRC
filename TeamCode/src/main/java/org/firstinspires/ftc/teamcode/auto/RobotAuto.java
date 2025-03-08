@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -16,181 +12,82 @@ import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 public class RobotAuto {
-    private long lastTime = 0;
-    final private Robot robot;
-    final private Telemetry telemetry;
+
+    private Robot robot;
+    private Telemetry telemetry;
+
+    private double lastTime = 0;
+    private int lastDuration = 0;
+    private boolean waitRunning = true;
+
     IMU imu;
     RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
     RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
     RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-
-    public RobotAuto(HardwareMap inHardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry inTelemetry) {
-        robot = new Robot(inHardwareMap, gamepad1, gamepad2, inTelemetry, true);
+    public RobotAuto(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
+        robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry, true);
         Robot.resetEncoders = false;
+
         robot.setYawOverride(new Robot.YawOverrride() {
             @Override
             public double getYaw() {
                 return getAutoYaw();
             }
         });
-        telemetry = inTelemetry;
 
-        imu = inHardwareMap.get(IMU .class, "imu");
+        this.telemetry = telemetry;
+
+        imu = hardwareMap.get(IMU .class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         imu.resetYaw();
-//        robot.initPid();
     }
 
     public double getAutoYaw() {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
-
-    public Action robotExecute() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                telemetry.addData("Delta time", System.currentTimeMillis()-lastTime);
-                lastTime = System.currentTimeMillis();
-                robot.executeAuto(telemetry);
-                return true;
-            }
-        };
-    }
-
-    public Action setState(IRobot.State state) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.switchState(state);
-                return false;
-            };
-        };
-    }
-
-    public Action specimenHangSubstate1() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setVerticalSlideTargetPosition(RoboSapiensTeleOp.Params.VERTICAL_SLIDE_HANG_DROP_POSITION);
-                robot.setClawAnglePosition(RoboSapiensTeleOp.Params.CLAW_ANGLE_FORWARD);
-                robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
-                return false;
-            }
-        };
-    }
-
-    public Action openTopClawAction() {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
-                return false;
-            }
-        };
-    }
-
-    public Action moveIntakeAngle(double pos) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setIntakeAngleServo(pos);
-                return false;
-            }
-        };
-
-    }
-
-
-
-    public void setIntakeClawAnglePosition(double pos) {
-        robot.setIntakeAngleServo(pos);
-
-    }
-
-    public Action setHorizontalSlidePosition(int pos) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setHorizontalSlideTargetPosition(pos);
-                return false;
-            }
-        };
-    }
-
-    public Action setVerticalSlidePosition(int pos) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setVerticalSlideTargetPosition(pos);
-                return false;
-            }
-        };
-    }
-
-    public Action setClawHorizontalAnglePosition(double pos) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setClawHorizontalAnglePosition(pos);
-                return false;
-            }
-        };
-    }
-
-    public Action setIntakeRotationServo(double pos) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                robot.setIntakeRotationServo(pos);
-                return false;
-            }
-        };
-    }
-
-
-    public void closeTopClaw() {
-        robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_CLOSE);
-    }
-
-    public void openTopClaw() {
+    public void openClaw() {
         robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
     }
 
-    private long waitTime = 0;
-    private long lastWaitTime = 0;
-    private boolean isWaitInit = false;
-    public Action waitAction(int durationInMillis) {
-        return new Action() {
-            @Override
-            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                if (!isWaitInit) {
-                    isWaitInit = true;
-                    lastWaitTime = System.currentTimeMillis();
-                }
-
-                if (isWaitInit) {
-                    waitTime = System.currentTimeMillis()-lastWaitTime;
-                    if (waitTime > durationInMillis)
-                        isWaitInit = false;
-                }
-                return isWaitInit;
-            }
-        };
+    public void closeClaw() {
+        robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_CLOSE);
     }
 
-//    public Action setHorizontalSlidePos(int pos) {
-//
-//        return new Action() {
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-//                robot.setHorizontalSlideTargetPosition(0);
-//                return false;
-//            }
-//        };
-//
-//    }
+    public void execute() {
+        robot.executeAuto(telemetry);
+    }
+
+    public void setState(IRobot.State state) {
+        robot.switchState(state);
+    }
+
+
+    public void startWait(int durationMillis) {
+        lastTime = System.currentTimeMillis();
+        waitRunning = true;
+        lastDuration = durationMillis;
+    }
+
+    public boolean checkWait() {
+        if (!waitRunning) {
+            return true;
+        }
+
+        if (System.currentTimeMillis()-lastTime>lastDuration) {
+            waitRunning = false;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setRotationalPos(int pos) {
+        robot.setRotationalTargetPosition(pos);
+    }
+
+
 
 }

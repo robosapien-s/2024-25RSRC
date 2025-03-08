@@ -11,7 +11,7 @@ public class DroppingL2State extends DroppingL1State {
 
     @Override
     public int getHeight() {
-        return RoboSapiensTeleOp.Params.VERTICAL_SLIDE_DROP_L2;
+        return RoboSapiensTeleOp.Params.SLIDE_DROP_L2;
     }
 
     @Override

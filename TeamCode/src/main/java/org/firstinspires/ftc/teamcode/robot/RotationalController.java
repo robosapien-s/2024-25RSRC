@@ -1,15 +1,13 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-public class HorizontalSlideController extends RobotPidMechanism {
+public class RotationalController extends RobotPidMechanism {
 
     private final DcMotorEx motorSlide1;
 
@@ -19,7 +17,7 @@ public class HorizontalSlideController extends RobotPidMechanism {
     public static int targetPosition = 0;
 
     // Constructor
-    public HorizontalSlideController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosition, boolean isBraking) {
+    public RotationalController(HardwareMap hardwareMap, String mainSlide, int inMaxPosition, int inMinPosition, boolean isBraking) {
         super(
                 kP,          // Proportional gain
                 kI,          // Integral gain
@@ -68,7 +66,7 @@ public class HorizontalSlideController extends RobotPidMechanism {
 
     @Override
     public String getName() {
-        return "Horizontal Slider";
+        return "Rotational Controller";
     }
 
     public void resetPID() {

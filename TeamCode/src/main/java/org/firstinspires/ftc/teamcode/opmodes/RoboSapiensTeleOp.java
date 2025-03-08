@@ -29,59 +29,40 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_ANGLE_PREP_BACK = 0.5;
         public static double CLAW_ANGLE_TRANSFER = .76;
 
-        public static int CLAW_SLIDER_FORWARD = 12000;
-        public static int CLAW_SLIDER_TRANSFER = 0;
-        public static int CLAW_SLIDER_DOWN = 6000;
-        public static int CLAW_SLIDER_BACK = 0;
 
-        public static int HORIZONTAL_SLIDE_INTAKE_INITIAL = 200;
+        public static int ROTATIONAL_INTAKE_INITIAL = 200;
 
-        public static double INTAKE_ANGLE_DOWN = .51;
-        public static int VERTICAL_SLIDE_POSITION = 140;
+        public static int SLIDE_POSITION = 140;
 
-        public static int VERTICAL_SLIDE_TRANSFER_POSITION = 0;
+        public static int SLIDE_TRANSFER_POSITION = 0;
 
-        public static int VERTICAL_SLIDE_MIDDLE_POSITION = 500;
+        public static int SLIDE_MIDDLE_POSITION = 500;
 
-        public static int VERTICAL_SLIDE_WALL_POSITION = 200;
+        public static int SLIDE_WALL_POSITION = 200;
 
-        public static int VERTICAL_SLIDE_DOWN_POSITION = 0;
+        public static int SLIDE_DOWN_POSITION = 0;
 
-        public static int VERTICAL_SLIDE_HANG_PREP_POSITION = 1030;
+        public static int SLIDE_HANG_PREP_POSITION = 1030;
 
-        public static int VERTICAL_SLIDE_HANG_DROP_POSITION = 600;
+        public static int SLIDE_HANG_DROP_POSITION = 600;
 
-        public static int VERTICAL_SLIDE_DROP_L1 = 2450;
+        public static int SLIDE_DROP_L1 = 2450;
 
-        public static int VERTICAL_SLIDE_DROP_L2 = 3000;
+        public static int SLIDE_DROP_L2 = 3000;
 
-        public static int VERTICAL_SLIDE_MAX_POSITION = 3000;
+        public static int SLIDE_MAX_POSITION = 3000;
 
-        public static int HORIZONTAL_SLIDE_TRANSFER_POSITION = 0;
+        public static int ROTATIONAL_TRANSFER_POSITION = 0;
 
-        public static int HORIZONTAL_SLIDE_MAX_POSITION = 1650;
+        public static int ROTATIONAL_MAX_POSITION = 1650;
 
-        public static double VERTICAL_SLIDE_PID_kp = 0.027;
-        public static double VERTICAL_SLIDE_PID_kd = 0.027;
-        public static double VERTICAL_SLIDE_PID_ki = 0.0001;
+        public static double SLIDE_PID_kp = 0.027;
+        public static double SLIDE_PID_kd = 0.027;
+        public static double SLIDE_PID_ki = 0.0001;
 
-        public static int VERTICAL_SLIDE_PID_target = 400;
+        public static int SLIDE_PID_target = 400;
 
-        public static double INTAKE_CLAW_OPEN = .49;
-        public static double INTAKE_CLAW_CLOSE = .73;//.55;
-        public static double INTAKE_CLAW_LOOSE = .665;//.53;
 
-        public static double INTAKE_ROT_SERVO_DEFAULT = .2393;
-
-        public static double INTAKE_ANGLE_READY = .3;//.6183;
-        //public static double INTAKE_ANGLE_READY_LOW = .3394;//.6183;
-        public static double INTAKE_ANGLE_PICKUP =  .43;//.68;
-
-        public static double INTAKE_ANGLE_PRE_TRANSFER = .25;
-        public static double INTAKE_ANGLE_TRANSFER = .14;
-
-        public static double INTAKE_KNUCKLE_PICKUP = 0.1789;//.1;
-        public static double INTAKE_KNUCKLE_TRANSFER = 0.95;
 
         public static double CLAW_HORIZONTAL_ANGLE_CENTER = 0.54;
         public static double CLAW_HORIZONTAL_ANGLE_LEFT = 0.42;
