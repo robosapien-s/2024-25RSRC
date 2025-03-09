@@ -33,7 +33,7 @@ public class IntakingStateClaw extends BaseState {
         } else if (prevState.getState() == State.SPECIMEN_HANG) {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
 
-            transferSeries.add();
+//            transferSeries.add();
 
             taskArrayList.add(transferSeries);
         }else {
