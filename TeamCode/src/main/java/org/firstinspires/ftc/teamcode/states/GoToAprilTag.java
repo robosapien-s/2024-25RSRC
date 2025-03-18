@@ -30,6 +30,11 @@ public class GoToAprilTag implements IRobot {
     }
 
     @Override
+    public void dispose() {
+
+    }
+
+    @Override
     public State getState() {
         return State.GO_TO_APRIL_TAG;
     }

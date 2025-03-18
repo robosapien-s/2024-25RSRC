@@ -18,6 +18,8 @@ public abstract class BaseState implements IRobot {
         this.joystick = joystick;
     }
 
+    @Override
+     public void dispose(){}
 
     public static IRobotTask createWaitTask(Robot robot, int duration, String name) {
 

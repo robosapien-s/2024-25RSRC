@@ -108,8 +108,11 @@ public class AngleDrive implements IDrive {
         backLeftMotor = hardwareMap.get(DcMotorEx.class, "bL");
         backRightMotor = hardwareMap.get(DcMotorEx.class, "bR");
 
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -245,6 +248,8 @@ public class AngleDrive implements IDrive {
 
     @Override
     public void setAutoMode(double inX, double inY) {
+
+       /*
         isAutoMode = true;
         autoModeX = inX;
         autoModeY = inY;
@@ -254,11 +259,14 @@ public class AngleDrive implements IDrive {
 
         backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+*/
 
 
     }
 
     public void disableAutoMode() {
+
+        /*
         isAutoMode = false;
         autoModeX = 0;
         autoModeY = 0;
@@ -268,6 +276,8 @@ public class AngleDrive implements IDrive {
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+         */
     }
 
     public double getNormalizedHeadingError() {

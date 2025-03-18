@@ -21,12 +21,16 @@ public interface IRobot {
         PICKUP_GROUND,
         AUTO_DRIVE_TEST,
         PICKUP_GROUND_LEFT,
+        AUTO_PICKUP
     }
 
 
     void initialize(Robot robot, IRobot prevState);
 
     void execute(Robot robot, Telemetry telemetry);
+
+    public void dispose();
+
 
     IRobot.State getState();
 }

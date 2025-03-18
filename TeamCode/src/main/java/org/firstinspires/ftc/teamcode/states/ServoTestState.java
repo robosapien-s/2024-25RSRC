@@ -27,6 +27,7 @@ public class ServoTestState extends BaseState {
     HashMap<String, Servo> servoHashMap;
     ArrayList<String> servoNames = new ArrayList<>();
     int index = -1;
+    double increment = .005;
 
 
     @Override
@@ -59,7 +60,7 @@ public class ServoTestState extends BaseState {
             Servo servo = Objects.requireNonNull(servoHashMap.get(servoName));
             if(servo != null) {
                 double position = servo.getPosition();
-                position += .02;
+                position += increment;
                 if (position > 1) {
                     position = 1;
                 }
@@ -71,13 +72,21 @@ public class ServoTestState extends BaseState {
             Servo servo = Objects.requireNonNull(servoHashMap.get(servoName));
             if(servo != null) {
                 double position = servo.getPosition();
-                position -= .02;
+                position -= increment;
                 if (position < 0 ) {
                     position = 0;
                 }
 
                 servo.setPosition(position);
             }
+        }
+
+        if(joystick.gamepad1GetRightBumperDown()) {
+            increment += .005;
+        }
+
+        if(joystick.gamepad1GetLeftBumperDown()) {
+            increment -= .005;
         }
 
 

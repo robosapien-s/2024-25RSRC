@@ -53,6 +53,8 @@ public class Robot {
 
     private final HardwareMap hardwareMap;
 
+    private final Telemetry telemetry;
+
     private Limelight3A limelight;
     private boolean isAprilTagDetected = false;
 
@@ -75,6 +77,9 @@ public class Robot {
     private double driftXValue = 0;
     private double driftYValue = 0;
 
+
+    private boolean driveTrainEnabled = true;
+
     DriveToPointController driveController = new DriveToPointController();
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
@@ -84,6 +89,7 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isAuto) {
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
 
         slideRotationController = new SlideRotationController(hardwareMap, "slideRotationController", RoboSapiensTeleOp.Params.SLIDE_ROTATION_MAX_POSITION, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIN_POSITION, false);
 
@@ -91,7 +97,7 @@ public class Robot {
         slideController = new SlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION, 0, false);
 //        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
 
-        clawRotAndAngleServoRight = hardwareMap.get(Servo.class, "clawAndAngleServoRight");
+        clawRotAndAngleServoRight = hardwareMap.get(Servo.class, "clawRotAndAngleServoRight");
         clawRotAndAngleServoLeft = hardwareMap.get(Servo.class, "clawRotAndAngleServoLeft");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawHorizontalAngleServo = hardwareMap.get(Servo.class, "clawHorizontalAngleServo");
@@ -115,6 +121,8 @@ public class Robot {
         instanceStateMap.put(State.PICKUP_GROUND, () -> new PickUpGroundState(joystick));
         instanceStateMap.put(State.AUTO_DRIVE_TEST, () -> new AutoDriveTestState(joystick));
         instanceStateMap.put(State.PICKUP_GROUND_LEFT, () -> new PickUpGroundStateLeft(joystick));
+        instanceStateMap.put(State.AUTO_PICKUP, () -> new AutoPickupState(joystick));
+
 
         /*
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
@@ -251,6 +259,10 @@ public class Robot {
         return this;
     }
 
+    public double getClawPosition() {
+        return clawServo.getPosition();
+    }
+
 
     public int getSlidePosition() {
         return slideController.getCurrentPosition();
@@ -354,6 +366,14 @@ public class Robot {
     long dTime = System.currentTimeMillis();
     long minTime = dTime;
 
+    public void setDriveTrainEnabled(boolean enabled) {
+        driveTrainEnabled = enabled;
+    }
+
+    public void updateDriveTrainsRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
+        drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+    }
+
     public void execute(Telemetry telemetry) {
 //        if (!isAprilTagDetected) {
 //            pollForAprilTag(telemetry);
@@ -390,36 +410,38 @@ public class Robot {
 ////            drive.updateRaw(telemetry, false, xPower, yPower, rightStickX, rightStickY, 1, 1);
 //        } else {
 
-            boolean tempIgnoreDrift = false;
-            if( Math.abs( joystick.gamepad1GetLeftStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetLeftStickY() ) > 0 ||
-                    Math.abs( joystick.gamepad1GetRightStickX() ) > 0  ||  Math.abs( joystick.gamepad1GetRightStickY() ) > 0) {
-                tempIgnoreDrift = true;
-                setDriftMode(false, 0, 0);
-                disableAutoMode();
-            }
+           if(driveTrainEnabled) {
+               boolean tempIgnoreDrift = false;
+               if (Math.abs(joystick.gamepad1GetLeftStickX()) > 0 || Math.abs(joystick.gamepad1GetLeftStickY()) > 0 ||
+                       Math.abs(joystick.gamepad1GetRightStickX()) > 0 || Math.abs(joystick.gamepad1GetRightStickY()) > 0) {
+                   tempIgnoreDrift = true;
+                   setDriftMode(false, 0, 0);
+                   disableAutoMode();
+               }
 
-            if(isAutoMode) {
+               if (isAutoMode) {
 
-                Vector3D powers = driveController.calculate( targetX, targetY, targetHeading, drive.getPose(), telemetry);
+                   Vector3D powers = driveController.calculate(targetX, targetY, targetHeading, drive.getPose(), telemetry);
 
-                telemetry.addData("POSE Heading: ", Math.toDegrees(drive.getPose().heading.toDouble()));
-                telemetry.addData("POSE Heading Power: ", powers.getZ());
+                   telemetry.addData("POSE Heading: ", Math.toDegrees(drive.getPose().heading.toDouble()));
+                   telemetry.addData("POSE Heading Power: ", powers.getZ());
 
-                telemetry.addData("POSE x: ", drive.getPose().position.x);
-                telemetry.addData("POSE x Power: ", powers.getX());
+                   telemetry.addData("POSE x: ", drive.getPose().position.x);
+                   telemetry.addData("POSE x Power: ", powers.getX());
 
-                telemetry.addData("POSE y: ", drive.getPose().position.y);
-                telemetry.addData("POSE t Power: ", powers.getY());
+                   telemetry.addData("POSE y: ", drive.getPose().position.y);
+                   telemetry.addData("POSE t Power: ", powers.getY());
 
-                AngleDrive angleDrive = (AngleDrive)drive;
-                angleDrive.MoveMecanumPidToPoint(powers.getX(), powers.getY(), powers.getZ());
-                //drive.updateRaw(telemetry, false, powers.getX(), powers.getY(), powers.getZ(), 0, 1, 1);
+                   AngleDrive angleDrive = (AngleDrive) drive;
+                   angleDrive.MoveMecanumPidToPoint(powers.getX(), powers.getY(), powers.getZ());
+                   //drive.updateRaw(telemetry, false, powers.getX(), powers.getY(), powers.getZ(), 0, 1, 1);
 
-            } else if(isDriftMode &&  !tempIgnoreDrift) {
-               drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
-            } else {
-                drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
-            }
+               } else if (isDriftMode && !tempIgnoreDrift) {
+                   drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+               } else {
+                   drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
+               }
+           }
 
         telemetry.addData("State:", getCurrentState().name());
         currentState.execute(this, telemetry);
@@ -460,6 +482,9 @@ public class Robot {
         }
     }
 
+    public MultiColorSampleDetector createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority colorPriority) {
+        return new MultiColorSampleDetector(hardwareMap, telemetry, colorPriority);
+    }
 
     private Pose3D pollForAprilTag(Telemetry telemetry) {
         Pose3D botPose = null;
@@ -502,6 +527,7 @@ public class Robot {
 
     public void switchState(State newState) {
         IRobot prevState = currentState;
+        prevState.dispose();
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
         currentState.initialize(this, prevState);
     }

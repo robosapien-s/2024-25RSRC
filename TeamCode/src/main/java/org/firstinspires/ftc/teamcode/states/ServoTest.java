@@ -20,13 +20,13 @@ public class ServoTest {
         if (joystick.gamepad1GetB()) {
             robot.setClawPosition(CLAW_SERVO_DOWN);
         } else if (joystick.gamepad1GetX()) {
-            robot.setClawRotationPosition(ROT_SERVO);
+            //robot.setClawRotationPosition(ROT_SERVO);
         } else if (joystick.gamepad1GetA()) {
-            robot.setClawPosition(CLAW_SERVO_UP);
+            //robot.setClawPosition(CLAW_SERVO_UP);
         }else if (joystick.gamepad1GetDUp()) {
-            robot.setClawAnglePosition(0);
+            //robot.setClawAnglePosition(0);
         } else if (joystick.gamepad1GetDDown()) {
-            robot.setClawAnglePosition(1);
+            //robot.setClawAnglePosition(1);
         }
     }
 }

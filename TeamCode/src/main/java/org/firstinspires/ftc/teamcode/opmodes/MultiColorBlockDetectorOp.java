@@ -1,113 +1,115 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.roadrunner.Localizer;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
+import org.firstinspires.ftc.teamcode.robot.AngleDrive;
+import org.firstinspires.ftc.teamcode.robot.MultiColorSampleDetector;
+import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 import org.openftc.easyopencv.*;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+@Config
 @TeleOp(name = "Multi-Color Block Detector", group = "Vision")
-public class MultiColorBlockDetector extends LinearOpMode {
-    private OpenCvCamera webcam;
+public class MultiColorBlockDetectorOp extends LinearOpMode {
+
+    public static double xKp = 0.003;
+    public static double xKd = 0.0;
+    public static double xKi = 0.0;
+
+
+
+    public static double yKp = 0.003;
+    public static double yKd = 0.0;
+    public static double yKi = 0.0;
 
     @Override
     public void runOpMode() {
         // Initialize webcam
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
 
-        // Set pipeline
-        ColorPipeline pipeline = new ColorPipeline();
-        webcam.setPipeline(pipeline);
+        double startingHeading = Math.toRadians(90);
+        Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
+        AngleDrive drive = new AngleDrive(hardwareMap, false, localizer);
+        JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
+        MultiColorSampleDetector sampleDetector = new MultiColorSampleDetector(hardwareMap, telemetry, MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.all);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-            }
 
-            @Override
-            public void onError(int errorCode) {
-                telemetry.addLine("Camera failed to open.");
-                telemetry.update();
-            }
-        });
+        PIDCoefficientsEx pidXCoefficients = new PIDCoefficientsEx(
+                xKp, xKi, xKd, 0, 0, 0
+        );
+
+        PIDEx xPid = new PIDEx(pidXCoefficients);
+
+
+        PIDCoefficientsEx pidYCoefficients = new PIDCoefficientsEx(
+                yKp, yKi, yKd, 0, 0, 0
+        );
+
+        PIDEx yPid = new PIDEx(pidYCoefficients);
+
 
         telemetry.addLine("Waiting for start...");
         telemetry.update();
         waitForStart();
 
+
+        Point centerTarget = sampleDetector.getCenterOfScreen();
+        RotatedRect prevRect = new RotatedRect();
+
+        long lastAquireTime = 0;
+
+
         while (opModeIsActive()) {
-            telemetry.addData("Blue Blocks:", pipeline.getBlueCount());
-            telemetry.addData("Red Blocks:", pipeline.getRedCount());
-            telemetry.addData("Yellow Blocks:", pipeline.getYellowCount());
-            telemetry.update();
-        }
 
-        webcam.stopStreaming();
-    }
+            RotatedRect cloestRect = sampleDetector.getClosestSample();
 
-    static class ColorPipeline extends OpenCvPipeline {
-        private int blueCount = 0, redCount = 0, yellowCount = 0;
+            long timeFromLastAquire = System.currentTimeMillis() - lastAquireTime;
 
-        public int getBlueCount() { return blueCount; }
-        public int getRedCount() { return redCount; }
-        public int getYellowCount() { return yellowCount; }
 
-        @Override
-        public Mat processFrame(Mat input) {
-            Mat hsv = new Mat();
-            Mat maskBlue = new Mat(), maskRed = new Mat(), maskYellow = new Mat();
-            Mat output = input.clone();
+            if(cloestRect.size.width != 0 ||  timeFromLastAquire  < 200) {
 
-            Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
-
-            Scalar lowerBlue = new Scalar(100, 150, 50), upperBlue = new Scalar(140, 255, 255);
-            Scalar lowerRed1 = new Scalar(0, 150, 50), upperRed1 = new Scalar(10, 255, 255);
-            Scalar lowerRed2 = new Scalar(170, 150, 50), upperRed2 = new Scalar(180, 255, 255);
-            Scalar lowerYellow = new Scalar(20, 150, 100), upperYellow = new Scalar(30, 255, 255);
-
-            Core.inRange(hsv, lowerBlue, upperBlue, maskBlue);
-            Core.inRange(hsv, lowerRed1, upperRed1, maskRed);
-            Mat maskRed2 = new Mat();
-            Core.inRange(hsv, lowerRed2, upperRed2, maskRed2);
-            Core.bitwise_or(maskRed, maskRed2, maskRed);
-            Core.inRange(hsv, lowerYellow, upperYellow, maskYellow);
-
-            blueCount = detectAndLabel(maskBlue, output, "Blue", new Scalar(0, 255, 0));
-            redCount = detectAndLabel(maskRed, output, "Red", new Scalar(255, 0, 0));
-            yellowCount = detectAndLabel(maskYellow, output, "Yellow", new Scalar(0, 0, 255));
-
-            // Release memory
-            hsv.release();
-            maskBlue.release();
-            maskRed.release();
-            maskRed2.release();
-            maskYellow.release();
-
-            return output;
-        }
-
-        private int detectAndLabel(Mat mask, Mat output, String label, Scalar color) {
-            List<MatOfPoint> contours = new ArrayList<>();
-            Mat hierarchy = new Mat();
-            Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
-            int count = 0;
-            for (MatOfPoint contour : contours) {
-                Rect rect = Imgproc.boundingRect(contour);
-                if (rect.area() > 500) {
-                    Imgproc.rectangle(output, rect, color, 3);
-                    Imgproc.putText(output, label, new Point(rect.x, rect.y - 10), Imgproc.FONT_HERSHEY_SIMPLEX, 0.6, color, 2);
-                    count++;
+                if(cloestRect.size.width == 0) {
+                    cloestRect = prevRect;
+                } else {
+                    lastAquireTime = System.currentTimeMillis();
+                    prevRect = cloestRect;
                 }
+
+                double xPower = 0;
+                double yPower = 0;
+
+                xPower = xPid.calculate(centerTarget.x, cloestRect.center.x);
+                yPower = yPid.calculate(centerTarget.y, cloestRect.center.y);
+
+                if (xPower * xPower + yPower * yPower > 1) {
+                    double mag = Math.sqrt(xPower * xPower + yPower * yPower);
+                    xPower = xPower / mag;
+                    yPower = yPower / mag;
+                }
+
+                telemetry.addData("X Power", xPower);
+                telemetry.addData("Y Power", yPower);
+                telemetry.addData("Current Pos", cloestRect.center);
+                telemetry.addData("Target", centerTarget);
+
+                drive.updateRaw(telemetry, false, -xPower, -yPower, 0, 0, 1, 1);
             }
-            hierarchy.release();
-            return count;
+
         }
+
+        sampleDetector.stopStreaming();
     }
+
+
 }
