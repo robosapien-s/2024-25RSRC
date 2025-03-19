@@ -527,7 +527,9 @@ public class Robot {
 
     public void switchState(State newState) {
         IRobot prevState = currentState;
-        prevState.dispose();
+        if(prevState != null) {
+            prevState.dispose();
+        }
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
         currentState.initialize(this, prevState);
     }
