@@ -30,9 +30,9 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {0.1, 0.9};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.55, 0.75};
+        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.35, 0.75};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.25, 0.45};
+        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.05, 0.45};
 
         public static double[] ROT_AND_ANGLE_BASKET = {0.15, 0.85};
 

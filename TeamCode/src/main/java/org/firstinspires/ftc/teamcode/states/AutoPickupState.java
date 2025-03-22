@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.states;
 
-import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
-import com.acmerobotics.dashboard.config.Config;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.DriveToPointTask;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
@@ -12,40 +12,34 @@ import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.MultiColorSampleDetector;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
-import org.opencv.core.Point;
-import org.opencv.core.RotatedRect;
+import org.opencv.core.Rect;
 
-@Config
 public class AutoPickupState extends BaseState {
 
-    public static double xKp = 0.025;
-    public static double xKd = 0.01;
-    public static double xKi = 0.0;
+    private MultiColorSampleDetector sampleDetector;
+    private boolean targetAcquired = false;
+    private String targetColor = "None";
+    private double targetX = 0;
+    private double targetY = 0;
 
+    // Constants for PID motion control
+    private static final double CAMERA_CENTER_X = 320.0; // Camera center X coordinate
+    private static final double CAMERA_CENTER_Y = 240.0; // Camera center Y coordinate
 
+    // Robot movement parameters
+    private static final double APPROACH_DISTANCE = 15.0; // Distance to move when approaching sample
+    private static final double PICKUP_DISTANCE = 5.0;    // Final distance for pickup
 
-    public static double yKp = 0.025;
-    public static double yKd = 0.0;
-    public static double yKi = 0.0;
+    // State machine states
+    private enum PickupState {
+        SCANNING,      // Looking for sample
+        APPROACHING,   // Moving to sample
+        ALIGNING,      // Aligning with sample
+        PICKING_UP,    // Picking up sample
+        COMPLETE       // Pickup complete
+    }
 
-    public static double capX = .4;
-    public static double capY = .3;
-
-    PIDCoefficientsEx pidXCoefficients = new PIDCoefficientsEx(
-            xKp, xKi, xKd, 0, 0, 0
-    );
-
-    PIDEx xPid = new PIDEx(pidXCoefficients);
-
-
-    PIDCoefficientsEx pidYCoefficients = new PIDCoefficientsEx(
-            yKp, yKi, yKd, 0, 0, 0
-    );
-
-    PIDEx yPid = new PIDEx(pidYCoefficients);
-
-
-    MultiColorSampleDetector colorSampleDetector;
+    private PickupState currentPickupState = PickupState.SCANNING;
 
     public AutoPickupState(JoystickWrapper joystick) {
         super(joystick);
@@ -53,200 +47,169 @@ public class AutoPickupState extends BaseState {
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
-
-
-
-        robot.setDriveTrainEnabled(false);
-        colorSampleDetector = robot.createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.all);
-
-        robot.setSlideRotationPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_CAMERA_POSITION);
-        robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_CAMERA);
-        robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
-
-        if(prevState == null) {
-            //use robot.set directly, not a task series
-           // robot.setSlideTargetPosition(0);
+        // Create a detector instance if not already created
+        if (sampleDetector == null) {
+            sampleDetector = new MultiColorSampleDetector(robot.getHardwareMap(), telemetry);
         }
+
+        currentPickupState = PickupState.SCANNING;
+        targetAcquired = false;
+
+        // Setup initial scanning task
+        RobotTaskSeries scanningTask = new RobotTaskSeries();
+        scanningTask.add(new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
+            @Override
+            public void execute() {
+                // Prepare robot for scanning
+                robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
+                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL);
+            }
+        }, "Initial Scanning Setup"));
+
+        taskArrayList.add(scanningTask);
     }
 
-    RotatedRect prevRect = new RotatedRect();
-    long lastAquireTime = 0;
-
-
-    boolean didGrab = false;
-    long delayTimeHack = 0;
-
-
-    public double calculateDistance(Point p1, Point p2) {
-        double dx = p2.x - p1.x;
-        double dy = p2.y - p1.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    public void updateFromCamera(Robot robot, Telemetry telemetry) {
-        Point centerTarget = colorSampleDetector.getCenterOfScreen();
-        centerTarget.y += 100;
-        RotatedRect cloestRect = colorSampleDetector.getClosestSample();
-
-        if(delayTimeHack == 0) {
-            delayTimeHack = System.currentTimeMillis();
-        }
-
-        long timeDelay = System.currentTimeMillis() - delayTimeHack;
-
-        if( timeDelay > 5000 && cloestRect.size.width != 0 && !didGrab) {
-
-            double xPower = 0;
-            double yPower = 0;
-
-            xPower = xPid.calculate(centerTarget.x, cloestRect.center.x);
-            yPower = yPid.calculate(centerTarget.y, cloestRect.center.y);
-
-            if (xPower < -capX) {
-                xPower = -capX;
-            } else if (xPower > capX) {
-                xPower = capX;
-            }
-
-            if (yPower < -capY) {
-                yPower = -capY;
-            } else if (yPower > capY) {
-                yPower = capY;
-            }
-
-            if (xPower * xPower + yPower * yPower > 1) {
-                double mag = Math.sqrt(xPower * xPower + yPower * yPower);
-                xPower = xPower / mag;
-                yPower = yPower / mag;
-            }
-
-            telemetry.addData("X Power", xPower);
-            telemetry.addData("Y Power", yPower);
-            telemetry.addData("Current Pos", cloestRect.center);
-            telemetry.addData("Target", centerTarget);
-
-            robot.updateDriveTrainsRaw(telemetry, false, -xPower, -yPower, 0, 0, 1, 1);
-
-            double distance = calculateDistance(centerTarget, cloestRect.center);
-            telemetry.addData("Distance", distance);
-            if(distance < 10 && !didGrab) {
-                telemetry.addData("Grab", "dograb");
-
-
-                double clawPosition = robot.getClawPosition();
-
-                taskArrayList.add(createHorizontalSlideTask(robot, 0, 200, "Arm Angle", false));
-
-                if(Math.abs(  clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN ) > .02) {
-                    taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
-                }
-
-
-                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL, 50, "IntakeAngle", false));
-
-                taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
-
-
-                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
-
-
-//                taskArrayList.add(
-//                        new ExecuteOnceTask(
-//                                new ExecuteOnceTask.ExecuteListener() {
-//                                    @Override
-//                                    public void execute() {
-//                                        didGrab
-//                                                = true;
-//                                    }
-//                                }, "Substate Transition"
-//                        )
-//                );
-
-                didGrab = true;
-
-            }
-        }
-
-        /*
-
-        long timeFromLastAquire = System.currentTimeMillis() - lastAquireTime;
-
-
-        if(cloestRect.size.width != 0 ||  timeFromLastAquire  < 200) {
-
-            if(cloestRect.size.width == 0) {
-                cloestRect = prevRect;
-            } else {
-                lastAquireTime = System.currentTimeMillis();
-                prevRect = cloestRect;
-            }
-
-            double xPower = 0;
-            double yPower = 0;
-
-            xPower = xPid.calculate(centerTarget.x, cloestRect.center.x);
-            yPower = yPid.calculate(centerTarget.y, cloestRect.center.y);
-
-            if(xPower < -.5) {
-                xPower = -.5;
-            } else if(xPower > .5) {
-                xPower = .5;
-            }
-
-            if(yPower < -.5) {
-                yPower = -.5;
-            } else if(yPower > .5) {
-                yPower = .5;
-            }
-
-            if (xPower * xPower + yPower * yPower > 1) {
-                double mag = Math.sqrt(xPower * xPower + yPower * yPower);
-                xPower = xPower / mag;
-                yPower = yPower / mag;
-            }
-
-            telemetry.addData("X Power", xPower);
-            telemetry.addData("Y Power", yPower);
-            telemetry.addData("Current Pos", cloestRect.center);
-            telemetry.addData("Target", centerTarget);
-
-            robot.updateDriveTrainsRaw(telemetry, false, -xPower, -yPower, 0, 0, 1, 1);
-        }
-
-         */
-
-    }
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
-
-
-        updateFromCamera(robot, telemetry);
-
-        if (joystick.gamepad1GetY()) {
-            delayTimeHack = 0;
-            didGrab = false;
-            robot.setSlideRotationPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_CAMERA_POSITION);
-            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_CAMERA);
-            robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
-
+        // Update sample detection
+        Rect closestSample = null;
+        if (sampleDetector != null) {
+            closestSample = sampleDetector.pipeline.getClosestSample();
         }
-        else if (joystick.gamepad1GetA()) {
-            robot.switchState(State.INTAKINGCLAW);
+
+        if (closestSample != null) {
+            targetColor = sampleDetector.getLastDetectedColor();
+            targetX = closestSample.x + closestSample.width / 2.0;
+            targetY = closestSample.y + closestSample.height / 2.0;
+            targetAcquired = true;
+        }
+
+        telemetry.addData("State", currentPickupState.toString());
+        telemetry.addData("Target Acquired", targetAcquired);
+        telemetry.addData("Target Color", targetColor);
+        telemetry.addData("Target Position", String.format("X: %.2f, Y: %.2f", targetX, targetY));
+
+        // State machine for pickup sequence
+        switch (currentPickupState) {
+            case SCANNING:
+                if (targetAcquired) {
+                    // Move to approaching state
+                    currentPickupState = PickupState.APPROACHING;
+
+                    // Calculate target position for approach
+                    // Convert camera coordinates to robot movement
+                    double xOffset = (targetX - CAMERA_CENTER_X) / CAMERA_CENTER_X; // Normalized -1 to 1
+                    double yOffset = (targetY - CAMERA_CENTER_Y) / CAMERA_CENTER_Y; // Normalized -1 to 1
+
+                    // Convert to robot coordinates and apply approach distance
+                    Vector3D currentPose = robot.getDeadWheelLocation();
+                    double targetRobotX = currentPose.getX() + (xOffset * APPROACH_DISTANCE);
+                    double targetRobotY = currentPose.getY() + (yOffset * APPROACH_DISTANCE);
+
+                    // Create drive task to approach target
+                    DriveToPointTask approachTask = new DriveToPointTask(
+                            robot,
+                            new Vector3D(targetRobotX, targetRobotY, currentPose.getZ()),
+                            2000, // timeout in ms
+                            1L,  // max speed
+                            0L   // initial timeout
+                    );
+
+                    taskArrayList.add(approachTask);
+                } else {
+                    // Continue scanning
+                    telemetry.addLine("Scanning for samples...");
+                }
+                break;
+
+            case APPROACHING:
+                if (taskArrayList.isEmpty()) {
+                    // We've reached approach position, now align
+                    currentPickupState = PickupState.ALIGNING;
+
+                    // Prepare alignment task
+                    RobotTaskSeries alignTask = new RobotTaskSeries();
+                    alignTask.add(createClawHorizontalAngleTask(robot,
+                            RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER,
+                            500, "Center Claw", false));
+
+                    alignTask.add(createRotationAndAngleTask(robot,
+                            RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL,
+                            500, "Position Claw", false));
+
+                    taskArrayList.add(alignTask);
+                }
+                break;
+
+            case ALIGNING:
+                if (taskArrayList.isEmpty()) {
+                    // Move to pickup position
+                    currentPickupState = PickupState.PICKING_UP;
+
+                    // Get final position for pickup
+                    Vector3D currentPose = robot.getDeadWheelLocation();
+                    double pickupX = currentPose.getX() + PICKUP_DISTANCE;
+
+                    // Create drive task to pickup position
+                    DriveToPointTask pickupTask = new DriveToPointTask(
+                            robot,
+                            new Vector3D(pickupX, currentPose.getY(), currentPose.getZ()),
+                            1500, // timeout in ms
+                    1L,  // slower speed for precision
+                            0L   // initial timeout
+                    );
+
+                    taskArrayList.add(pickupTask);
+
+                    // Prepare grab sequence
+                    RobotTaskSeries grabSequence = new RobotTaskSeries();
+                    grabSequence.add(createWaitTask(robot, 500, "Wait before grab"));
+                    grabSequence.add(createClawTask(robot,
+                            RoboSapiensTeleOp.Params.CLAW_CLOSE,
+                            300, "Close Claw", false));
+                    grabSequence.add(createWaitTask(robot, 500, "Wait after grab"));
+
+                    // Add lift sequence
+                    grabSequence.add(createVerticalSlideTask(robot,
+                            RoboSapiensTeleOp.Params.SLIDE_POSITION,
+                            800, "Lift Sample", false));
+
+                    taskArrayList.add(grabSequence);
+                }
+                break;
+
+            case PICKING_UP:
+                if (taskArrayList.isEmpty()) {
+                    // Pickup complete
+                    currentPickupState = PickupState.COMPLETE;
+
+                    // Add completion task - reset to intaking state
+                    RobotTaskSeries completeTask = new RobotTaskSeries();
+                    completeTask.add(new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
+                        @Override
+                        public void execute() {
+                            robot.switchState(State.INTAKINGCLAW);
+                        }
+                    }, "Complete Pickup"));
+
+                    taskArrayList.add(completeTask);
+                }
+                break;
+
+            case COMPLETE:
+                // Wait for final tasks to complete
+                break;
         }
 
         executeTasks(telemetry);
 
+        if (joystick.gamepad1GetB()) {
+            robot.switchState(State.INTAKINGCLAW);
+        }
     }
 
     @Override
     public State getState() {
         return State.AUTO_PICKUP;
-    }
-
-    @Override
-    public void dispose(Robot robot) {
-        robot.setDriveTrainEnabled(true);
-        colorSampleDetector.stopStreaming();
-        colorSampleDetector = null;
     }
 }

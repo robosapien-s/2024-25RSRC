@@ -482,7 +482,7 @@ public class Robot {
         }
     }
 
-    public MultiColorSampleDetector createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority colorPriority) {
+    public MultiColorSampleDetector createColorSampleDetector(MultiColorSampleDetector.SampleColorPriority colorPriority) {
         return new MultiColorSampleDetector(hardwareMap, telemetry, colorPriority);
     }
 
@@ -532,5 +532,12 @@ public class Robot {
         }
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
         currentState.initialize(this, prevState);
+    }
+    public Telemetry getTelemetry() {
+        return this.telemetry;
+    }
+
+    public HardwareMap getHardwareMap() {
+        return this.hardwareMap;
     }
 }
