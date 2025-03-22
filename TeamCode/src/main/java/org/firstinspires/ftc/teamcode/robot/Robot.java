@@ -371,7 +371,7 @@ public class Robot {
     }
 
     public void updateDriveTrainsRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
-        drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+        drive.updateRaw(telemetry, false, leftStickX, leftStickY, 0, 0, 1, 1);
     }
 
     public void execute(Telemetry telemetry) {
@@ -528,7 +528,7 @@ public class Robot {
     public void switchState(State newState) {
         IRobot prevState = currentState;
         if(prevState != null) {
-            prevState.dispose();
+            prevState.dispose(this);
         }
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
         currentState.initialize(this, prevState);

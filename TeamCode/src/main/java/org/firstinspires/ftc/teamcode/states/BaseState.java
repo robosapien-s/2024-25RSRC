@@ -19,7 +19,7 @@ public abstract class BaseState implements IRobot {
     }
 
     @Override
-     public void dispose(){}
+     public void dispose(Robot robot){}
 
     public static IRobotTask createWaitTask(Robot robot, int duration, String name) {
 

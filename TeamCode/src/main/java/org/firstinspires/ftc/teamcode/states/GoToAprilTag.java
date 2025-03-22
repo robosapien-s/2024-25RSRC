@@ -30,7 +30,7 @@ public class GoToAprilTag implements IRobot {
     }
 
     @Override
-    public void dispose() {
+    public void dispose(Robot robot) {
 
     }
 

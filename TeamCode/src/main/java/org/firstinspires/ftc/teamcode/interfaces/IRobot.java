@@ -29,7 +29,7 @@ public interface IRobot {
 
     void execute(Robot robot, Telemetry telemetry);
 
-    public void dispose();
+    public void dispose(Robot robot);
 
 
     IRobot.State getState();

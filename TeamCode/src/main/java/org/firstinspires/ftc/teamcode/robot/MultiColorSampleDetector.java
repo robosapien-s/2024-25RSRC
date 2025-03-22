@@ -74,6 +74,7 @@ public class MultiColorSampleDetector {
 
     public void stopStreaming() {
         webcam.stopStreaming();
+        webcam.closeCameraDevice();
     }
 
 
