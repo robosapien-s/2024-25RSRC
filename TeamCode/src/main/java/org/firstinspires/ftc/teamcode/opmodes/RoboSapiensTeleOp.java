@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @Config
@@ -16,7 +20,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_OPEN = .9;
         public static double CLAW_CLOSE = .43;
 
-
+        public static double INTAKE_ANGLE_INIT = 0.6;
         public static double INTAKE_ANGLE_START = .485;
         public static double INTAKE_ANGLE_READY =.445;
         public static double INTAKE_ANGLE_PICKUP = .33;
@@ -39,7 +43,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.56, 0.79};
 
-        public static double[] ROT_AND_ANGLE_BASKET = {1.0, 0.03};
+        public static double[] ROT_AND_ANGLE_BASKET = {1, 0.4489};
 
         public static int SLIDE_ROTATION_INTAKE_INITIAL = 200;
 
@@ -59,13 +63,15 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_DROP_L1 = 1000;
 
-        public static int SLIDE_DROP_L2 = 1300;
+        public static int SLIDE_DROP_L2 = 1350;
 
         public static int SLIDE_MAX_POSITION = 880;
 
         public static int SLIDE_MIN_POSITION = 70;
 
-        public static int SLIDE_ROTATION_TRANSFER_POSITION = 1400;
+        public static int SLIDE_ROTATION_DROP_POSITION = 1400;
+
+        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1300;
 
         public static int SLIDE_ROTATION_MIN_POSITION = 0;
 
@@ -87,7 +93,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
 
 
-        public static double ANGLE_DRIVE_KP = 0.026;
+        public static double ANGLE_DRIVE_KP = 0.01;
         public static double ANGLE_DRIVE_KD = .00004;
         public static double ANGLE_DRIVE_KI = 0.0;
 
@@ -97,8 +103,13 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static RoboSapiensTeleOp.Params PARAMS = new RoboSapiensTeleOp.Params();
 
+    private Follower follower;
+
     @Override
     public void runOpMode() {
+
+        follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
+        follower.setStartingPose(new Pose(0,0,0));
 
         Robot robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry);
 
@@ -122,9 +133,10 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         robot.start();
 
         while (opModeIsActive()) {
-//            telemetry.addData("x pos", localizer.getPose().position.x);
-//            telemetry.addData("y pos", localizer.getPose().position.y);
-//            telemetry.addData("angle (deadwheels)", Math.toDegrees(localizer.getPose().heading.toDouble()));
+            follower.update();
+            telemetry.addData("X", follower.getPose().getX());
+            telemetry.addData("Y", follower.getPose().getY());
+            telemetry.addData("Heading in Degrees", Math.toDegrees(follower.getPose().getHeading()));
             robot.execute(telemetry);
 
 //            telemetry.addData("FrontLeftMotor current (A): ", frontLeftMotor.getCurrent(CurrentUnit.AMPS));

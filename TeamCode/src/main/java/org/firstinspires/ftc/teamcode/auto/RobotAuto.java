@@ -84,8 +84,21 @@ public class RobotAuto {
         return false;
     }
 
-    public void setRotationalPos(int pos) {
+    public void setSlideRotationPos(int pos) {
         robot.setSlideRotationTargetPosition(pos);
+    }
+
+    public void setSlidePos(int pos) {
+        robot.setSlideTargetPosition(pos);
+    }
+
+
+    public void setRotAndAnglePos(double[] pos) {
+        robot.setRotAndAnglePosition(pos);
+    }
+
+    public void setIntakeAnglePos (double pos) {
+        robot.setIntakeAnglePosition(pos);
     }
 
 

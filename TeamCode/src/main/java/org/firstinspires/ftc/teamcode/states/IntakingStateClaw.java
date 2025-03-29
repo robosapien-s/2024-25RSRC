@@ -31,7 +31,7 @@ public class IntakingStateClaw extends BaseState {
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
-        robot.setSlideMinPosition(70);
+        robot.setSlideMinPosition(110);
         robot.setSlideMaxPosition(880);
 
         if(prevState == null) {
@@ -48,7 +48,20 @@ public class IntakingStateClaw extends BaseState {
 //            transferSeries.add();
 
             taskArrayList.add(transferSeries);
-        }else {
+        } else if (prevState.getState() == State.PICKUP_GROUND_LEFT) {
+            robot.setSlideTargetPosition(70);
+        } else if (prevState.getState() == State.DROPPING_L2) {
+
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
+
+            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIDDLE_POSITION, 200, "Rotation", false));
+
+            taskArrayList.add(createSlideTask(robot, 0, 300, "Slide", false));
+
+            taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Rotation", false));
+
+
+        } else {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
 
             taskArrayList.add(transferSeries);
@@ -63,7 +76,7 @@ public class IntakingStateClaw extends BaseState {
         }
 
         if(joystick.gamepad1GetY()) {
-            robot.switchState(State.AUTO_PICKUP);
+//            robot.switchState(State.AUTO_PICKUP);
         } else if(joystick.gamepad1GetA()) {
 
             robot.setRobotSpeedNormal();

@@ -5,8 +5,6 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
-import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.MultiColorSampleDetector;
@@ -135,7 +133,7 @@ public class AutoPickupState extends BaseState {
 
                 double clawPosition = robot.getClawPosition();
 
-                taskArrayList.add(createHorizontalSlideTask(robot, 0, 200, "Arm Angle", false));
+                taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Arm Angle", false));
 
                 if(Math.abs(  clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN ) > .02) {
                     taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));

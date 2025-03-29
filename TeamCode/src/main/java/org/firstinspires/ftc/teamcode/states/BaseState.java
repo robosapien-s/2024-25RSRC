@@ -82,7 +82,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    public static IRobotTask createVerticalSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
+    public static IRobotTask createSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
@@ -99,7 +99,7 @@ public abstract class BaseState implements IRobot {
         }, position, duration, name, steps);
     }
 
-    public static IRobotTask createHorizontalSlideTask(Robot robot, int position, int duration, String name, boolean steps) {
+    public static IRobotTask createSlideRotationTask(Robot robot, int position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
