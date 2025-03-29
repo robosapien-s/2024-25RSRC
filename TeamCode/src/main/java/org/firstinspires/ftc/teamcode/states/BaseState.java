@@ -50,12 +50,13 @@ public abstract class BaseState implements IRobot {
         }, 0, duration, name, steps);
     }
 
-    public static IRobotTask createClawHorizontalAngleTask(Robot robot, double position, int duration, String name, boolean steps) {
+
+    public static IRobotTask createIntakeAngleServoTask(Robot robot, double position, int duration, String name, boolean steps) {
 
         return new CallBackTask(new CallBackTask.CallBackListener() {
             @Override
             public void setPosition(double value) {
-                robot.setClawHorizontalAnglePosition(value);
+                robot.setIntakeAnglePosition(value);
             }
 
             @Override
@@ -139,6 +140,12 @@ public abstract class BaseState implements IRobot {
             }
         }
     }
+
+    @Override
+    public void start(Robot robot, Telemetry telemetry) {
+
+    }
+
 
 
 

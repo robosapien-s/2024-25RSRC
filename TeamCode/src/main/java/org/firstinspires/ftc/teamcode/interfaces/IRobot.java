@@ -31,6 +31,8 @@ public interface IRobot {
 
     public void dispose(Robot robot);
 
+    void start(Robot robot, Telemetry telemetry);
+
 
     IRobot.State getState();
 }

@@ -10,7 +10,7 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
 
     private final PIDEx pidController;
     private int targetPosition;
-    private int maxPostition;
+    private int maxPosition;
     private int minPosition;
 
     public boolean showTelemetry = true;
@@ -30,13 +30,21 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
         pidController = new PIDEx(pidCoefficients);
 
         targetPosition = 0;
-        maxPostition = inMaxPostition;
+        maxPosition = inMaxPostition;
         minPosition = inMinPosition;
+    }
+
+    public void setMinPosition(int minPosition) {
+        this.minPosition = minPosition;
+    }
+
+    public void setMaxPosition(int maxPosition) {
+        this.maxPosition = maxPosition;
     }
 
     public RobotPidMechanism( int inMaxPostition, int inMinPosition) {
 
-        maxPostition = inMaxPostition;
+        maxPosition = inMaxPostition;
         minPosition = inMinPosition;
 
         PIDCoefficientsEx pidCoefficients = new PIDCoefficientsEx(
@@ -55,7 +63,7 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     }
 
     public int getMaxPosition() {
-        return maxPostition;
+        return maxPosition;
     }
 
     public int getMinPosition() {
@@ -78,8 +86,8 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     public int evaluateConstraints(int position) {
         if(position < minPosition) {
             position = minPosition;
-        } else if(position > maxPostition) {
-            position = maxPostition;
+        } else if(position > maxPosition) {
+            position = maxPosition;
         }
 
         return position;
@@ -92,8 +100,8 @@ abstract class RobotPidMechanism implements IRobotPidMechanism {
     public void increaseTargetPosition(int offset) {
         int newTargetPosition = targetPosition+offset;
 
-        if(newTargetPosition > maxPostition) {
-            newTargetPosition = maxPostition;
+        if(newTargetPosition > maxPosition) {
+            newTargetPosition = maxPosition;
         } else if(newTargetPosition < minPosition) {
             newTargetPosition = minPosition;
         }

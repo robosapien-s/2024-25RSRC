@@ -49,7 +49,7 @@ public class Robot {
     private final Servo clawRotAndAngleServoRight;
     private final Servo clawRotAndAngleServoLeft;
     private final Servo clawServo;
-    private final Servo clawHorizontalAngleServo;
+    private final Servo intakeAngleServo;
 
     private final HardwareMap hardwareMap;
 
@@ -94,13 +94,13 @@ public class Robot {
         slideRotationController = new SlideRotationController(hardwareMap, "slideRotationController", RoboSapiensTeleOp.Params.SLIDE_ROTATION_MAX_POSITION, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIN_POSITION, false);
 
 
-        slideController = new SlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION, 0, false);
+        slideController = new SlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION, RoboSapiensTeleOp.Params.SLIDE_MIN_POSITION, false);
 //        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
 
         clawRotAndAngleServoRight = hardwareMap.get(Servo.class, "clawRotAndAngleServoRight");
         clawRotAndAngleServoLeft = hardwareMap.get(Servo.class, "clawRotAndAngleServoLeft");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
-        clawHorizontalAngleServo = hardwareMap.get(Servo.class, "clawHorizontalAngleServo");
+        intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
 
 //        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
@@ -139,21 +139,28 @@ public class Robot {
         switchState(State.INTAKINGCLAW);
         if (!isAuto) {
             double startingHeading = Math.toRadians(90);
-            Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
+            Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0, 0, startingHeading));
             drive = new AngleDrive(hardwareMap, false, localizer);
         } else {
             drive = null;
         }
 
-        resetEncoders=true;
+        resetEncoders = true;
 
 
         initPid();
     }
 
+    public void start() {
+        if (currentState != null) {
+            currentState.start(this, telemetry);
+        }
+    }
+
     public void setYawOverride(YawOverrride inOverride) {
         doOverrideYaw = inOverride;
     }
+
     public Robot setSlideRotationTargetPosition(int target) {
         slideRotationController.setTargetPosition(target);
         return this;
@@ -182,75 +189,76 @@ public class Robot {
     }
 
     public double[] getClawAnglePosition() {
-        return new double[] {clawRotAndAngleServoRight.getPosition(), clawRotAndAngleServoLeft.getPosition()};
+        return new double[]{clawRotAndAngleServoRight.getPosition(), clawRotAndAngleServoLeft.getPosition()};
     }
 
-    public Robot setClawHorizontalAnglePosition(double position) {
-        clawHorizontalAngleServo.setPosition(position);
+    public Robot setIntakeAnglePosition(double position) {
+        intakeAngleServo.setPosition(position);
         return this;
     }
 
     public Robot autoHorizontalPosWall(Telemetry telemetry) {
-    double angle = 0;
+        double angle = 0;
 
-        if(doOverrideYaw == null) {
+        if (doOverrideYaw == null) {
             angle = drive.getYaw();
         } else {
             angle = doOverrideYaw.getYaw();
         }
 
-        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT - RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER) / (33.1458);
         double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
-        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
-        telemetry.addData("clawHorizontalAngleServo min", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT+intercept);
-        telemetry.addData("clawHorizontalAngleServo max", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT+intercept);
-        telemetry.addData("clawHorizontalAngleServo attempted pos", slope*angle+intercept);
+        double pos = Range.clip(slope * angle + intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        telemetry.addData("clawHorizontalAngleServo min", slope * RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT + intercept);
+        telemetry.addData("clawHorizontalAngleServo max", slope * RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT + intercept);
+        telemetry.addData("clawHorizontalAngleServo attempted pos", slope * angle + intercept);
         telemetry.addData("clawHorizontalAngleServo actual pos", pos);
 
-        clawHorizontalAngleServo.setPosition(pos);
+        //clawHorizontalAngleServo.setPosition(pos);
         return this;
     }
 
     public Robot autoHorizontalPosHang() {
         double angle = 0;
 
-        if(doOverrideYaw == null) {
+        if (doOverrideYaw == null) {
             angle = drive.getYaw();
         } else {
             angle = doOverrideYaw.getYaw();
         }
 
-        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT - RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER) / (33.1458);
         double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
-        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        double pos = Range.clip(slope * angle + intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
 
-        clawHorizontalAngleServo.setPosition(pos);
+        //clawHorizontalAngleServo.setPosition(pos);
         return this;
     }
+
 
     public Robot autoHorizontalPosBucket(Telemetry telemetry) {
         double angle = 0;
 
-        if(doOverrideYaw == null) {
-            angle = drive.getYaw()+45;
+        if (doOverrideYaw == null) {
+            angle = drive.getYaw() + 45;
         } else {
-            angle = doOverrideYaw.getYaw()+45;
+            angle = doOverrideYaw.getYaw() + 45;
         }
 
-        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT-RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER)/(33.1458);
+        double slope = (RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT - RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER) / (33.1458);
         double intercept = RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER;
-        double pos = Range.clip(slope*angle+intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
-        telemetry.addData("clawHorizontalAngleServo min", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT+intercept);
-        telemetry.addData("clawHorizontalAngleServo max", slope*RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT+intercept);
-        telemetry.addData("clawHorizontalAngleServo attempted pos", slope*angle+intercept);
+        double pos = Range.clip(slope * angle + intercept, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT);
+        telemetry.addData("clawHorizontalAngleServo min", slope * RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_RIGHT + intercept);
+        telemetry.addData("clawHorizontalAngleServo max", slope * RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT + intercept);
+        telemetry.addData("clawHorizontalAngleServo attempted pos", slope * angle + intercept);
         telemetry.addData("clawHorizontalAngleServo actual pos", pos);
 
-        clawHorizontalAngleServo.setPosition(pos);
+        //clawHorizontalAngleServo.setPosition(pos);
         return this;
     }
 
     public double getClawHorizontalAnglePostion() {
-        return clawHorizontalAngleServo.getPosition();
+        return 0;//clawHorizontalAngleServo.getPosition();
     }
 
 
@@ -266,6 +274,14 @@ public class Robot {
 
     public int getSlidePosition() {
         return slideController.getCurrentPosition();
+    }
+
+    public void setSlideMinPosition(int minPosition) {
+        slideController.setMinPosition(minPosition);
+    }
+
+    public void setSlideMaxPosition(int maxPosition) {
+        slideController.setMaxPosition(maxPosition);
     }
 
     public int getSlideRotationPosition() {
@@ -310,7 +326,7 @@ public class Robot {
         HashMap<String, Servo> servoHashMap = new HashMap<>();
         servoHashMap.put("clawRotAndAngleServoRight", clawRotAndAngleServoRight);
         servoHashMap.put("clawRotAndAngleServoLeft", clawRotAndAngleServoLeft);
-        servoHashMap.put("clawHorizontalAngleServo", clawHorizontalAngleServo);
+        servoHashMap.put("intakeAngleServo", intakeAngleServo);
         servoHashMap.put("clawServo", clawServo);
 //        servoHashMap.put("intakeAngleServo", intakeAngleServo);
 //        servoHashMap.put("intakeKnuckleServo", intakeKnuckleServo);

@@ -24,13 +24,23 @@ public class IntakingStateClaw extends BaseState {
     }
 
     @Override
+    public void start(Robot robot, Telemetry telemetry) {
+        robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY);
+    }
+
+
+    @Override
     public void initialize(Robot robot, IRobot prevState) {
+        robot.setSlideMinPosition(70);
+        robot.setSlideMaxPosition(880);
+
         if(prevState == null) {
             //use robot.set directly, not a task series
-            robot.setSlideTargetPosition(0);
+            robot.setSlideTargetPosition(70);
             robot.setSlideRotationPosition(0);
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);
             robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
+            robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_START);
 
         } else if (prevState.getState() == State.SPECIMEN_HANG) {
             RobotTaskSeries transferSeries = new RobotTaskSeries();
@@ -67,13 +77,16 @@ public class IntakingStateClaw extends BaseState {
                     transferSeries.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
                 }
 
-                transferSeries.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL, 50, "IntakeAngle", false));
+//                transferSeries.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL, 50, "IntakeAngle", false));
+
+                transferSeries.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 50, "IntakeAngle", false));
 
                 transferSeries.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
 
 
-                transferSeries.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
+                transferSeries.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
 
+                transferSeries.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 50, "IntakeAngle", false));
 
                 clawStateHack = 1;
             } else if(clawStateHack == 1) {
@@ -142,6 +155,16 @@ public class IntakingStateClaw extends BaseState {
 
 
 
+        }
+
+        if (joystick.gamepad1GetDUp()) {
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);
+        } else if (joystick.gamepad1GetDRight()) {
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_RIGHT);
+        } else if (joystick.gamepad1GetDLeft()) {
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT);
+        } else if (joystick.gamepad1GetDDown()) {
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL);
         }
 
         robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-100)+joystick.gamepad1GetRightTrigger()*100));

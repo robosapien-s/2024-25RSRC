@@ -38,4 +38,7 @@ public class GoToAprilTag implements IRobot {
     public State getState() {
         return State.GO_TO_APRIL_TAG;
     }
+
+    @Override
+    public void start(Robot robot, Telemetry telemetry) {}
 }

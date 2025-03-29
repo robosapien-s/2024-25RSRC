@@ -83,13 +83,14 @@ public class SlideController extends RobotPidMechanism {
         return motorSlide1.getCurrentPosition();
     }
 
+
     // Set power to both motors, adjusting direction for synchronization
     @Override
     public void onSetPower(double power) {
 
         if (isLeftMotorEncoded) {
           motorSlide1.setPower(-power);
-          motorSlide2.setPower(power);
+          motorSlide2.setPower(-power);
 
           if(motorSlide3 != null) {
               motorSlide3.setPower(-power);

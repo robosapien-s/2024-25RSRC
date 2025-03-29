@@ -29,6 +29,7 @@ public class DroppingL1State extends BaseState {
     public int getWait() {return 1000;}
     @Override
     public void initialize(Robot robot, IRobot prevState) {
+        robot.setSlideMaxPosition(getHeight());
 
         RobotTaskSeries transferSeries = new RobotTaskSeries();
 
@@ -105,7 +106,9 @@ public class DroppingL1State extends BaseState {
         } else if(joystick.gamepad1GetA()) {
             angle_ready = false;
             taskArrayList.add(createVerticalSlideTask(robot, 0, 300, "horizontal claw center", false));
-            taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER, 0, "horizontal claw center", false));
+
+            //taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER, 0, "horizontal claw center", false));
+
             taskArrayList.add(new ExecuteOnceTask(
                     new ExecuteOnceTask.ExecuteListener() {
                         @Override

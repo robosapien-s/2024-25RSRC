@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.constants;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Localizers;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.util.CustomFilteredPIDFCoefficients;
@@ -9,6 +10,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class FConstants {
     static {
         FollowerConstants.localizers = Localizers.PINPOINT;
+
+        FollowerConstants.useBrakeModeInTeleOp = true;
+
+        FollowerConstants.useVoltageCompensationInAuto = true;
+        FollowerConstants.nominalVoltage = 13.60;
+
+        FollowerConstants.automaticHoldEnd = true;
 
         FollowerConstants.leftFrontMotorName = "fL";
         FollowerConstants.leftRearMotorName = "bL";
@@ -20,13 +28,13 @@ public class FConstants {
         FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        FollowerConstants.mass = 20;
+        FollowerConstants.mass = 11.106;
 
-        FollowerConstants.xMovement = 69.86680881172086;
-        FollowerConstants.yMovement = 57.50440083156084;
+        FollowerConstants.xMovement = 85.92609668110683;
+        FollowerConstants.yMovement = 71.16550902956126;
 
-        FollowerConstants.forwardZeroPowerAcceleration = -32.06369553314052;
-        FollowerConstants.lateralZeroPowerAcceleration = -76.81493969273066;
+        FollowerConstants.forwardZeroPowerAcceleration = -46.90393206636484;
+        FollowerConstants.lateralZeroPowerAcceleration = -75.12649023831416;
 
         FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.1,0,0.01,0);
         FollowerConstants.useSecondaryTranslationalPID = false;

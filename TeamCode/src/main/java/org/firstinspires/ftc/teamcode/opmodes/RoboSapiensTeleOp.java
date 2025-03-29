@@ -13,28 +13,33 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = 0.4;
-        public static double CLAW_CLOSE = .67;
+        public static double CLAW_OPEN = .9;
+        public static double CLAW_CLOSE = .43;
 
-        public static double[] ROT_AND_ANGLE_BACK = {1.0, 0.0};
 
-        public static double[] ROT_AND_ANGLE_BUCKET = {.43, .98};
+        public static double INTAKE_ANGLE_START = .485;
+        public static double INTAKE_ANGLE_READY =.445;
+        public static double INTAKE_ANGLE_PICKUP = .33;
+
+        public static double[] ROT_AND_ANGLE_BACK = {1.0, 0.03};
+
+        public static double[] ROT_AND_ANGLE_BUCKET = {1.0, 0.03};
 
         public static double[] ROT_AND_ANGLE_CAMERA = {0.76, 0.6239};
 
-        public static double[] ROT_AND_ANGLE_PREP = { 0.65, .78}; // R / L
+        public static double[] ROT_AND_ANGLE_PREP = { 0.606, .835}; //{ 0.5678, .875}; // R / L
 
         //public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.513, 0.695};
-        public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.7844, 0.6083};
+        public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = { 0.59, 0.85};//{ 0.5678, .875}; // R / L
 
 
-        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {0.1, 0.9};
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {0.505, 0.745};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.55, 0.75};
+        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.655 , 0.86};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.25, 0.45};
+        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.56, 0.79};
 
-        public static double[] ROT_AND_ANGLE_BASKET = {0.15, 0.85};
+        public static double[] ROT_AND_ANGLE_BASKET = {1.0, 0.03};
 
         public static int SLIDE_ROTATION_INTAKE_INITIAL = 200;
 
@@ -52,19 +57,21 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_HANG_DROP_POSITION = 600;
 
-        public static int SLIDE_DROP_L1 = 2000;
+        public static int SLIDE_DROP_L1 = 1000;
 
-        public static int SLIDE_DROP_L2 = 2500;
+        public static int SLIDE_DROP_L2 = 1300;
 
-        public static int SLIDE_MAX_POSITION = 2500;
+        public static int SLIDE_MAX_POSITION = 880;
 
-        public static int SLIDE_ROTATION_TRANSFER_POSITION = -1400;
+        public static int SLIDE_MIN_POSITION = 70;
 
-        public static int SLIDE_ROTATION_MIN_POSITION = -1400;
+        public static int SLIDE_ROTATION_TRANSFER_POSITION = 1400;
 
-        public static int SLIDE_ROTATION_CAMERA_POSITION = -500;
+        public static int SLIDE_ROTATION_MIN_POSITION = 0;
 
-        public static int SLIDE_ROTATION_MAX_POSITION = 100;
+        public static int SLIDE_ROTATION_CAMERA_POSITION = 500;
+
+        public static int SLIDE_ROTATION_MAX_POSITION = 1400;
 
         public static double SLIDE_PID_kp = 0.027;
         public static double SLIDE_PID_kd = 0.027;
@@ -112,6 +119,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
 
         waitForStart();
+        robot.start();
 
         while (opModeIsActive()) {
 //            telemetry.addData("x pos", localizer.getPose().position.x);

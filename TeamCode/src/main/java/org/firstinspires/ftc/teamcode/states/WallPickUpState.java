@@ -41,7 +41,7 @@ public class WallPickUpState extends BaseState {
                 )
         );
 
-        taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER,1,"ClawHorizontalAngle",false));
+        //taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER,1,"ClawHorizontalAngle",false));
 
         if(prevState.getState() == State.INTAKINGCLAW) {
             //use transferParallel.add();
