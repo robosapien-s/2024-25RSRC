@@ -92,7 +92,7 @@ public class Robot {
         this.telemetry = telemetry;
 
         slideRotationController = new SlideRotationController(hardwareMap, "slideRotationController", RoboSapiensTeleOp.Params.SLIDE_ROTATION_MAX_POSITION, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIN_POSITION, false);
-
+//hi
 
         slideController = new SlideController(hardwareMap, "verticalSlide1", "verticalSlide2", "clawSliderEncoder", true, RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION, RoboSapiensTeleOp.Params.SLIDE_MIN_POSITION, false);
 //        dualServoSlideController = new DualServoSlideController(hardwareMap, "clawSliderCR1","clawSliderCR2", "clawSliderEncoder", RoboSapiensTeleOp.Params.CLAW_SLIDER_FORWARD, RoboSapiensTeleOp.Params.CLAW_SLIDER_BACK);
