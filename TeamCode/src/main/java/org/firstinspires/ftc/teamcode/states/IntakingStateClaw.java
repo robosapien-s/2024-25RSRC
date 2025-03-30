@@ -32,7 +32,7 @@ public class IntakingStateClaw extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         robot.setSlideMinPosition(110);
-        robot.setSlideMaxPosition(880);
+        robot.setSlideMaxPosition(2000);
 
         if(prevState == null) {
             //use robot.set directly, not a task series

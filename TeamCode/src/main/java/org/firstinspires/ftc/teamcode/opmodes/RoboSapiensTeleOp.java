@@ -63,7 +63,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_DROP_L1 = 1000;
 
-        public static int SLIDE_DROP_L2 = 1350;
+        public static int SLIDE_DROP_L2 = 2000;
 
         public static int SLIDE_MAX_POSITION = 880;
 

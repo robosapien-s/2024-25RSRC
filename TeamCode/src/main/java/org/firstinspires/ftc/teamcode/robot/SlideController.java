@@ -15,9 +15,9 @@ public class SlideController extends RobotPidMechanism {
     private DcMotorEx motorSlide3 = null;
 
     // Dashboard-configurable PID coefficients and target position
-    public static double kP = 0.0156;
+    public static double kP = 0.01;
     public static double kI = 0.0000;
-    public static double kD = 0.001;
+    public static double kD = 0.0001;
     public static int targetPosition = 0;
 
     private boolean isLeftMotorEncoded = true;
