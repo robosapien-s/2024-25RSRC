@@ -4,6 +4,8 @@ import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.pedropathing.localization.Pose;
+import com.pedropathing.localization.localizers.PinpointLocalizer;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -40,7 +42,7 @@ public class AngleDrive implements IDrive {
     double rotateAngleOffset = 0;
 
 
-    Localizer localizer = null;
+    PinpointLocalizer localizer = null;
     boolean isLerpEnabled;
 
     private final PIDEx pidController;
@@ -48,7 +50,7 @@ public class AngleDrive implements IDrive {
     private final PIDEx pidXController;
     private final PIDEx pidYController;
 
-    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Localizer localizer) {
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, PinpointLocalizer localizer) {
         this(hardwareMap, isLerpEnabled);
         this.localizer = localizer;
     }
@@ -130,18 +132,18 @@ public class AngleDrive implements IDrive {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
-    public void setPose(Pose2d pose) {
+    public void setPose(Pose pose) {
         if(localizer != null) {
             localizer.setPose(pose);
         }
     }
 
-    public Pose2d getPose() {
+    public Pose getPose() {
         if(localizer != null) {
             localizer.update();
             return localizer.getPose();
         } else {
-            return new Pose2d(0,0,0);
+            return new Pose(0,0,0);
         }
     }
 

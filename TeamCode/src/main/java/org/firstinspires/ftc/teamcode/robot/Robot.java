@@ -5,6 +5,7 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
+import com.pedropathing.localization.localizers.PinpointLocalizer;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -143,7 +144,7 @@ public class Robot {
         switchState(State.INTAKINGCLAW);
         if (!isAuto) {
             double startingHeading = Math.toRadians(90);
-            Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0, 0, startingHeading));
+            PinpointLocalizer localizer = new PinpointLocalizer(hardwareMap, new Pose(0,0,0));
             drive = new AngleDrive(hardwareMap, false, localizer);
         } else {
             drive = null;
@@ -379,11 +380,11 @@ public class Robot {
         drive.setTargetHeading(heading);
     }
 
-    public void setPose(Pose2d pose) {
+    public void setPose(Pose pose) {
         drive.setPose(pose);
     }
 
-    public Pose2d getPose() {
+    public Pose getPose() {
         return drive.getPose();
     }
 
@@ -447,13 +448,13 @@ public class Robot {
 
                    Vector3D powers = driveController.calculate(targetX, targetY, targetHeading, drive.getPose(), telemetry);
 
-                   telemetry.addData("POSE Heading: ", Math.toDegrees(drive.getPose().heading.toDouble()));
+                   telemetry.addData("POSE Heading: ", Math.toDegrees(drive.getPose().getHeading()));
                    telemetry.addData("POSE Heading Power: ", powers.getZ());
 
-                   telemetry.addData("POSE x: ", drive.getPose().position.x);
+                   telemetry.addData("POSE x: ", drive.getPose().getX());
                    telemetry.addData("POSE x Power: ", powers.getX());
 
-                   telemetry.addData("POSE y: ", drive.getPose().position.y);
+                   telemetry.addData("POSE y: ", drive.getPose().getY());
                    telemetry.addData("POSE t Power: ", powers.getY());
 
                    AngleDrive angleDrive = (AngleDrive) drive;

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.interfaces;
 import android.graphics.Point;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.localization.Pose;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -25,8 +26,8 @@ public interface IDrive {
 
     public double getYaw();
 
-    public void setPose(Pose2d pose);
+    public void setPose(Pose pose);
 
-    public Pose2d getPose() ;
+    public Pose getPose() ;
 
 }

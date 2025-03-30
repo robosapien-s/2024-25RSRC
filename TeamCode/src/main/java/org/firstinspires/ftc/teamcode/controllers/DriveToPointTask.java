@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.controllers;
 
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
+import com.pedropathing.localization.Pose;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
-import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.robot.Robot;
-import org.opencv.core.Mat;
 
 public class DriveToPointTask implements IRobotTask {
 
@@ -44,11 +40,11 @@ public class DriveToPointTask implements IRobotTask {
             _robot.setAutoTarget(_targets.getX(), _targets.getY(), _targets.getZ());
         }
 
-        Pose2d pose2d = _robot.getPose();
+        Pose pose = _robot.getPose();
 
-        double xDiff = Math.abs(pose2d.position.x - _targets.getX());
-        double yDiff = Math.abs(pose2d.position.y - _targets.getY());
-        double aDiff = Math.abs( Math.toDegrees(   pose2d.heading.toDouble()   ) - Math.toDegrees( _targets.getZ() ));
+        double xDiff = Math.abs(pose.getX() - _targets.getX());
+        double yDiff = Math.abs(pose.getY() - _targets.getY());
+        double aDiff = Math.abs( Math.toDegrees(   pose.getHeading()   ) - Math.toDegrees( _targets.getZ() ));
 
         //If robot was driving manually or is auto mode was turned off
         if((xDiff < _tolerance && yDiff < _tolerance && aDiff < _tolerance) || _robot.isAutoMode()) {

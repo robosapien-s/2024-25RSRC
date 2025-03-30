@@ -2,15 +2,22 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Localizer;
+import com.pedropathing.localization.Pose;
+import com.pedropathing.localization.localizers.PinpointLocalizer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.robot.DriveToPointController;
+import org.firstinspires.ftc.teamcode.robot.SquidController;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 @Config
 @TeleOp
@@ -18,7 +25,7 @@ public class pidToPointTest extends LinearOpMode {
 
     public static double xTarget = 0;
     public static double yTarget = 0;
-    public static double angleTarget = 90;
+    public static double angleTarget = 0;
     JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
 
 
@@ -28,28 +35,29 @@ public class pidToPointTest extends LinearOpMode {
     DcMotorEx frontRightMotor;
     DcMotorEx backLeftMotor;
     DcMotorEx backRightMotor;
-/*
 
-    public static double xKp = .11;
-    public static double xKd = 6.5;
-    public static double xKi = 0;
 
-    public static double yKp = .11;
-    public static double yKd = 6.5;
-    public static double yKi = 0;
+//    public static double xKp = .11;
+//    public static double xKd = 6.5;
+//    public static double xKi = 0;
 
-    public static double angleKp = 2.1;
-    public static double angleKd = 0.04;
-    public static double angleKi = 0;
+//    public static double yKp = .11;
+//    public static double yKd = 6.5;
+//    public static double yKi = 0;
 
- */
+//    public static double angleKp = 2.1;
+//    public static double angleKd = 0.04;
+//    public static double angleKi = 0;
 
+
+
+
+    Follower localizer;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        double startingHeading = Math.toRadians(90);
-        ThreeDeadWheelLocalizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
+        localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
 
         frontLeftMotor = hardwareMap.get(DcMotorEx.class, "fL");
         frontRightMotor = hardwareMap.get(DcMotorEx.class, "fR");
@@ -59,7 +67,6 @@ public class pidToPointTest extends LinearOpMode {
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
 
         DriveToPointController driveController = new DriveToPointController();
 
@@ -73,6 +80,8 @@ public class pidToPointTest extends LinearOpMode {
 //        double anglePower;
 //        double xRotated;
 //        double yRotated;
+
+//        SquidController xPid = new SquidController(xKp, xKd);
 
         waitForStart();
 
@@ -117,9 +126,9 @@ public class pidToPointTest extends LinearOpMode {
             backRightMotor.setPower(xRotated + yRotated - anglePower);
 
 
-            telemetry.addData("xPos", localizer.getPose().position.x);
-            telemetry.addData("yPos", localizer.getPose().position.y);
-            telemetry.addData("angle", Math.toDegrees(localizer.getPose().heading.toDouble()));
+            telemetry.addData("xPos", localizer.getPose().getX());
+            telemetry.addData("yPos", localizer.getPose().getY());
+            telemetry.addData("angle", Math.toDegrees(localizer.getPose().getHeading()));
 
             telemetry.addData("xTarget", xTarget);
             telemetry.addData("yTarget", yTarget);

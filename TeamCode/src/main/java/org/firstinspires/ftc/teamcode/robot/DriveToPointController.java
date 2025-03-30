@@ -6,6 +6,7 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.pedropathing.localization.Pose;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,88 +14,76 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class DriveToPointController {
 
-    public static double xKp = .11;
-    public static double xKd = 10;
+//    public static double xKp = .11;
+//    public static double xKd = 10;
+
+    public static double xKp = 0.2;
+    public static double xKd = 8;
+
     //public static double xKp = .22;
     //public static double xKd = 18;
-    public static double xKi = 0;
+//    public static double xKi = 0;
 
-    public static double yKp = .11;
-    public static double yKd = 10;
+//    public static double yKp = .11;
+//    public static double yKd = 10;
     //public static double yKp = .22;
     //public static double yKd = 18;
-    public static double yKi = 0;
+//    public static double yKi = 0;
 
-    public static double angleKp = 1.3;
-    public static double angleKd = 0.47;
+//    public static double angleKp = 1.3;
+//    public static double angleKd = 0.47;
     //public static double angleKp = .75;
     //public static double angleKd = 40;
-    public static double angleKi = 0;
+//    public static double angleKi = 0;
+
+    public static double angleKp = 0.7;
+    public static double angleKd = 0.4;
 
 
-    final BasicPID xPid;
-    final BasicPID yPid;
-    final BasicPID anglePidInner;
-    final AngleController anglePid;
+//    final BasicPID xPid;
+//    final BasicPID yPid;
+//    final BasicPID anglePidInner;
+//    final AngleController anglePid;
 
-    /*
+
     final SquidController xSquid;
     final SquidController ySquid;
     final SquidController angleSquid;
-*/
 
     public DriveToPointController() {
 
-        xPid = new BasicPID(new PIDCoefficients(xKp,xKi,xKd));
-        yPid = new BasicPID(new PIDCoefficients(yKp,yKi,yKd));
-        anglePidInner = new BasicPID(new PIDCoefficients(angleKp,angleKi,angleKd));
-        anglePid = new AngleController(anglePidInner);
-/*
+//        xPid = new BasicPID(new PIDCoefficients(xKp,xKi,xKd));
+//        yPid = new BasicPID(new PIDCoefficients(yKp,yKi,yKd));
+//        anglePidInner = new BasicPID(new PIDCoefficients(angleKp,angleKi,angleKd));
+//        anglePid = new AngleController(anglePidInner);
+
         xSquid = new SquidController(xKp, xKd);
-        ySquid = new SquidController(yKp, yKd);
+        ySquid = new SquidController(xKp, xKd);
         angleSquid = new SquidController(angleKp, angleKd);
 
- */
+
     }
 
-    public Vector3D calculate(double xTarget, double yTarget, double angleTarget, Pose2d current, Telemetry telemetry) {
+    public Vector3D calculate(double xTarget, double yTarget, double angleTarget, Pose current, Telemetry telemetry) {
 
 
+        double xPower = xSquid.calculate(xTarget, current.getX());
+        double yPower = -ySquid.calculate(yTarget, current.getY());
 
-        double angle = angleWrap(current.heading.toDouble());
+        double angle = angleWrap(current.getHeading());
 
-        double xPower = xPid.calculate(xTarget, current.position.x);
-        double yPower = -yPid.calculate(yTarget, current.position.y);
-        double anglePower = -anglePid.calculate(angleTarget, angle);
+        double anglePower = -angleSquid.calculate(angleTarget, angleWrap(angle));
 
+
+//        double xPower = xPid.calculate(xTarget, current.position.x);
+//        double yPower = -yPid.calculate(yTarget, current.position.y);
+//        double anglePower = -anglePid.calculate(angleTarget, angle);
+//
         double xRotated = xPower*Math.cos(angle) - yPower*Math.sin(angle);
         double yRotated = xPower*Math.sin(angle) + yPower*Math.cos(angle);
-
+//
         return new Vector3D(xRotated, yRotated, anglePower);
 
-
-        /*
-
-         double angle = angleWrap(localizer.getPose().heading.toDouble());
-
-        xPower = xPid.calculate(xTarget, localizer.getPose().position.x);
-        yPower = -yPid.calculate(yTarget, localizer.getPose().position.y);
-        anglePower = -anglePid.calculate(Math.toRadians(angleTarget), angle);
-
-
-
-
-
-
-        xRotated = xPower*Math.cos(angle) - yPower*Math.sin(angle);
-        yRotated = xPower*Math.sin(angle) + yPower*Math.cos(angle);
-
-        frontLeftMotor.setPower(xRotated + yRotated + anglePower);
-        backLeftMotor.setPower(xRotated - yRotated + anglePower);
-        frontRightMotor.setPower(xRotated - yRotated - anglePower);
-        backRightMotor.setPower(xRotated + yRotated - anglePower);
-        *
-         */
 
     }
 
