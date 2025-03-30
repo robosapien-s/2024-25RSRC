@@ -32,7 +32,7 @@ public class IntakingStateClaw extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         robot.setSlideMinPosition(110);
-        robot.setSlideMaxPosition(2000);
+        robot.setSlideMaxPosition(1290);
 
         if(prevState == null) {
             //use robot.set directly, not a task series
@@ -147,25 +147,22 @@ public class IntakingStateClaw extends BaseState {
         }
 
 
-        if(joystick.gamepad1GetB()) {
+        else if(joystick.gamepad1GetB()) {
             robot.setRobotSpeedNormal();
             robot.switchState(State.WALLPICKUP);
         }
 
-        if(joystick.gamepad1GetX()) {
+        else if(joystick.gamepad1GetX()) {
 
             robot.setRobotSpeedNormal();
-            RobotTaskSeries transferSeries = new RobotTaskSeries();
+            ;
 
-            transferSeries.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
+            taskArrayList.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
                 @Override
                 public void execute() {
                     robot.switchState(State.DROPPING_L2);
                 }
             }, "Set Drop State"));
-
-            taskArrayList.add(transferSeries);
-
 
 
         }

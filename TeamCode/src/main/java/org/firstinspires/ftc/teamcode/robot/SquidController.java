@@ -30,7 +30,7 @@ public class SquidController {
 
         double dError = currentError-lastError;
 
-        return kP*signedSqrt(currentError); //+ kD*dError/dt ;
+        return kP*signedSqrt(currentError)+kD*dError/dt ;
     }
 
 

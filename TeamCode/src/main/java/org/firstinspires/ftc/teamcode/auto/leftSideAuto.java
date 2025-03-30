@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Timer;
@@ -22,9 +23,10 @@ public class leftSideAuto extends LinearOpMode {
     private int pathState;
 
     private final Pose startPose = new Pose(7.3, 113.7, Math.toRadians(0));
-    private final Pose dropPose = new Pose(19.6, 130.8, Math.toRadians(-25.4));
-    private final Pose secondPickUpPose = new Pose(19.7, 130.8, Math.toRadians(0));
-    private final Pose thirdPickUpPose = new Pose(20.4, 131.35, Math.toRadians(21.74));
+    private final Pose dropPose = new Pose(20, 130.4, Math.toRadians(-25.4));
+    private final Pose firstPickUpPose = new Pose(20, 131.8, Math.toRadians(-25.4));
+    private final Pose secondPickUpPose = new Pose(19.6, 131.3, Math.toRadians(0));
+    private final Pose thirdPickUpPose = new Pose(20, 131, Math.toRadians(21.74));
     private boolean clawOpen = false;
 
     private RobotAuto robotAuto;
@@ -46,11 +48,13 @@ public class leftSideAuto extends LinearOpMode {
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
         follower.setStartingPose(startPose);
         //Path chains here
-        PathChain firstDrop = lineToLinearHeading(startPose, dropPose);
-        PathChain secondPickUp = lineToLinearHeading(dropPose, secondPickUpPose);
-        PathChain thirdDrop = lineToLinearHeading(secondPickUpPose, dropPose);
-        PathChain thirdPickUp = lineToLinearHeading(dropPose, thirdPickUpPose);
-        PathChain fourthDrop = lineToLinearHeading(thirdPickUpPose, dropPose);
+        PathChain firstDrop = lineToLinearHeading(startPose, dropPose,2);
+        PathChain firstPickUp = lineToLinearHeading(dropPose, firstPickUpPose,3);
+        PathChain secondDrop = lineToLinearHeading(firstPickUpPose, dropPose,3);
+        PathChain secondPickUp = lineToLinearHeading(dropPose, secondPickUpPose,3);
+        PathChain thirdDrop = lineToLinearHeading(secondPickUpPose, dropPose,3);
+        PathChain thirdPickUp = lineToLinearHeading(dropPose, thirdPickUpPose,3);
+        PathChain fourthDrop = lineToLinearHeading(thirdPickUpPose, dropPose,3);
 
 
         robotAuto.setIntakeAnglePos(RoboSapiensTeleOp.Params.INTAKE_ANGLE_INIT);
@@ -97,36 +101,39 @@ public class leftSideAuto extends LinearOpMode {
                 case 3:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        follower.followPath(firstPickUp, true);
                         robotAuto.startWait(1000);
                         setPathState(pathState+1);
                     }
                     break;
                 case 4:
-                    if (robotAuto.checkWait()) {
-                        robotAuto.setSlidePos(880);
+                    if (!follower.isBusy() && robotAuto.checkWait()) {
+                        robotAuto.setSlidePos(1290);
                         robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT);
-                        robotAuto.startWait(1000);
+                        robotAuto.startWait(800);
                         setPathState(pathState+1);
                     }
                     break;
                 case 5:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.PICKUP_GROUND_LEFT);
-                        robotAuto.startWait(400);
+                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
                 case 6:
                     if (robotAuto.checkWait()) {
+                        follower.followPath(secondDrop);
+                        robotAuto.setSlidePos(0);
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(500);
-                        setPathState(pathState+1);
+                        robotAuto.startWait(400);
+                        setPathState(pathState + 1);
                     }
                     break;
                 case 7:
-                    if (robotAuto.checkWait()) {
+                    if (robotAuto.checkWait() && !follower.isBusy()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1000);
+                        robotAuto.startWait(1700);
                         setPathState(pathState+1);
                     }
                     break;
@@ -140,7 +147,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 9:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(1000);
+                        robotAuto.startWait(600);
                         follower.followPath(secondPickUp, true);
                         setPathState(pathState+1);
                     }
@@ -153,35 +160,35 @@ public class leftSideAuto extends LinearOpMode {
                     break;
                 case 11:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setSlidePos(880);
-                        robotAuto.startWait(500);
+                        robotAuto.setSlidePos(1200);
+                        robotAuto.startWait(700);
                         setPathState(pathState+1);
                     }
                     break;
                 case 12:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.PICKUP_GROUND_LEFT);
-                        robotAuto.startWait(400);
+                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
                 case 13:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.setSlidePos(0);
                         follower.followPath(thirdDrop, true);
-                        robotAuto.startWait(500);
+                        robotAuto.startWait(400);
                         setPathState(pathState+1);
                     }
                     break;
                 case 14:
                     if (!follower.isBusy() && robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1000);
+                        robotAuto.startWait(1700);
                         setPathState(pathState+1);
                     }
                     break;
                 case 15:
-                    if (!robotAuto.checkWait()) {
+                    if (robotAuto.checkWait()) {
                         robotAuto.openClaw();
                         robotAuto.startWait(200);
                         setPathState(pathState+1);
@@ -191,29 +198,29 @@ public class leftSideAuto extends LinearOpMode {
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
                         follower.followPath(thirdPickUp, true);
-                        robotAuto.startWait(1000);
+                        robotAuto.startWait(1200);
                         setPathState(pathState+1);
                     }
                     break;
                 case 17:
                     if (!follower.isBusy() && robotAuto.checkWait()) {
-                        robotAuto.setSlidePos(880);
+                        robotAuto.setSlidePos(1290);
                         robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_RIGHT);
-                        robotAuto.startWait(500);
+                        robotAuto.startWait(700);
                         setPathState(pathState+1);
                     }
                     break;
                 case 18:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.PICKUP_GROUND_LEFT);
-                        robotAuto.startWait(400);
+                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
                 case 19:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(500);
+                        robotAuto.setSlidePos(0);
+                        robotAuto.startWait(400);
                         follower.followPath(fourthDrop, true);
                         setPathState(pathState+1);
                     }
@@ -221,7 +228,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 20:
                     if (!follower.isBusy() && robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1000);
+                        robotAuto.startWait(1700);
                         setPathState(pathState+1);
                     }
                     break;
@@ -261,6 +268,14 @@ public class leftSideAuto extends LinearOpMode {
         return follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
                 .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
+                .build();
+    }
+
+    public PathChain lineToLinearHeading(Pose startPose, Pose endPose, double ZPAM) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
+                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
+                .setZeroPowerAccelerationMultiplier(ZPAM)
                 .build();
     }
 
