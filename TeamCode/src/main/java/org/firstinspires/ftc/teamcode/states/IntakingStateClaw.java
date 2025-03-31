@@ -76,7 +76,7 @@ public class IntakingStateClaw extends BaseState {
         }
 
         if(joystick.gamepad1GetY()) {
-//            robot.switchState(State.AUTO_PICKUP);
+            robot.switchState(State.AUTO_PICKUP);
         } else if(joystick.gamepad1GetA()) {
 
             robot.setRobotSpeedNormal();

@@ -57,6 +57,8 @@ public class AutoPickupState extends BaseState {
         robot.setDriveTrainEnabled(false);
         colorSampleDetector = robot.createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.all);
 
+
+        robot.setSlideTargetPosition(700);
         robot.setSlideRotationPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_CAMERA_POSITION);
         robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_CAMERA);
         robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
@@ -83,7 +85,7 @@ public class AutoPickupState extends BaseState {
 
     public void updateFromCamera(Robot robot, Telemetry telemetry) {
         Point centerTarget = colorSampleDetector.getCenterOfScreen();
-        centerTarget.y += 100;
+        centerTarget.y += 170;
         RotatedRect cloestRect = colorSampleDetector.getClosestSample();
 
         if(delayTimeHack == 0) {
@@ -133,19 +135,28 @@ public class AutoPickupState extends BaseState {
 
                 double clawPosition = robot.getClawPosition();
 
-                taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Arm Angle", false));
+                taskArrayList.add(createSlideRotationTask(robot, 100, 200, "Arm Angle", false));
 
                 if(Math.abs(  clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN ) > .02) {
                     taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
                 }
 
 
-                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL, 50, "IntakeAngle", false));
+                taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 50, "IntakeAngle", false));
 
                 taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
 
 
-                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
+                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
+
+                taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 50, "IntakeAngle", false));
+
+//                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL, 50, "IntakeAngle", false));
+//
+//                taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
+//
+//
+//                taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
 
 
 //                taskArrayList.add(

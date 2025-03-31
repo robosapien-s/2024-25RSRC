@@ -30,7 +30,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_BUCKET = {1.0, 0.03};
 
-        public static double[] ROT_AND_ANGLE_CAMERA = {0.76, 0.6239};
+        public static double[] ROT_AND_ANGLE_CAMERA = { 0.59, 0.85};
 
         public static double[] ROT_AND_ANGLE_PREP = { 0.606, .835}; //{ 0.5678, .875}; // R / L
 
@@ -76,7 +76,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_ROTATION_MIN_POSITION = 0;
 
-        public static int SLIDE_ROTATION_CAMERA_POSITION = 500;
+        public static int SLIDE_ROTATION_CAMERA_POSITION = 350;
 
         public static int SLIDE_ROTATION_MAX_POSITION = 1400;
 
