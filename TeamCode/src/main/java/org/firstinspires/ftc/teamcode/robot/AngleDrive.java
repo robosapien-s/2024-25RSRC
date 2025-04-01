@@ -4,6 +4,7 @@ import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.localization.localizers.PinpointLocalizer;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -42,7 +43,7 @@ public class AngleDrive implements IDrive {
     double rotateAngleOffset = 0;
 
 
-    PinpointLocalizer localizer = null;
+    Follower localizer = null;
     boolean isLerpEnabled;
 
     private final PIDEx pidController;
@@ -50,7 +51,7 @@ public class AngleDrive implements IDrive {
     private final PIDEx pidXController;
     private final PIDEx pidYController;
 
-    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, PinpointLocalizer localizer) {
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Follower localizer) {
         this(hardwareMap, isLerpEnabled);
         this.localizer = localizer;
     }
@@ -132,6 +133,7 @@ public class AngleDrive implements IDrive {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
+
     public void setPose(Pose pose) {
         if(localizer != null) {
             localizer.setPose(pose);
@@ -185,7 +187,7 @@ public class AngleDrive implements IDrive {
         roll = orientation.getRoll(AngleUnit.DEGREES);
         yaw = orientation.getYaw(AngleUnit.DEGREES);
 
-        telemetry.addData("yaw", yaw);
+//        telemetry.addData("yaw", yaw);
 
         if (length(rightStickX, rightStickY) > 0.5) {
             targetHeading = normalize(Math.toDegrees(Math.atan2(-rightStickY, rightStickX)) - 90);

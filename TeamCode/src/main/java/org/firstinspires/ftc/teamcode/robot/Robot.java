@@ -141,10 +141,10 @@ public class Robot {
         DroppingL1State._lastPose = null;
 
 
-        switchState(State.INTAKINGCLAW);
+        switchState(State.AUTO_PICKUP);
         if (!isAuto) {
             double startingHeading = Math.toRadians(90);
-            PinpointLocalizer localizer = new PinpointLocalizer(hardwareMap, new Pose(0,0,0));
+            Follower localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
             drive = new AngleDrive(hardwareMap, false, localizer);
         } else {
             drive = null;

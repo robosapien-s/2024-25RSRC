@@ -28,7 +28,7 @@ public class ServoTestState extends BaseState {
     ArrayList<String> servoNames = new ArrayList<>();
     int index = -1;
     double increment = .005;
-
+    IRobot _prevState = null;
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
@@ -37,13 +37,18 @@ public class ServoTestState extends BaseState {
         if(!servoNames.isEmpty()) {
             index = 0;
         }
+
+        _prevState = prevState;
     }
 
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-
-        if(joystick.gamepad1GetDLeft()) {
+        if(joystick.gamepad2GetA()) {
+            if(_prevState != null) {
+                robot.switchState(_prevState.getState());
+            }
+        } else if(joystick.gamepad1GetDLeft()) {
             index--;
             if(index < 0) {
                 index = servoNames.size()-1;

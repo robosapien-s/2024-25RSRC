@@ -15,7 +15,13 @@ public class SquidController {
         this.kD = kD;
     }
 
+    public void setkP(double kP) {
+        this.kP = kP;
+    }
 
+    public void setkD(double kD) {
+        this.kD = kD;
+    }
 
 
     public double calculate(double target, double state) {

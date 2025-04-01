@@ -4,12 +4,15 @@ import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.localization.localizers.PinpointLocalizer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.Localizer;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
@@ -42,7 +45,7 @@ public class MultiColorBlockDetectorOp extends LinearOpMode {
 
         double startingHeading = Math.toRadians(90);
 //        Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
-        PinpointLocalizer localizer = new PinpointLocalizer(hardwareMap, new Pose(0,0,0));
+        Follower localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
         AngleDrive drive = new AngleDrive(hardwareMap, false, localizer);
         JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
         MultiColorSampleDetector sampleDetector = new MultiColorSampleDetector(hardwareMap, telemetry, MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.all);
