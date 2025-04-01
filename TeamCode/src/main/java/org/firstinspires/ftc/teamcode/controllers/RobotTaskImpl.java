@@ -8,4 +8,9 @@ abstract class RobotTaskImpl implements IRobotTask {
     public void stopTask() {
 
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

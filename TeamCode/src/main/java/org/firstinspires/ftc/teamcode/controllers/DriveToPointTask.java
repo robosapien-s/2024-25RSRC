@@ -81,4 +81,9 @@ public class DriveToPointTask implements IRobotTask {
     public void stopTask() {
         _isComplete = true;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

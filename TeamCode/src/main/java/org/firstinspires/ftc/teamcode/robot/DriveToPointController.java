@@ -17,7 +17,7 @@ public class DriveToPointController {
 //    public static double xKp = .11;
 //    public static double xKd = 10;
 
-    public static double xKp = 0.2;
+    public static double xKp = 0.3;
     public static double xKd = 8;
 
     //public static double xKp = .22;

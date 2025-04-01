@@ -136,6 +136,7 @@ public abstract class BaseState implements IRobot {
 
 
             if(isComplete){
+                taskArrayList.get(0).dispose();
                 taskArrayList.remove(0);
             }
         }

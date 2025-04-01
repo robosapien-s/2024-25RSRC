@@ -141,7 +141,7 @@ public class Robot {
         DroppingL1State._lastPose = null;
 
 
-        switchState(State.AUTO_PICKUP);
+        switchState(State.INTAKINGCLAW);
         if (!isAuto) {
             double startingHeading = Math.toRadians(90);
             Follower localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
@@ -399,6 +399,12 @@ public class Robot {
         drive.updateRaw(telemetry, false, leftStickX, leftStickY, 0, 0, 1, 1);
     }
 
+    public void moveMecanum(double xRotated, double yRotated, double anglePower){
+
+        AngleDrive angleDrive = (AngleDrive) drive;
+        angleDrive.MoveMecanumPidToPoint(xRotated, yRotated, anglePower);
+    }
+
     public void execute(Telemetry telemetry) {
 //        if (!isAprilTagDetected) {
 //            pollForAprilTag(telemetry);
@@ -474,15 +480,15 @@ public class Robot {
         slideController.update(telemetry);
 //        dualServoSlideController.update(telemetry);
 
-        telemetry.addData("Delta Time", System.currentTimeMillis()-dTime);
+      //  telemetry.addData("Delta Time", System.currentTimeMillis()-dTime);
         dTime=System.currentTimeMillis();
         if (dTime<minTime) {
             minTime=dTime;
         }
 
-        telemetry.addData("Min Time", minTime);
+        //telemetry.addData("Min Time", minTime);
 
-        telemetry.update();
+        //telemetry.update();
 
     }
 

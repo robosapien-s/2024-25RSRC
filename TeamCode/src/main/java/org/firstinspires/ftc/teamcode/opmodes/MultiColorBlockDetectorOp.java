@@ -44,7 +44,9 @@ public class MultiColorBlockDetectorOp extends LinearOpMode {
         // Initialize webcam
 
         double startingHeading = Math.toRadians(90);
-//        Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
+//       Localizer localizer = new ThreeDeadWheelLocalizer(hardwareMap, MecanumDrive.PARAMS.inPerTick, new Pose2d(0,0,startingHeading));
+
+ //       PinpointLocalizer localizer = new PinpointLocalizer(hardwareMap, new Pose(0,0,0));
         Follower localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
         AngleDrive drive = new AngleDrive(hardwareMap, false, localizer);
         JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
