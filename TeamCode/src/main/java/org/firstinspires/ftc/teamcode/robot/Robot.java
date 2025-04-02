@@ -396,7 +396,7 @@ public class Robot {
     }
 
     public void updateDriveTrainsRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
-        drive.updateRaw(telemetry, false, leftStickX, leftStickY, 0, 0, 1, 1);
+        drive.updateRaw(telemetry, false, leftStickX, -leftStickY, 0, 0, 1, 1);
     }
 
     public void moveMecanum(double xRotated, double yRotated, double anglePower){
@@ -468,8 +468,9 @@ public class Robot {
                    //drive.updateRaw(telemetry, false, powers.getX(), powers.getY(), powers.getZ(), 0, 1, 1);
 
                } else if (isDriftMode && !tempIgnoreDrift) {
-                   drive.updateRaw(telemetry, false, driftXValue, driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+                   drive.updateRaw(telemetry, false, driftXValue, -driftYValue, joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
                } else {
+                   telemetry.addData("yaw", drive.getYaw());
                    drive.update(telemetry, joystick, isSlowMode ? .4 : 1, isSlowMode ? .3 : 1);
                }
            }

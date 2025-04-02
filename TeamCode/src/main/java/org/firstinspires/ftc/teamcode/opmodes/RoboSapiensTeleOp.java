@@ -21,9 +21,9 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_CLOSE = .4;
 
         public static double INTAKE_ANGLE_INIT = 0.575;
-        public static double INTAKE_ANGLE_START = .46;
+//        public static double INTAKE_ANGLE_START = .42;
         public static double INTAKE_ANGLE_BUCKET = 0.44;
-        public static double INTAKE_ANGLE_READY =.42;
+        public static double INTAKE_ANGLE_READY =.40;
         public static double INTAKE_ANGLE_PICKUP = .305;
         public static double INTAKE_ANGLE_CAMERA = 0.35;
 
@@ -31,12 +31,12 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_BUCKET = {1.0, 0.03};
 
-        public static double[] ROT_AND_ANGLE_CAMERA = { 0.575, 0.885};
+        public static double[] ROT_AND_ANGLE_CAMERA = {0.575, 0.885};
 
-        public static double[] ROT_AND_ANGLE_PREP = { 0.606, .835}; //{ 0.5678, .875}; // R / L
+        public static double[] ROT_AND_ANGLE_PREP = {0.606, .835}; //{ 0.5678, .875}; // R / L
 
         //public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.513, 0.695};
-        public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = { 0.59, 0.85};//{ 0.5678, .875}; // R / L
+        public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.59, 0.85};//{ 0.5678, .875}; // R / L
 
 
         public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {0.505, 0.745};
@@ -129,9 +129,9 @@ public class RoboSapiensTeleOp extends LinearOpMode {
        // DcMotorEx verticalSlide1 = hardwareMap.get(DcMotorEx.class, "verticalSlide1");
        // DcMotorEx verticalSlide2 = hardwareMap.get(DcMotorEx.class, "verticalSlide2");
 
-        while (!opModeIsActive() && !isStopRequested()) {
-            robot.execute(telemetry);
-        }
+//        while (!opModeIsActive() && !isStopRequested()) {
+//            robot.execute(telemetry);
+//        }
         waitForStart();
         robot.start();
 

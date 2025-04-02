@@ -20,7 +20,7 @@ public class SquidToPointTask extends  RobotTaskImpl {
     boolean _started = false;
     boolean _isComplete = false;
 
-    Pose _tolerance = new Pose(1, 1, 3);
+    Pose _tolerance = new Pose(.5, .5, Math.toRadians(3));
 
     DriveToPointController driveController = new DriveToPointController();
 
@@ -36,15 +36,17 @@ public class SquidToPointTask extends  RobotTaskImpl {
 
         }
 
+
+
         Pose currentValues = _listner.getCurrentValues();
 
         if(Math.abs(_targetPose.getX() - currentValues.getX()) < _tolerance.getX() &&
                 Math.abs(_targetPose.getY() - currentValues.getY()) < _tolerance.getY() &&
-                Math.abs(_targetPose.getHeading() - currentValues.getHeading()) < _tolerance.getHeading()
+                Math.abs(angleWrap(_targetPose.getHeading()) - angleWrap(currentValues.getHeading())) < angleWrap(_tolerance.getHeading())
         ) {
             _isComplete = true;
         } else {
-            Vector3D powers = driveController.calculate(_targetPose.getX(), _targetPose.getY(), _targetPose.getHeading(), currentValues, telemetry);
+            Vector3D powers = driveController.calculate(_targetPose.getX(), _targetPose.getY(), angleWrap(_targetPose.getHeading()), currentValues, telemetry);
             _listner.onUpdate(powers.getX(), powers.getY(), powers.getZ());
         }
 
@@ -72,5 +74,18 @@ public class SquidToPointTask extends  RobotTaskImpl {
     public boolean isComplete() {
 
         return _isComplete;
+    }
+
+    public double angleWrap(double radians) {
+
+        while (radians > Math.PI) {
+            radians -= 2 * Math.PI;
+        }
+        while (radians < -Math.PI) {
+            radians += 2 * Math.PI;
+        }
+
+        // keep in mind that the result is in radians
+        return radians;
     }
 }

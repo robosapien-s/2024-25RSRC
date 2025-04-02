@@ -40,7 +40,7 @@ public class IntakingStateClaw extends BaseState {
             robot.setSlideRotationPosition(0);
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);
             robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
-            robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_START);
+            robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY);
 
         } else if (prevState.getState() == State.SPECIMEN_HANG) {
             RobotTaskSeries transferSeries = new RobotTaskSeries();

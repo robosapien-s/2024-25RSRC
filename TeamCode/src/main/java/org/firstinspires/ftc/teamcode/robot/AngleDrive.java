@@ -111,11 +111,11 @@ public class AngleDrive implements IDrive {
         backLeftMotor = hardwareMap.get(DcMotorEx.class, "bL");
         backRightMotor = hardwareMap.get(DcMotorEx.class, "bR");
 
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /*
         backRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -170,7 +170,7 @@ public class AngleDrive implements IDrive {
 
     @Override
     public void update(Telemetry telemetry, JoystickWrapper joystickWrapper, double speed, double rotSpeed) {
-        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetExponentialLeftStickX(1), joystickWrapper.gamepad1GetExponentialLeftStickY(1), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
+        updateRaw(telemetry, joystickWrapper.gamepad1GetLeftStick(), joystickWrapper.gamepad1GetExponentialLeftStickX(1), -joystickWrapper.gamepad1GetExponentialLeftStickY(1), joystickWrapper.gamepad1GetRightStickX(), joystickWrapper.gamepad1GetRightStickY(), speed, rotSpeed);
     }
 
     @Override
@@ -199,23 +199,21 @@ public class AngleDrive implements IDrive {
 
         if(isAutoMode) {
             leftStickX =  Range.clip( pidXController.calculate( autoModeX, frontRightMotor.getCurrentPosition()), -1, 1 );
-            leftStickY=  Range.clip( pidXController.calculate( autoModeY, frontLeftMotor.getCurrentPosition()), -1, 1 );
+            leftStickY  =  Range.clip( pidXController.calculate( autoModeY, frontLeftMotor.getCurrentPosition()), -1, 1 );
         }
 
-        double smoothingFactor = 0.1;
-        double smoothedYaw = this.isLerpEnabled ? lerp(yaw, targetHeading, smoothingFactor) : targetHeading;
-
-        double headingError = normalize((smoothedYaw - yaw) + rotateAngleOffset);
+//maybe use rotate Angle Offset
+        double headingError = normalize((targetHeading - yaw));
 
         Translation2d translation2d = RotateAngle(leftStickX * Math.abs(leftStickX), leftStickY * Math.abs(leftStickY), yaw);
 
-        double newRx = pidController.calculate( yaw+headingError, yaw);
+        double newRx = -pidController.calculate( yaw+headingError, yaw);
 
         if (cosineThing) {
-            MoveMecanum(-translation2d.getX() * speed,  (translation2d.getY()*speed) * Math.cos(Math.toRadians(headingError)), speed * Range.clip(headingError * PGain, -1, 1));
+            MoveMecanum(translation2d.getX() * speed,  (translation2d.getY()*speed) * Math.cos(Math.toRadians(headingError)), speed * Range.clip(headingError * PGain, -1, 1));
         } else {
            // MoveMecanum(-translation2d.getX(), translation2d.getY(), Range.clip(headingError * PGain, -1, 1));
-            MoveMecanum(-translation2d.getX() * speed, translation2d.getY() * speed, Range.clip(newRx, -1, 1) * speed);
+            MoveMecanum(translation2d.getX() * speed, translation2d.getY() * speed, Range.clip(newRx, -1, 1) * speed);
         }
 
 //        telemetry.update();
@@ -232,6 +230,7 @@ public class AngleDrive implements IDrive {
     }
 
     void MoveMecanumPidToPoint(double xRotated, double yRotated, double anglePower) {
+        localizer.update();
         frontLeftMotor.setPower(xRotated + yRotated + anglePower);
         backLeftMotor.setPower(xRotated - yRotated + anglePower);
         frontRightMotor.setPower(xRotated - yRotated - anglePower);
@@ -245,7 +244,7 @@ public class AngleDrive implements IDrive {
     }
 
     Translation2d RotateAngle(double x, double y, double angle) {
-        double rAngle = Math.toRadians(angle + rotateAngleOffset);
+        double rAngle = -Math.toRadians(angle + rotateAngleOffset);
 
         double rotatedX = x * Math.cos(rAngle) - y * Math.sin(rAngle);
         double rotatedY = x * Math.sin(rAngle) + y * Math.cos(rAngle);
