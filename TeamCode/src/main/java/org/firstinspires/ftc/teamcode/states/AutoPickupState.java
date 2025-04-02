@@ -19,6 +19,8 @@ import org.opencv.core.RotatedRect;
 @Config
 public class AutoPickupState extends BaseState {
 
+
+    AutoPickupTask _pickupTask = null;
     public AutoPickupState(JoystickWrapper joystick) {
         super(joystick);
     }
@@ -40,6 +42,20 @@ public class AutoPickupState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
+        if(joystick.gamepad1GetY()) {
+            if(!taskArrayList.isEmpty()) {
+                taskArrayList.get(0).stopTask();
+            } else {
+                AutoPickupTask pickupTask = new AutoPickupTask(new AutoPickupTask.AutoPickupListener() {
+                    @Override
+                    public Robot getRobot() {
+                        return robot;
+                    }
+                });
+
+                taskArrayList.add(pickupTask);
+            }
+        }
 
         executeTasks(telemetry);
 

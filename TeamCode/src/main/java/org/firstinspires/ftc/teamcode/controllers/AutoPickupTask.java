@@ -53,12 +53,38 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     }
 
+    @Override
+    public void stopTask() {
+        _isComplete = true;
+    }
+
     public Point getTargetPose(Point center) {
         //return new double[] {(240-center.y)*(6.25/480), (320-center.x)*(8.5/640)};
         return new Point((240-center.y)*(6.25/480), (320-center.x)*(8.5/640));
         //return new Point((320-center.x)*(8.5/640), (240-center.y)*(6.25/480));
     }
 
+    public double[] mapAngleToClawPosition() {
+
+        if(_closestRec.size.width>=_closestRec.size.height) {
+
+            if(_closestRec.angle>70) {
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL;
+            } else if(_closestRec.angle<20) {
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL;
+            } else {
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT;
+            }
+        } else {
+            if(_closestRec.angle<20) {
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL;
+            } else if(_closestRec.angle>70) {
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL;
+            } else {
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_RIGHT;
+            }
+        }
+    }
     public void calculateDistanceToSample() {
 
         Point centerTarget = _detector.getCenterOfScreen();
@@ -87,25 +113,36 @@ public class AutoPickupTask extends  RobotTaskImpl {
         telemetry.addData("AutoPickup: Did Pickup", _didPickup);
 
 
+
         Robot robot = _listener.getRobot();
 
         if(_didPickup) {
 
             telemetry.addData("AutoPickup", "didPickup");
 
+            telemetry.addData("AutoPickup: Rec", _closestRec);
+            telemetry.addData("AutoPickup: Width", _closestRec.size.width);
+            telemetry.addData("AutoPickup: Height", _closestRec.size.height);
+            telemetry.addData("AutoPickup: Angle", _closestRec.angle);
+
         } else if(_didMoveToLocation) {
             if (!is_pickupStarted) {
                 is_pickupStarted = true;
                 double clawPosition = robot.getClawPosition();
 
-                _taskExecuter.add(BaseState.createSlideRotationTask(robot, 100, 200, "Arm Angle", false));
+
+
+                _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 50, "IntakeAngle", false));
+
+
+                _taskExecuter.add(BaseState.createSlideRotationTask(robot, 80, 500, "Arm Angle", false));
 
                 if (Math.abs(clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN) > .02) {
                     _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
                 }
 
 
-                _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 150, "IntakeAngle", false));
+                _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP-.01, 150, "IntakeAngle", false));
 
                 _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
 
@@ -124,6 +161,9 @@ public class AutoPickupTask extends  RobotTaskImpl {
         } else if(_didFindSample) {
             _targetLocation = getTargetPose(_closestRec.center);
             robot.setDriveTrainEnabled(false);
+
+            telemetry.addData("AutoPickup: Rect", _closestRec);
+            telemetry.addData("AutoPickup: Angle", _closestRec.angle);
 
             double angle = angleWrap(robot.getPose().getHeading());
 
