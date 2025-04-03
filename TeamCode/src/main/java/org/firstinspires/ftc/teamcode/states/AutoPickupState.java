@@ -42,6 +42,7 @@ public class AutoPickupState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
+
 //        if(joystick.gamepad1GetY()) {
 //            if(!taskArrayList.isEmpty()) {
 //                taskArrayList.get(0).stopTask();
@@ -56,6 +57,20 @@ public class AutoPickupState extends BaseState {
 //                taskArrayList.add(pickupTask);
 //            }
 //        }
+
+        if(joystick.gamepad1GetA()) {
+            if(!taskArrayList.isEmpty()) {
+                taskArrayList.get(0).stopTask();
+                robot.switchState(State.INTAKINGCLAW);
+            }
+        }
+
+        if (taskArrayList.isEmpty()) {
+            robot.switchState(State.INTAKINGCLAW);
+        }
+
+
+
 
         executeTasks(telemetry);
 

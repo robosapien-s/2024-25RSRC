@@ -113,8 +113,8 @@ public class AutoPickupTask extends  RobotTaskImpl {
         telemetry.addData("AutoPickup: Did Pickup", _didPickup);
 
 
-
         Robot robot = _listener.getRobot();
+
 
         if(_didPickup) {
 
@@ -124,6 +124,8 @@ public class AutoPickupTask extends  RobotTaskImpl {
             telemetry.addData("AutoPickup: Width", _closestRec.size.width);
             telemetry.addData("AutoPickup: Height", _closestRec.size.height);
             telemetry.addData("AutoPickup: Angle", _closestRec.angle);
+            _isComplete = true;
+
 
         } else if(_didMoveToLocation) {
             if (!is_pickupStarted) {
@@ -152,6 +154,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
                 _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 50, "IntakeAngle", false));
 
 
+
             }
             if(_taskExecuter.isComplete()) {
                 //TODO:  check to see if it has it and maybe try a second time???
@@ -165,26 +168,31 @@ public class AutoPickupTask extends  RobotTaskImpl {
             telemetry.addData("AutoPickup: Rect", _closestRec);
             telemetry.addData("AutoPickup: Angle", _closestRec.angle);
 
-            double angle = angleWrap(robot.getPose().getHeading());
+            Pose currentPose = robot.getPose();
+
+            double angle = angleWrap(currentPose.getHeading());
 
             double rotX = _targetLocation.x*Math.cos(angle)-_targetLocation.y*Math.sin(angle);
             double rotY = _targetLocation.y*Math.cos(angle)+_targetLocation.x*Math.sin(angle);
 
 
+
+
             if(_squidToPointTask == null) {
                 _squidToPointTask = new SquidToPointTask(
-                        new Pose(rotX, rotY, angle),
+                        new Pose(rotX+currentPose.getX(), rotY+currentPose.getY(), angle),
                         new SquidToPointTask.SquidToPointListener() {
                             @Override
                             public void onUpdate(double x, double y, double heading) {
 
 
-                                telemetry.addData("Auto Target: ", new Pose(rotX, rotY, angle));
+                                telemetry.addData("Auto Target: ", new Pose(rotX+currentPose.getX(), rotY+currentPose.getY(), angle));
                                 telemetry.addData("Auto Current: ", robot.getPose());
                                 telemetry.addData("Auto Power: ", new Vector3D(x,y,heading));
 
 
-                                robot.moveMecanum(x,y,-heading);
+//                                robot.moveMecanum(x,y,-heading);
+                                robot.moveMecanum(x,y, heading);
 
 
 //                               dont use this robot.updateDriveTrainsRaw(telemetry, false, x, y, 0, 0, 1, 1);
@@ -201,6 +209,9 @@ public class AutoPickupTask extends  RobotTaskImpl {
             }
 
             if(_taskExecuter.isComplete()) {
+//                telemetry.addData("Auto Target: ", new Pose(rotX, rotY, angle));
+//                telemetry.addData("Auto Current: ", robot.getPose());
+//             telemetry.addData("Auto Power: ");
                 robot.setDriveTrainEnabled(true);
                 _didMoveToLocation = true;
             }
@@ -243,7 +254,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     @Override
     public boolean isComplete() {
-        return false;
+        return _isComplete;
     }
 
     @Override

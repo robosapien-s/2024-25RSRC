@@ -20,7 +20,7 @@ public class SquidToPointTask extends  RobotTaskImpl {
     boolean _started = false;
     boolean _isComplete = false;
 
-    Pose _tolerance = new Pose(.5, .5, Math.toRadians(3));
+    Pose _tolerance = new Pose(.3, .3, Math.toRadians(2));
 
     DriveToPointController driveController = new DriveToPointController();
 
