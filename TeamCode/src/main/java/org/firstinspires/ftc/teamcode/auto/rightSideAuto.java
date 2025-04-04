@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import static org.firstinspires.ftc.teamcode.robot.AngleDrive.lineToConstantHeading;
+import static org.firstinspires.ftc.teamcode.robot.AngleDrive.lineToLinearHeading;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -76,41 +79,41 @@ public class rightSideAuto extends LinearOpMode {
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
         follower.setStartingPose(autoStartPose);
 
-        PathChain hangPreload = lineToConstantHeading(autoStartPose, preloadHangPose);
+        PathChain hangPreload = lineToConstantHeading(follower, autoStartPose, preloadHangPose);
 
-        PathChain pickup1 = lineToLinearHeading(preloadHangPose, pickup1Pose);
+        PathChain pickup1 = lineToLinearHeading(follower, preloadHangPose, pickup1Pose);
 
-        PathChain dropoff1 = lineToLinearHeading(pickup1Pose, dropoff1Pose);
+        PathChain dropoff1 = lineToLinearHeading(follower, pickup1Pose, dropoff1Pose);
 
-        PathChain pickup2 = lineToLinearHeading(dropoff1Pose, pickup2pose);
+        PathChain pickup2 = lineToLinearHeading(follower, dropoff1Pose, pickup2pose);
 
-        PathChain dropoff2 = lineToLinearHeading(pickup2pose, dropoff2pose);
+        PathChain dropoff2 = lineToLinearHeading(follower, pickup2pose, dropoff2pose);
 
-        PathChain pickup3 = lineToLinearHeading(dropoff2pose, pickup3pose);
+        PathChain pickup3 = lineToLinearHeading(follower, dropoff2pose, pickup3pose);
 
-        PathChain dropoff3 = lineToLinearHeading(pickup3pose, dropoff3pose);
+        PathChain dropoff3 = lineToLinearHeading(follower, pickup3pose, dropoff3pose);
 
 
 
-        PathChain lineUpWall1 = lineToLinearHeading(dropoff3pose, lineUpWallPose);
-        PathChain pickUpWall = lineToConstantHeading(lineUpWallPose, pickUpWallPose);
+        PathChain lineUpWall1 = lineToLinearHeading(follower, dropoff3pose, lineUpWallPose);
+        PathChain pickUpWall = lineToConstantHeading(follower, lineUpWallPose, pickUpWallPose);
 
 //        PathChain pickUpWall2 = lineToConstantHeading(lineUpWall2Pose, pickUpWall2Pose);
 
-        PathChain hang1 = lineToConstantHeading(pickUpWallPose, hang1Pose);
+        PathChain hang1 = lineToConstantHeading(follower, pickUpWallPose, hang1Pose);
 //        PathChain lineUpWall2 = lineToConstantHeading(hang1Pose, lineUpWall2Pose);
-        PathChain pickUpWall2 = lineToConstantHeading(hang1Pose, pickUpWall2Pose,1.5);
+        PathChain pickUpWall2 = lineToConstantHeading(follower, hang1Pose, pickUpWall2Pose,1.5);
 
-        PathChain hang2 = lineToConstantHeading(pickUpWall2Pose, hang2Pose);
+        PathChain hang2 = lineToConstantHeading(follower, pickUpWall2Pose, hang2Pose);
 //        PathChain lineUpWall3 = lineToConstantHeading(hang2Pose, lineUpWall2Pose);
-        PathChain pickUpWall3 = lineToConstantHeading(hang2Pose, pickUpWall2Pose,1.5);
+        PathChain pickUpWall3 = lineToConstantHeading(follower, hang2Pose, pickUpWall2Pose,1.5);
 
-        PathChain hang3 = lineToConstantHeading(pickUpWall2Pose, hang3Pose);
+        PathChain hang3 = lineToConstantHeading(follower, pickUpWall2Pose, hang3Pose);
 //        PathChain lineUpWall4 = lineToConstantHeading(hang3Pose, lineUpWall2Pose);
-        PathChain pickUpWall4 = lineToConstantHeading(hang3Pose, pickUpWall2Pose,1.5);
+        PathChain pickUpWall4 = lineToConstantHeading(follower, hang3Pose, pickUpWall2Pose,1.5);
 
-        PathChain hang4 = lineToConstantHeading(pickUpWall2Pose, hang4Pose);
-        PathChain park = lineToConstantHeading(hang4Pose, pickUpWallPose);
+        PathChain hang4 = lineToConstantHeading(follower, pickUpWall2Pose, hang4Pose);
+        PathChain park = lineToConstantHeading(follower, hang4Pose, pickUpWallPose);
 
 //        robotAuto.setIntakeClawAnglePos(RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER);
         while (!opModeIsActive() && !isStopRequested()) {
@@ -487,29 +490,6 @@ public class rightSideAuto extends LinearOpMode {
     public void setPathState(int pState) {
         pathState = pState;
         pathTimer.resetTimer();
-    }
-
-    //prob move this to a separate class later
-    public PathChain lineToLinearHeading(Pose startPose, Pose endPose) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
-                .build();
-    }
-
-    public PathChain lineToConstantHeading(Pose startPose, Pose endPose) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setConstantHeadingInterpolation(endPose.getHeading())
-                .build();
-    }
-
-    public PathChain lineToConstantHeading(Pose startPose, Pose endPose, double zeroPowerAccelerationMultiplier) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setConstantHeadingInterpolation(endPose.getHeading())
-                .setZeroPowerAccelerationMultiplier(zeroPowerAccelerationMultiplier)
-                .build();
     }
 
 }

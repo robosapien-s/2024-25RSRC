@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.controllers;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
+import com.pedropathing.pathgen.PathChain;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -33,6 +35,10 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     SquidToPointTask _squidToPointTask = null;
 
+//    PedroPathingTask _pedroPathingTask = null;
+
+//    boolean _movingToLocation = false;
+
     TaskExecuter _taskExecuter = new TaskExecuter();
 
     public AutoPickupTask(AutoPickupListener listener) {
@@ -60,8 +66,8 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     public Point getTargetPose(Point center) {
         //return new double[] {(240-center.y)*(6.25/480), (320-center.x)*(8.5/640)};
-        return new Point((240-center.y)*(6.25/480), (320-center.x)*(8.5/640));
-        //return new Point((320-center.x)*(8.5/640), (240-center.y)*(6.25/480));
+        return new Point((240-center.y)*(6.25/480), (320-center.x)*(8.5/640)); //original
+//        return new Point((320-center.x)*(8.5/640), (240-center.y)*(6.25/480));
     }
 
     public double[] mapAngleToClawPosition() {
@@ -128,42 +134,47 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
 
         } else if(_didMoveToLocation) {
-            if (!is_pickupStarted) {
-                is_pickupStarted = true;
-                double clawPosition = robot.getClawPosition();
+
+            if(/*PedroPathingTask._doContinueHack == 2*/true) {
+                if (!is_pickupStarted) {
+                    is_pickupStarted = true;
+                    double clawPosition = robot.getClawPosition();
 
 
+                    _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 50, "IntakeAngle", false));
 
-                _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 50, "IntakeAngle", false));
+
+                    _taskExecuter.add(BaseState.createSlideRotationTask(robot, 80, 500, "Arm Angle", false));
+
+                    if (Math.abs(clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN) > .02) {
+                        _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
+                    }
 
 
-                _taskExecuter.add(BaseState.createSlideRotationTask(robot, 80, 500, "Arm Angle", false));
+                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP - .01, 150, "IntakeAngle", false));
 
-                if (Math.abs(clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN) > .02) {
-                    _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
+                    _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
+
+
+                    _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
+
+                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 50, "IntakeAngle", false));
+
+
                 }
+                if (_taskExecuter.isComplete()) {
+//                TODO:  check to see if it has it and maybe try a second time???
 
-
-                _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP-.01, 150, "IntakeAngle", false));
-
-                _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
-
-
-                _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
-
-                _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 50, "IntakeAngle", false));
-
-
-
+                    robot.getFollower().breakFollowing();
+                    _didPickup = true;
+                }
             }
-            if(_taskExecuter.isComplete()) {
-                //TODO:  check to see if it has it and maybe try a second time???
-                _didPickup = true;
-            }
+
+
+            telemetry.addData("Auto Current: ", robot.getPose());
 
         } else if(_didFindSample) {
             _targetLocation = getTargetPose(_closestRec.center);
-            robot.setDriveTrainEnabled(false);
 
             telemetry.addData("AutoPickup: Rect", _closestRec);
             telemetry.addData("AutoPickup: Angle", _closestRec.angle);
@@ -176,7 +187,34 @@ public class AutoPickupTask extends  RobotTaskImpl {
             double rotY = _targetLocation.y*Math.cos(angle)+_targetLocation.x*Math.sin(angle);
 
 
-
+//            if(_pedroPathingTask == null) {
+//                _pedroPathingTask = new PedroPathingTask(
+//                        currentPose,
+//                        new Pose(rotX + currentPose.getX(), rotY + currentPose.getY(), angle),
+//                        3,
+//                        new PedroPathingTask.PedroPathingListener() {
+//                            @Override
+//                            public Follower follower() {
+//                                return robot.getFollower();
+//                            }
+//
+//                            @Override
+//                            public void onUpdate() {
+//                                telemetry.addData("Sample pos in pixels (x,y)", _closestRec.center);
+//                                telemetry.addData("Auto Target: ", new Pose(rotX+currentPose.getX(), rotY+currentPose.getY(), angle));
+//                                telemetry.addData("Amount to Move", new Pose(rotX, rotY, angle));
+//                                telemetry.addData("Auto Current: ", robot.getPose());
+////                                telemetry.addData("Auto Power: ", new Vector3D(x,y,heading));
+//                                robot.updateFollower();
+//                            }
+//                        }
+//                );
+//
+//
+//
+//                _taskExecuter.add(_pedroPathingTask);
+//
+//            }
 
             if(_squidToPointTask == null) {
                 _squidToPointTask = new SquidToPointTask(
@@ -218,6 +256,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
         } else if(hasStarted()) {
             calculateDistanceToSample();
+            robot.setDriveTrainEnabled(false);
         } else if(!hasStarted()) {
 
             robot.setDriveTrainEnabled(false);

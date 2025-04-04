@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
+import org.firstinspires.ftc.teamcode.robot.AngleDrive;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 @Autonomous
@@ -48,13 +49,13 @@ public class leftSideAuto extends LinearOpMode {
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
         follower.setStartingPose(startPose);
         //Path chains here
-        PathChain firstDrop = lineToLinearHeading(startPose, dropPose,2);
-        PathChain firstPickUp = lineToLinearHeading(dropPose, firstPickUpPose,3);
-        PathChain secondDrop = lineToLinearHeading(firstPickUpPose, dropPose,3);
-        PathChain secondPickUp = lineToLinearHeading(dropPose, secondPickUpPose,3);
-        PathChain thirdDrop = lineToLinearHeading(secondPickUpPose, dropPose,3);
-        PathChain thirdPickUp = lineToLinearHeading(dropPose, thirdPickUpPose,3);
-        PathChain fourthDrop = lineToLinearHeading(thirdPickUpPose, dropPose,3);
+        PathChain firstDrop = AngleDrive.lineToLinearHeading(follower, startPose, dropPose,2);
+        PathChain firstPickUp = AngleDrive.lineToLinearHeading(follower, dropPose, firstPickUpPose,3);
+        PathChain secondDrop = AngleDrive.lineToLinearHeading(follower, firstPickUpPose, dropPose,3);
+        PathChain secondPickUp = AngleDrive.lineToLinearHeading(follower, dropPose, secondPickUpPose,3);
+        PathChain thirdDrop = AngleDrive.lineToLinearHeading(follower, secondPickUpPose, dropPose,3);
+        PathChain thirdPickUp = AngleDrive.lineToLinearHeading(follower, dropPose, thirdPickUpPose,3);
+        PathChain fourthDrop = AngleDrive.lineToLinearHeading(follower,thirdPickUpPose, dropPose,3);
 
 
         robotAuto.setIntakeAnglePos(RoboSapiensTeleOp.Params.INTAKE_ANGLE_INIT);
@@ -263,35 +264,5 @@ public class leftSideAuto extends LinearOpMode {
         pathTimer.resetTimer();
     }
 
-    //prob move this to a separate class later
-    public PathChain lineToLinearHeading(Pose startPose, Pose endPose) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
-                .build();
-    }
-
-    public PathChain lineToLinearHeading(Pose startPose, Pose endPose, double ZPAM) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
-                .setZeroPowerAccelerationMultiplier(ZPAM)
-                .build();
-    }
-
-    public PathChain lineToConstantHeading(Pose startPose, Pose endPose) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setConstantHeadingInterpolation(endPose.getHeading())
-                .build();
-    }
-
-    public PathChain lineToConstantHeading(Pose startPose, Pose endPose, double zeroPowerAccelerationMultiplier) {
-        return follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
-                .setConstantHeadingInterpolation(endPose.getHeading())
-                .setZeroPowerAccelerationMultiplier(zeroPowerAccelerationMultiplier)
-                .build();
-    }
 
 }

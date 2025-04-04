@@ -380,6 +380,14 @@ public class Robot {
         drive.setTargetHeading(heading);
     }
 
+    public Follower getFollower() {
+        return ((AngleDrive) drive).getFollower();
+    }
+
+    public void updateFollower() {
+        ((AngleDrive) drive).updateFollower();
+    }
+
     public void setPose(Pose pose) {
         drive.setPose(pose);
     }
@@ -481,7 +489,7 @@ public class Robot {
         slideController.update(telemetry);
 //        dualServoSlideController.update(telemetry);
 
-      //  telemetry.addData("Delta Time", System.currentTimeMillis()-dTime);
+        telemetry.addData("Delta Time", System.currentTimeMillis()-dTime);
         dTime=System.currentTimeMillis();
         if (dTime<minTime) {
             minTime=dTime;

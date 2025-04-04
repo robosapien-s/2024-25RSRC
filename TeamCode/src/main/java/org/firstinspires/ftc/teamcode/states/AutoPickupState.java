@@ -7,6 +7,7 @@ import com.pedropathing.localization.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.AutoPickupTask;
+import org.firstinspires.ftc.teamcode.controllers.PedroPathingTask;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.MultiColorSampleDetector;
@@ -28,7 +29,7 @@ public class AutoPickupState extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
-
+        PedroPathingTask._doContinueHack = 0;
         AutoPickupTask pickupTask = new AutoPickupTask(new AutoPickupTask.AutoPickupListener() {
             @Override
             public Robot getRobot() {
@@ -64,6 +65,14 @@ public class AutoPickupState extends BaseState {
                 robot.switchState(State.INTAKINGCLAW);
             }
         }
+
+        if(joystick.gamepad1GetB()) {
+            PedroPathingTask._doContinueHack++;
+        }
+
+
+
+
 
         if (taskArrayList.isEmpty()) {
             robot.switchState(State.INTAKINGCLAW);

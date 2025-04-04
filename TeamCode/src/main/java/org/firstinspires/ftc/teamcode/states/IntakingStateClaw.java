@@ -152,20 +152,20 @@ public class IntakingStateClaw extends BaseState {
             robot.switchState(State.WALLPICKUP);
         }
 
-        else if(joystick.gamepad1GetX()) {
-
-            robot.setRobotSpeedNormal();
-            ;
-
-            taskArrayList.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
-                @Override
-                public void execute() {
-                    robot.switchState(State.DROPPING_L2);
-                }
-            }, "Set Drop State"));
-
-
-        }
+//        else if(joystick.gamepad1GetX()) {
+//
+//            robot.setRobotSpeedNormal();
+//            ;
+//
+//            taskArrayList.add( new ExecuteOnceTask(new ExecuteOnceTask.ExecuteListener() {
+//                @Override
+//                public void execute() {
+//                    robot.switchState(State.DROPPING_L2);
+//                }
+//            }, "Set Drop State"));
+//
+//
+//        }
 
         if (joystick.gamepad1GetDUp()) {
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);

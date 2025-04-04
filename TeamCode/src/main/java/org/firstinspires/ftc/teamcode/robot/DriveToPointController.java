@@ -14,12 +14,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
 public class DriveToPointController {
 
-//    public static double xKp = .45;
-//    public static double xKd = 2; //PID values
-//    public static double xKi = 0;
+    public static double xKp = .25;
+    public static double xKd = .3; //PID values
+    public static double xKi = 0;
 
-    public static double xKp = 0.3;
-    public static double xKd = 8; //SQUID VALUES
+//    public static double xKp = 0.3;
+//    public static double xKd = 8; //SQUID VALUES
 
     //public static double xKp = .22;
     //public static double xKd = 18;
@@ -31,35 +31,36 @@ public class DriveToPointController {
     //public static double yKd = 18;
 //    public static double yKi = 0;
 
-    public static double angleKp = 0.7;
-    public static double angleKd = 0.4; //SQUID values
+//    public static double angleKp = 0.7;
+//    public static double angleKd = 0.4; //SQUID values
 //    public static double angleKi = 0;
-//    public static double angleKp = .75;
-//    public static double angleKd = 40; //PID values
-//    public static double angleKi = 0;
+
+    public static double angleKp = 2;
+    public static double angleKd = 0; //PID values
+    public static double angleKi = 0;
 //
 
 
-//    final BasicPID xPid;
-//    final BasicPID yPid;
-//    final BasicPID anglePidInner;
-//    final AngleController anglePid;
+    final BasicPID xPid;
+    final BasicPID yPid;
+    final BasicPID anglePidInner;
+    final AngleController anglePid;
 
 
-    final SquidController xSquid;
-    final SquidController ySquid;
-    final SquidController angleSquid;
+//    final SquidController xSquid;
+//    final SquidController ySquid;
+//    final SquidController angleSquid;
 
     public DriveToPointController() {
 
-//        xPid = new BasicPID(new PIDCoefficients(xKp,xKi,xKd));
-//        yPid = new BasicPID(new PIDCoefficients(xKp,angleKi,xKd));
-//        anglePidInner = new BasicPID(new PIDCoefficients(angleKp,0,angleKd));
-//        anglePid = new AngleController(anglePidInner);
+        xPid = new BasicPID(new PIDCoefficients(xKp,xKi,xKd));
+        yPid = new BasicPID(new PIDCoefficients(xKp,xKi,xKd));
+        anglePidInner = new BasicPID(new PIDCoefficients(angleKp,0,angleKd));
+        anglePid = new AngleController(anglePidInner);
 
-        xSquid = new SquidController(xKp, xKd);
-        ySquid = new SquidController(xKp, xKd);
-        angleSquid = new SquidController(angleKp, angleKd);
+//        xSquid = new SquidController(xKp, xKd);
+//        ySquid = new SquidController(xKp, xKd);
+//        angleSquid = new SquidController(angleKp, angleKd);
 
 
     }
@@ -67,16 +68,16 @@ public class DriveToPointController {
     public Vector3D calculate(double xTarget, double yTarget, double angleTarget, Pose current, Telemetry telemetry) {
         double angle = angleWrap(current.getHeading());
 
-        double xPower = xSquid.calculate(xTarget, current.getX());
-        double yPower = -ySquid.calculate(yTarget, current.getY());
+//        double xPower = xSquid.calculate(xTarget, current.getX());
+//        double yPower = -ySquid.calculate(yTarget, current.getY());
+//
+//
+//        double anglePower = -angleSquid.calculate(angleTarget, angleWrap(angle));
 
 
-        double anglePower = -angleSquid.calculate(angleTarget, angleWrap(angle));
-
-
-//        double xPower = xPid.calculate(xTarget, current.getX());
-//        double yPower = -yPid.calculate(yTarget, current.getY());
-//        double anglePower = -anglePid.calculate(angleTarget, angleWrap(current.getHeading()));
+        double xPower = xPid.calculate(xTarget, current.getX());
+        double yPower = -yPid.calculate(yTarget, current.getY());
+        double anglePower = -anglePid.calculate(angleTarget, angleWrap(current.getHeading()));
 
         double xRotated = xPower*Math.cos(angle) - yPower*Math.sin(angle);
         double yRotated = xPower*Math.sin(angle) + yPower*Math.cos(angle);

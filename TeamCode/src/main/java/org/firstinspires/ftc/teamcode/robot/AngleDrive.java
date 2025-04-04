@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import androidx.annotation.NonNull;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
-import com.pedropathing.localization.localizers.PinpointLocalizer;
+import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.PathChain;
+import com.pedropathing.pathgen.Point;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -18,7 +21,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.roadrunner.Localizer;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
@@ -43,7 +45,7 @@ public class AngleDrive implements IDrive {
     double rotateAngleOffset = 0;
 
 
-    Follower localizer = null;
+    Follower follower = null;
     boolean isLerpEnabled;
 
     private final PIDEx pidController;
@@ -51,9 +53,9 @@ public class AngleDrive implements IDrive {
     private final PIDEx pidXController;
     private final PIDEx pidYController;
 
-    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Follower localizer) {
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Follower follower) {
         this(hardwareMap, isLerpEnabled);
-        this.localizer = localizer;
+        this.follower = follower;
     }
     public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled) {
         if (Robot.resetEncoders) {
@@ -134,16 +136,25 @@ public class AngleDrive implements IDrive {
     }
 
 
+    public Follower getFollower() {
+        return follower;
+    }
+
+    public void updateFollower() {
+        follower.update();
+    }
+
+
     public void setPose(Pose pose) {
-        if(localizer != null) {
-            localizer.setPose(pose);
+        if(follower != null) {
+            follower.setPose(pose);
         }
     }
 
     public Pose getPose() {
-        if(localizer != null) {
-            localizer.update();
-            return localizer.getPose();
+        if(follower != null) {
+            follower.update();
+            return follower.getPose();
         } else {
             return new Pose(0,0,0);
         }
@@ -176,8 +187,8 @@ public class AngleDrive implements IDrive {
     @Override
     public void updateRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
 
-        if(localizer != null) {
-            localizer.update();
+        if(follower != null) {
+            follower.update();
         }
 
 
@@ -230,7 +241,7 @@ public class AngleDrive implements IDrive {
     }
 
     void MoveMecanumPidToPoint(double xRotated, double yRotated, double anglePower) {
-        localizer.update();
+        follower.update();
         frontLeftMotor.setPower(xRotated + yRotated + anglePower);
         backLeftMotor.setPower(xRotated - yRotated + anglePower);
         frontRightMotor.setPower(xRotated - yRotated - anglePower);
@@ -303,4 +314,65 @@ public class AngleDrive implements IDrive {
             return angle;
         }
     }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param endPose
+     * @param ZPAM
+     * @return PathChain
+     */
+
+    public static PathChain lineToLinearHeading(@NonNull Follower follower, Pose startPose, Pose endPose, double ZPAM) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
+                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
+                .setZeroPowerAccelerationMultiplier(ZPAM)
+                .build();
+    }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param endPose
+     * @return PathChain
+     */
+    public static PathChain lineToLinearHeading(@NonNull Follower follower, Pose startPose, Pose endPose) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
+                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
+                .build();
+    }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param endPose
+     *
+     * @return PathChain
+     */
+
+    public static PathChain lineToConstantHeading(@NonNull Follower follower, Pose startPose, Pose endPose) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .build();
+    }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param endPose
+     * @param ZPAM
+     * @return PathChain
+     */
+
+    public static PathChain lineToConstantHeading(@NonNull Follower follower, Pose startPose, Pose endPose, double ZPAM) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPose), new Point(endPose)))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .setZeroPowerAccelerationMultiplier(ZPAM)
+                .build();
+    }
+
 }
