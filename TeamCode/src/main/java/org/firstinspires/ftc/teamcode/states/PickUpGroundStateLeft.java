@@ -39,6 +39,6 @@ public class PickUpGroundStateLeft extends BaseState {
 
     @Override
     public State getState() {
-        return State.PICKUP_GROUND;
+        return State.PICKUP_GROUND_LEFT;
     }
 }

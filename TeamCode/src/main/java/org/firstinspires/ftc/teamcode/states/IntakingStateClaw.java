@@ -42,12 +42,12 @@ public class IntakingStateClaw extends BaseState {
             robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
             robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY);
 
-        } else if (prevState.getState() == State.SPECIMEN_HANG) {
-            RobotTaskSeries transferSeries = new RobotTaskSeries();
+        } else if (prevState.getState() == State.SPECIMEN_HANG_FRONT) {
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
 
-//            transferSeries.add();
+            taskArrayList.add(createSlideTask(robot, 0, 300, "Slide", false));
 
-            taskArrayList.add(transferSeries);
+            taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Rotation", false));
         } else if (prevState.getState() == State.PICKUP_GROUND_LEFT) {
             robot.setSlideTargetPosition(70);
         } else if (prevState.getState() == State.DROPPING_L2) {
@@ -62,9 +62,10 @@ public class IntakingStateClaw extends BaseState {
 
 
         } else {
-            RobotTaskSeries transferSeries = new RobotTaskSeries();
-
-            taskArrayList.add(transferSeries);
+            robot.setSlideTargetPosition(70);
+            robot.setSlideRotationPosition(0);
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);
+            robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY);
         }
     }
 
@@ -166,6 +167,17 @@ public class IntakingStateClaw extends BaseState {
 //
 //
 //        }
+
+
+        else if(joystick.gamepad1GetX()) {
+
+            robot.setRobotSpeedNormal();
+
+
+            robot.switchState(State.SPECIMEN_HANG_FRONT);
+
+
+        }
 
         if (joystick.gamepad1GetDUp()) {
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);

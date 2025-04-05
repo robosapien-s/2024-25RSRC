@@ -37,6 +37,8 @@ import java.util.function.Supplier;
 
 public class Robot {
 
+    public boolean isAuto;
+
     public static boolean resetEncoders = true;
 
 
@@ -88,10 +90,18 @@ public class Robot {
     DriveToPointController driveController = new DriveToPointController();
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
-        this(hardwareMap, gamepad1, gamepad2, telemetry, false);
+        this(hardwareMap, gamepad1, gamepad2, telemetry, false, null);
     }
 
     public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isAuto) {
+        this(hardwareMap, gamepad1, gamepad2, telemetry, isAuto, null);
+    }
+
+
+    public Robot(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isAuto, Follower inFollower) {
+
+        this.isAuto = isAuto;
+
         joystick = new JoystickWrapper(gamepad1, gamepad2);
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
@@ -127,6 +137,7 @@ public class Robot {
         instanceStateMap.put(State.AUTO_DRIVE_TEST, () -> new AutoDriveTestState(joystick));
         instanceStateMap.put(State.PICKUP_GROUND_LEFT, () -> new PickUpGroundStateLeft(joystick));
         instanceStateMap.put(State.AUTO_PICKUP, () -> new AutoPickupState(joystick));
+        instanceStateMap.put(State.SPECIMEN_HANG_FRONT, () -> new SpecimenHangFrontState(joystick));
 
 
         /*
@@ -144,10 +155,16 @@ public class Robot {
         switchState(State.INTAKINGCLAW);
         if (!isAuto) {
             double startingHeading = Math.toRadians(90);
-            Follower localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
-            drive = new AngleDrive(hardwareMap, false, localizer);
+            Follower follower;
+            if (inFollower == null) {
+                follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
+            } else {
+                follower = inFollower;
+            }
+            drive = new AngleDrive(hardwareMap, false, follower);
         } else {
-            drive = null;
+            drive = new AngleDrive(hardwareMap, false, inFollower);
+            setDriveTrainEnabled(false);
         }
 
         resetEncoders = true;
@@ -572,5 +589,9 @@ public class Robot {
         }
         currentState = Objects.requireNonNull(instanceStateMap.get(newState)).get();
         currentState.initialize(this, prevState);
+    }
+
+    public boolean getIsAuto() {
+        return isAuto;
     }
 }

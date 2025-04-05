@@ -20,14 +20,19 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double CLAW_OPEN = .9;
         public static double CLAW_CLOSE = .4;
 
-        public static double INTAKE_ANGLE_INIT = 0.575;
-//        public static double INTAKE_ANGLE_START = .42;
-        public static double INTAKE_ANGLE_BUCKET = 0.44;
-        public static double INTAKE_ANGLE_READY =.40;
-        public static double INTAKE_ANGLE_PICKUP = .305;
-        public static double INTAKE_ANGLE_CAMERA = 0.35;
+
+        public static double INTAKE_ANGLE_OFFSET=0;
+        public static double INTAKE_ANGLE_INIT = 0.575 + RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+//        public static double INTAKE_ANGLE_START = .42 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_BUCKET = 0.44+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.44 + Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_READY =.40+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_PICKUP = .305+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_CAMERA = 0.35+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
 
         public static double[] ROT_AND_ANGLE_BACK = {1.0, 0.03};
+
+        public static double[] ROT_AND_ANGLE_SPECIMEN_FRONT = {0.606, .835};
 
         public static double[] ROT_AND_ANGLE_BUCKET = {1.0, 0.03};
 
@@ -47,21 +52,8 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_BASKET = {1, 0.4489};
 
-        public static int SLIDE_ROTATION_INTAKE_INITIAL = 200;
+        public static int SLIDE_SPECIMEN_FRONT_DROP_POSITION = 1000;
 
-        public static int SLIDE_POSITION = 140;
-
-        public static int SLIDE_TRANSFER_POSITION = 0;
-
-        public static int SLIDE_MIDDLE_POSITION = 500;
-
-        public static int SLIDE_WALL_POSITION = 200;
-
-        public static int SLIDE_DOWN_POSITION = 0;
-
-        public static int SLIDE_HANG_PREP_POSITION = 1030;
-
-        public static int SLIDE_HANG_DROP_POSITION = 600;
 
         public static int SLIDE_DROP_L1 = 1000;
 
@@ -70,6 +62,8 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static int SLIDE_MAX_POSITION = 880;
 
         public static int SLIDE_MIN_POSITION = 70;
+
+        public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 600;
 
         public static int SLIDE_ROTATION_DROP_POSITION = 1400;
 

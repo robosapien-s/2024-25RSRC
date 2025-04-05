@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class SpecimenHangState extends BaseState {
-    boolean angle_ready = false;
 
     public static Pose2d _lastPose = null;
     boolean didLowerHeight = false;
@@ -25,17 +24,6 @@ public class SpecimenHangState extends BaseState {
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
-
-        taskArrayList.add(
-                new ExecuteOnceTask(
-                        new ExecuteOnceTask.ExecuteListener() {
-                            @Override
-                            public void execute() {
-                                angle_ready = false;
-                            }
-                        }, "Substate Transition"
-                )
-        );
 
         if (prevState.getState() == State.INTAKINGCLAW) {
             //use taskArrayList.add();
@@ -85,8 +73,7 @@ public class SpecimenHangState extends BaseState {
         }
 
 
-        if (angle_ready)
-            robot.autoHorizontalPosHang();
+
 
 
         if(joystick.gamepad1GetRightBumperRaw()) {

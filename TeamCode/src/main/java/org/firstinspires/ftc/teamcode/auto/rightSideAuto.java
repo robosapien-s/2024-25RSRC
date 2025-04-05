@@ -68,7 +68,7 @@ public class rightSideAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        robotAuto = new RobotAuto(hardwareMap, gamepad1, gamepad2, telemetry);
+        robotAuto = new RobotAuto(hardwareMap, gamepad1, gamepad2, telemetry, follower);
 
         joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
 

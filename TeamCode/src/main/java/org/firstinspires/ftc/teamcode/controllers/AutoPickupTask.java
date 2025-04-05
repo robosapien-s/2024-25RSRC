@@ -15,6 +15,8 @@ import org.opencv.core.RotatedRect;
 
 public class AutoPickupTask extends  RobotTaskImpl {
 
+    boolean isAuto;
+
     AutoPickupTask.AutoPickupListener _listener;
     boolean _started = false;
     boolean _isComplete = false;
@@ -41,8 +43,9 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     TaskExecuter _taskExecuter = new TaskExecuter();
 
-    public AutoPickupTask(AutoPickupListener listener) {
+    public AutoPickupTask(AutoPickupListener listener, boolean isAuto) {
         _listener = listener;
+        this.isAuto = isAuto;
     }
 
     public interface AutoPickupListener {
@@ -103,7 +106,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
         long timeDelay = System.currentTimeMillis() - delayTimeHack;
 
-        if( timeDelay > 2000 && cloestRect.size.width != 0) {
+        if( timeDelay > 1000 && cloestRect.size.width != 0) {
 
             _closestRec = cloestRect;
             _didFindSample = true;
@@ -250,7 +253,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 //                telemetry.addData("Auto Target: ", new Pose(rotX, rotY, angle));
 //                telemetry.addData("Auto Current: ", robot.getPose());
 //             telemetry.addData("Auto Power: ");
-                robot.setDriveTrainEnabled(true);
+                robot.setDriveTrainEnabled(!isAuto);
                 _didMoveToLocation = true;
             }
 
@@ -298,7 +301,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     @Override
     public void dispose() {
-        _listener.getRobot().setDriveTrainEnabled(true); //??
+        _listener.getRobot().setDriveTrainEnabled(!isAuto); //??
         _detector.stopStreaming();
         _detector = null;
     }

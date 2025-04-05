@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -25,8 +26,8 @@ public class RobotAuto {
     RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
     RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-    public RobotAuto(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
-        robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry, true);
+    public RobotAuto(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, Follower follower) {
+        robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry, true, follower);
         Robot.resetEncoders = false;
 
         robot.setYawOverride(new Robot.YawOverrride() {
@@ -100,6 +101,11 @@ public class RobotAuto {
     public void setIntakeAnglePos (double pos) {
         robot.setIntakeAnglePosition(pos);
     }
+
+    public IRobot.State getState() {
+        return robot.getCurrentState();
+    }
+
 
 
 

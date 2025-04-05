@@ -35,7 +35,7 @@ public class AutoPickupState extends BaseState {
             public Robot getRobot() {
                 return robot;
             }
-        });
+        }, robot.getIsAuto());
 
         taskArrayList.add(pickupTask);
     }
