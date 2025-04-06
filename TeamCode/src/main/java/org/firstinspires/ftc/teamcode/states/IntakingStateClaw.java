@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
-import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
@@ -11,7 +9,9 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class IntakingStateClaw extends BaseState {
 
-    int clawRotationStateHack = 0;
+//    int clawRotationStateHack = 0;
+
+    boolean leftVertical = true;
 
     int clawStateHack = 0; //0 = ready, 1 = pickup, 2 = transfer
 
@@ -32,7 +32,7 @@ public class IntakingStateClaw extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         robot.setSlideMinPosition(110);
-        robot.setSlideMaxPosition(1290);
+        robot.setSlideMaxPosition(RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION);
 
         if(prevState == null) {
             //use robot.set directly, not a task series
@@ -43,11 +43,16 @@ public class IntakingStateClaw extends BaseState {
             robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY);
 
         } else if (prevState.getState() == State.SPECIMEN_HANG_FRONT) {
-            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
+            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "Open Claw", false));
 
-            taskArrayList.add(createSlideTask(robot, 0, 300, "Slide", false));
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 100, "IntakeAngle", false));
 
-            taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Rotation", false));
+            taskArrayList.add(createSlideTask(robot, 0, 100, "Slide", false));
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngle", false));
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 100, "RotAndAngle", false));
+
+
+            taskArrayList.add(createSlideRotationTask(robot, 0, 0, "Rotation", false));
         } else if (prevState.getState() == State.PICKUP_GROUND_LEFT) {
             robot.setSlideTargetPosition(70);
         } else if (prevState.getState() == State.DROPPING_L2) {
@@ -61,6 +66,8 @@ public class IntakingStateClaw extends BaseState {
             taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Rotation", false));
 
 
+        } else if (prevState.getState() == State.PICKUP_GROUND) {
+            robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
         } else {
             robot.setSlideTargetPosition(70);
             robot.setSlideRotationPosition(0);
@@ -79,6 +86,8 @@ public class IntakingStateClaw extends BaseState {
         if(joystick.gamepad1GetY()) {
             robot.switchState(State.AUTO_PICKUP);
         } else if(joystick.gamepad1GetA()) {
+
+            leftVertical = true;
 
             robot.setRobotSpeedNormal();
 
@@ -174,7 +183,7 @@ public class IntakingStateClaw extends BaseState {
             robot.setRobotSpeedNormal();
 
 
-            robot.switchState(State.SPECIMEN_HANG_FRONT);
+            robot.switchState(State.DROPPING_L2);
 
 
         }
@@ -186,7 +195,14 @@ public class IntakingStateClaw extends BaseState {
         } else if (joystick.gamepad1GetDLeft()) {
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT);
         } else if (joystick.gamepad1GetDDown()) {
-            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL);
+            if (!leftVertical) {
+                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT);
+            } else {
+                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
+            }
+
+            leftVertical = !leftVertical;
+
         }
 
         robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-100)+joystick.gamepad1GetRightTrigger()*100));

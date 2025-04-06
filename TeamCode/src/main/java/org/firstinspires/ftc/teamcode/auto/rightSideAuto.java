@@ -8,13 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
-import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.PathChain;
-import com.pedropathing.pathgen.Point;
-import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
+import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.*;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
@@ -27,13 +25,13 @@ public class rightSideAuto extends LinearOpMode {
 
     private int pathState;
 
-    private final Pose autoStartPose = new Pose(8.5, 76.5, Math.toRadians(0));
+    private final Pose autoStartPose = new Pose(7.3, 75.6, Math.toRadians(0));
 
-    private final Pose preloadHangPose = new Pose(30.25, 74, Math.toRadians(0));
+    private final Pose preloadHangPose = new Pose(30, 74, Math.toRadians(0));
 
-    private final Pose pickup1Pose = new Pose(30.5, 48.25, Math.toRadians(-60));
+    private final Pose pickup1Pose = new Pose(32, 48.25, Math.toRadians(-60));
 
-    private final Pose dropoff1Pose = new Pose(29, 45.5, Math.toRadians(-144));
+    private final Pose dropoff1Pose = new Pose(29, 48.25, Math.toRadians(-144));
 
     private final Pose pickup2pose = new Pose(29.5, 41, Math.toRadians(-60));
 
@@ -115,13 +113,15 @@ public class rightSideAuto extends LinearOpMode {
         PathChain hang4 = lineToConstantHeading(follower, pickUpWall2Pose, hang4Pose);
         PathChain park = lineToConstantHeading(follower, hang4Pose, pickUpWallPose);
 
-//        robotAuto.setIntakeClawAnglePos(RoboSapiensTeleOp.Params.INTAKE_ANGLE_TRANSFER);
+
+        robotAuto.setIntakeAnglePos(RoboSapiensTeleOp.Params.INTAKE_ANGLE_INIT);
+        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_BASKET);
         while (!opModeIsActive() && !isStopRequested()) {
             if (joystickWrapper.gamepad1GetA()) {
                 if (!clawOpen) {
-//                    robotAuto.openClaw();
+                    robotAuto.openClaw();
                 } else {
-//                    robotAuto.closeClaw();
+                    robotAuto.closeClaw();
                 }
 
                 clawOpen = !clawOpen;
@@ -141,8 +141,7 @@ public class rightSideAuto extends LinearOpMode {
 
             switch(pathState) {
                 case 0:
-
-//                    robotAuto.setState(IRobot.State.SPECIMEN_HANG);
+                    robotAuto.setState(IRobot.State.SPECIMEN_HANG_FRONT);
 
                     follower.followPath(hangPreload, true);
                     setPathState(pathState+1);
@@ -150,7 +149,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 1:
                     if (!follower.isBusy()) {
-//                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
                         robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
@@ -166,17 +165,17 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 3:
                     if (!follower.isBusy()) {
-//                        robotAuto.setRotationalPos(1650);
-//                        robotAuto.setIntakeRotServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16);
-                        robotAuto.startWait(750);
+                        robotAuto.setSlidePos(1140);
+                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
+                        robotAuto.startWait(500);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 4:
                     if (robotAuto.checkWait()) {
-//                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //first pickup
-                        robotAuto.startWait(400);
+                        robotAuto.setState(IRobot.State.PICKUP_GROUND);
+                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
@@ -191,7 +190,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 6:
                     if (!follower.isBusy()) {
-//                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
                         robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
@@ -207,7 +206,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 8:
                     if (robotAuto.checkWait()) {
-//                        robotAuto.setIntakeRotServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16);
+                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT);
                         setPathState(pathState+1);
                     }
                     break;
@@ -222,8 +221,8 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 10:
                     if (robotAuto.checkWait()) {
-//                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup 2
-                        robotAuto.startWait(500);
+                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup 2
+                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
@@ -237,7 +236,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 12:
                     if (!follower.isBusy()) {
-//                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
                         robotAuto.startWait(100);
                         setPathState(pathState+1);
                     }
@@ -253,7 +252,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 14:
                     if (robotAuto.checkWait()) {
-//                        robotAuto.setIntakeRotServo(RoboSapiensTeleOp.Params.INTAKE_ROT_SERVO_DEFAULT-.16);
+                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT);
                         setPathState(pathState+1);
                     }
                     break;
@@ -267,15 +266,15 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 16:
                     if (robotAuto.checkWait()) {
-//                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup3
-                        robotAuto.startWait(400);
+                        robotAuto.setState(IRobot.State.PICKUP_GROUND); //pickup3
+                        robotAuto.startWait(600);
                         setPathState(pathState+1);
                     }
                     break;
 
                 case 17:
                     if (robotAuto.checkWait()) {
-//                        robotAuto.setRotationalPos(1150);
+                        robotAuto.setSlidePos(800);
                         follower.followPath(dropoff3, true);
                         setPathState(pathState+1);
                     }
@@ -283,7 +282,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 18:
                     if (!follower.isBusy()) {
-//                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
+                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
                         robotAuto.startWait(50);
                         setPathState(pathState+1);
                     }
@@ -292,8 +291,8 @@ public class rightSideAuto extends LinearOpMode {
                 case 19:
                     if (robotAuto.checkWait()) {
 //                        robotAuto.setState(IRobot.State.WALLPICKUP);
-                        follower.followPath(lineUpWall1, true);
-                        setPathState(pathState+1);
+//                        follower.followPath(lineUpWall1, true);
+//                        setPathState(pathState+1);
                     }
                     break;
                 case 20:
@@ -479,7 +478,6 @@ public class rightSideAuto extends LinearOpMode {
             telemetry.addData("x", follower.getPose().getX());
             telemetry.addData("y", follower.getPose().getY());
             telemetry.addData("heading", follower.getPose().getHeading());
-            int i = 1+1;
 
             robotAuto.execute();
 //            telemetry.update();

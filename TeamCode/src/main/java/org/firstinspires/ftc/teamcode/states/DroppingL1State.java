@@ -76,6 +76,10 @@ public class DroppingL1State extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
+        if (joystick.gamepad2GetA()) {
+            robot.switchState(State.SERVO_TEST);
+        }
+
 
         if(joystick.gamepad1GetX()) {
 

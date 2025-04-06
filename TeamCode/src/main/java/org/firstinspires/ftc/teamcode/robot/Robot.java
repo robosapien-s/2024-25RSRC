@@ -147,8 +147,8 @@ public class Robot {
         */
 
 
-        WallPickUpState._lastPose = null;
-        SpecimenHangState._lastPose = null;
+//        WallPickUpState._lastPose = null;
+//        SpecimenHangState._lastPose = null;
         DroppingL1State._lastPose = null;
 
 
@@ -514,7 +514,7 @@ public class Robot {
 
         //telemetry.addData("Min Time", minTime);
 
-        //telemetry.update();
+        telemetry.update();
 
     }
 

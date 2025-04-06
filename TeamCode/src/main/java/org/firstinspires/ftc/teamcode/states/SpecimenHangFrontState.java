@@ -25,12 +25,16 @@ public class SpecimenHangFrontState extends BaseState {
 
         taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN_FRONT, 0,"", false));
         taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN_FRONT, 0,"", false));
-        taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION,300, "", false));
+        taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION,200, "", false));
         taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_FRONT_DROP_POSITION, 0, "", false));
     }
 
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
+
+        if (joystick.gamepad2GetA()) {
+            robot.switchState(State.SERVO_TEST);
+        }
 
         if(joystick.gamepad1GetA()) {
             robot.switchState(State.INTAKINGCLAW);
@@ -53,7 +57,7 @@ public class SpecimenHangFrontState extends BaseState {
             robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*20));
         }
 
-        if (joystick.gamepad1GetLeftBumperDown()) {
+        if (joystick.gamepad1GetLeftBumperRaw()) {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-20));
         } else {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*20));

@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 public class WallPickUpState extends BaseState {
 
 
-    public static Pose2d _lastPose = null;
+//    public static Pose2d _lastPose = null;
 
-    boolean angle_ready = false;
+//    boolean angle_ready = false;
     boolean isDriftModeEnabled = false;
     public WallPickUpState(JoystickWrapper joystick) {
         super(joystick);
@@ -27,72 +27,66 @@ public class WallPickUpState extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
-        RobotTaskSeries transferParallel = new RobotTaskSeries();
 
-
-        transferParallel.add(
-                new ExecuteOnceTask(
-                        new ExecuteOnceTask.ExecuteListener() {
-                            @Override
-                            public void execute() {
-                                angle_ready = false;
-                            }
-                        }, "Substate Transition"
-                )
-        );
 
         //taskArrayList.add(createClawHorizontalAngleTask(robot, RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER,1,"ClawHorizontalAngle",false));
 
         if(prevState.getState() == State.INTAKINGCLAW) {
-            //use transferParallel.add();
+            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_WALL_POSITION, 0, "Slide", false));
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
+            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
+
         } else if (prevState.getState() == State.SPECIMEN_HANG) {
-
-
-
-            RobotTaskSeries transferMainSeries = new RobotTaskSeries();
-
-            RobotTaskParallel subParallel = new RobotTaskParallel();
-
-
-
-
-
-            transferMainSeries.add(subParallel);
-
-
-            if(_lastPose != null){
-//                transferMainSeries.add(createWaitTask(robot , 200, "Wait for final move" ));
-                transferMainSeries.add(new DriveToPointTask(robot, new Vector3D(_lastPose.position.x, _lastPose.position.y-1.2, _lastPose.heading.toDouble()), 2000, 1, 0));
-            }
-
-
-
-            transferParallel.add(transferMainSeries);
-
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN_DOWN, 0, "Rot and Angle", false));
+            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DOWN_POSITION, 100, "Slide", false));
+            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "Claw Open", false));
+            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_WALL_POSITION, 0, "Slide", false));
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
+            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
 
         } else {
-           //use transferParalle.add();
+            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_WALL_POSITION, 0, "Slide", false));
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
+            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
         }
 
 
-        taskArrayList.add(transferParallel);
     }
 
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-        if(joystick.gamepad1GetDUp()) {
+        if (joystick.gamepad2GetA()) {
+            robot.switchState(State.SERVO_TEST);
+        }
 
+        if (joystick.gamepad1GetA()) {
+            robot.switchState(State.INTAKINGCLAW);
+        }
 
+        if (joystick.gamepad1GetB()) {
+            robot.switchState(State.SPECIMEN_HANG);
         }
 
 
 
         if(joystick.gamepad1GetRightBumperRaw()) {
-            robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
+            robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-20));
         } else {
-            robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
+            robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*20));
         }
+
+        if(joystick.gamepad1GetLeftBumperRaw()) {
+            robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-20));
+        } else {
+            robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*20));
+        }
+
+
+
 
 //        if (joystick.gamepad1GetDLeft()) {
 //            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_LEFT);
@@ -102,10 +96,8 @@ public class WallPickUpState extends BaseState {
 //            robot.setClawHorizontalAnglePosition(RoboSapiensTeleOp.Params.CLAW_HORIZONTAL_ANGLE_CENTER);
 //        }
 
-        if (angle_ready)
-            robot.autoHorizontalPosWall(telemetry);
 
-        telemetry.addData("angle_ready", angle_ready);
+//        telemetry.addData("angle_ready", angle_ready);
 
         executeTasks(telemetry);
     }

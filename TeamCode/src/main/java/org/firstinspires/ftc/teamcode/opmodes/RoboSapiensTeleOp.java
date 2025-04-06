@@ -22,52 +22,69 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
 
         public static double INTAKE_ANGLE_OFFSET=0;
-        public static double INTAKE_ANGLE_INIT = 0.575 + RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-//        public static double INTAKE_ANGLE_START = .42 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_BUCKET = 0.44+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.44 + Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_INIT = 0.225 + RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+//        public static double INTAKE_ANGLE_START = .38 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_BUCKET = 0.425+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.39 + Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_READY =.40+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_PICKUP = .305+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_CAMERA = 0.35+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_PICKUP = .515+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_CAMERA = 0.45+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_SPECIMEN = 0.4575 + Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_WALL_PICKUP = .4575+Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_SWEEP = 0.565 + Params.INTAKE_ANGLE_OFFSET;
 
-        public static double[] ROT_AND_ANGLE_BACK = {1.0, 0.03};
 
-        public static double[] ROT_AND_ANGLE_SPECIMEN_FRONT = {0.606, .835};
-
-        public static double[] ROT_AND_ANGLE_BUCKET = {1.0, 0.03};
+        public static double[] ROT_AND_ANGLE_SPECIMEN_FRONT = {0.70, .3};
 
         public static double[] ROT_AND_ANGLE_CAMERA = {0.575, 0.885};
 
-        public static double[] ROT_AND_ANGLE_PREP = {0.606, .835}; //{ 0.5678, .875}; // R / L
+        public static double[] ROT_AND_ANGLE_PREP = {0.0978, .8894}; //{ 0.0978, .8894}; // R / L
 
-        //public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.513, 0.695};
-        public static double[] ROT_AND_ANGLE_PICKUP_HORIZONTAL = {0.59, 0.85};//{ 0.5678, .875}; // R / L
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT = {0, 0.7866};
+
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT = {0.2172, 1};
+
+        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.1624 , 0.9494};
+
+        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.0268, 0.8138};
+
+        public static double[] ROT_AND_ANGLE_BASKET = {.89, .11};
+
+        public static double[] ROT_AND_ANGLE_SPECIMEN = {.97, 0.03};
+
+        public static double[] ROT_AND_ANGLE_SPECIMEN_DOWN = {1, 0};
+
+        public static double[] ROT_AND_ANGLE_WALL_PICKUP = {.2583, 0.1639};
 
 
-        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {0.505, 0.745};
+        public static int SLIDE_SPECIMEN_FRONT_DROP_POSITION = 590;
 
-        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.655 , 0.86};
+        public static int SLIDE_SPECIMEN_DROP_POSITION = 592;
 
-        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.56, 0.79};
+        public static int SLIDE_SPECIMEN_DOWN_POSITION = 220;
 
-        public static double[] ROT_AND_ANGLE_BASKET = {1, 0.4489};
-
-        public static int SLIDE_SPECIMEN_FRONT_DROP_POSITION = 1000;
-
+        public static int SLIDE_WALL_POSITION = 110;
 
         public static int SLIDE_DROP_L1 = 1000;
 
-        public static int SLIDE_DROP_L2 = 1900;
+        public static int SLIDE_DROP_L2 = 1850;
 
-        public static int SLIDE_MAX_POSITION = 880;
+        public static int SLIDE_MAX_POSITION = 1140;
 
         public static int SLIDE_MIN_POSITION = 70;
 
-        public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 600;
 
-        public static int SLIDE_ROTATION_DROP_POSITION = 1400;
+        public static int SLIDE_ROTATION_SPECIMEN_POSITION = 1345;
 
-        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1350;
+        public static int SLIDE_ROTATION_WALL_POSITION = 218;
+
+        public static int SLIDE_ROTATION_WALL_MIDDLE_POSITION = 320;
+
+        public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 590;
+
+        public static int SLIDE_ROTATION_DROP_POSITION = 1345; //might help prevent tipping?
+
+        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1295;
 
         public static int SLIDE_ROTATION_MIN_POSITION = 0;
 

@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.controllers;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
-import com.pedropathing.pathgen.PathChain;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -78,17 +76,17 @@ public class AutoPickupTask extends  RobotTaskImpl {
         if(_closestRec.size.width>=_closestRec.size.height) {
 
             if(_closestRec.angle>70) {
-                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL;
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP;
             } else if(_closestRec.angle<20) {
-                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL;
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT;
             } else {
                 return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT;
             }
         } else {
             if(_closestRec.angle<20) {
-                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_HORIZONTAL;
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP;
             } else if(_closestRec.angle>70) {
-                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL;
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT;
             } else {
                 return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_RIGHT;
             }
@@ -147,14 +145,14 @@ public class AutoPickupTask extends  RobotTaskImpl {
                     _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 50, "IntakeAngle", false));
 
 
-                    _taskExecuter.add(BaseState.createSlideRotationTask(robot, 80, 500, "Arm Angle", false));
+                    _taskExecuter.add(BaseState.createSlideRotationTask(robot, 0, 500, "Arm Angle", false));
 
                     if (Math.abs(clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN) > .02) {
                         _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
                     }
 
 
-                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP - .01, 150, "IntakeAngle", false));
+                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 150, "IntakeAngle", false));
 
                     _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
 
