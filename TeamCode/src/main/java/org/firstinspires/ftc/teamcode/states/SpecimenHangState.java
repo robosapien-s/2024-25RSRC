@@ -15,10 +15,15 @@ public class SpecimenHangState extends BaseState {
         super(joystick);
     }
 
+
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
+        robot.setSlideMinPosition(0);
+        robot.setSlideMaxPosition(1000);
+
         if (prevState.getState() == State.INTAKINGCLAW) {
+            taskArrayList.add(createSlideTask(robot, 0, 0, "Slide", false));
             taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
             taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 0, "Rot and Angle", false));
             taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 300, "Rotation", false));

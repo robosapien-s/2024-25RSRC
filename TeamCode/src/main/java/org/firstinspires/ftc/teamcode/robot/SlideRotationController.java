@@ -13,7 +13,7 @@ public class SlideRotationController extends RobotPidMechanism {
 
     public static double kP = 0.015;
     public static double kI = 0.000;
-    public static double kD = 0.002;
+    public static double kD = 0.004;
     public static int targetPosition = 0;
 
     // Constructor

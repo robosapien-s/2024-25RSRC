@@ -17,12 +17,12 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = .9;
-        public static double CLAW_CLOSE = .4;
+        public static double CLAW_OPEN = .4144;//.9;
+        public static double CLAW_CLOSE = .7144;
 
 
         public static double INTAKE_ANGLE_OFFSET=0;
-        public static double INTAKE_ANGLE_INIT = 0.225 + RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_INIT = 0.24 + RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
 //        public static double INTAKE_ANGLE_START = .38 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_BUCKET = 0.425+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.39 + Params.INTAKE_ANGLE_OFFSET;
