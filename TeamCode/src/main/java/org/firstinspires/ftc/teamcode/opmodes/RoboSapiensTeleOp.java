@@ -26,7 +26,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 //        public static double INTAKE_ANGLE_START = .38 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_BUCKET = 0.425+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.39 + Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_READY =.40+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_READY =.44+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_PICKUP = .515+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_CAMERA = 0.45+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN = 0.4575 + Params.INTAKE_ANGLE_OFFSET;
@@ -38,15 +38,15 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_CAMERA = {0.575, 0.885};
 
-        public static double[] ROT_AND_ANGLE_PREP = {0.0978, .8894}; //{ 0.0978, .8894}; // R / L
+        public static double[] ROT_AND_ANGLE_PREP = {0.153, .8}; //{ 0.0978, .8894}; // R / L
 
-        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT = {0, 0.7866};
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT = {0.02, 0.6333};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT = {0.2172, 1};
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT = {0.352, .9333};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.1624 , 0.9494};
+        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.2011 , 0.8433};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.0268, 0.8138};
+        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.102, 0.7533};
 
         public static double[] ROT_AND_ANGLE_BASKET = {.89, .11};
 
