@@ -22,7 +22,7 @@ public class LConstants {
 
 
         PinpointConstants.forwardY = 124.25;
-        PinpointConstants.strafeX = -47.90367;
+        PinpointConstants.strafeX = -44.72867;
         PinpointConstants.distanceUnit = DistanceUnit.MM;
         PinpointConstants.hardwareMapName = "pinpoint";
         PinpointConstants.useYawScalar = false;
