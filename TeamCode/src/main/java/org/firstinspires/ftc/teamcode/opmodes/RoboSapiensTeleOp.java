@@ -26,8 +26,8 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 //        public static double INTAKE_ANGLE_START = .38 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_BUCKET = 0.425+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.39 + Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_READY =.44+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_PICKUP = .515+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_READY =.4+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_PICKUP = .55+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_CAMERA = 0.45+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN = 0.4575 + Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_WALL_PICKUP = .4575+Params.INTAKE_ANGLE_OFFSET;
@@ -38,23 +38,23 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static double[] ROT_AND_ANGLE_CAMERA = {0.575, 0.885};
 
-        public static double[] ROT_AND_ANGLE_PREP = {0.153, .8}; //{ 0.0978, .8894}; // R / L
+        public static double[] ROT_AND_ANGLE_PREP = {0.0772, 0.915}; //{ 0.0978, .8894}; // R / L
 
-        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT = {0.02, 0.6333};
+//        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT = {0.02, 0.6333};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT = {0.352, .9333};
+        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {.3072, 1};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {0.2011 , 0.8433};
+        public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {.1317 , 0.98};
 
-        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0.102, 0.7533};
+        public static double[] ROT_AND_ANGLE_PICKUP_RIGHT = {0, .825};
 
-        public static double[] ROT_AND_ANGLE_BASKET = {.89, .11};
+        public static double[] ROT_AND_ANGLE_BASKET = {.925, 0.075};
 
         public static double[] ROT_AND_ANGLE_SPECIMEN = {.97, 0.03};
 
         public static double[] ROT_AND_ANGLE_SPECIMEN_DOWN = {1, 0};
 
-        public static double[] ROT_AND_ANGLE_WALL_PICKUP = {.2583, 0.1639};
+        public static double[] ROT_AND_ANGLE_WALL_PICKUP = {0.1978, .2228};
 
 
         public static int SLIDE_SPECIMEN_FRONT_DROP_POSITION = 590;
@@ -74,7 +74,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static int SLIDE_MIN_POSITION = 70;
 
 
-        public static int SLIDE_ROTATION_SPECIMEN_POSITION = 1345;
+        public static int SLIDE_ROTATION_SPECIMEN_POSITION = 1400;
 
         public static int SLIDE_ROTATION_WALL_POSITION = 218;
 

@@ -78,7 +78,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
             if(_closestRec.angle>70) {
                 return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP;
             } else if(_closestRec.angle<20) {
-                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT;
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL;
             } else {
                 return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT;
             }
@@ -86,7 +86,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
             if(_closestRec.angle<20) {
                 return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP;
             } else if(_closestRec.angle>70) {
-                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT;
+                return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL;
             } else {
                 return RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_RIGHT;
             }

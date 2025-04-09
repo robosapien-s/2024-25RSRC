@@ -11,7 +11,7 @@ public class IntakingStateClaw extends BaseState {
 
 //    int clawRotationStateHack = 0;
 
-    boolean leftVertical = true;
+//    boolean leftVertical = true;
 
     int clawStateHack = 0; //0 = ready, 1 = pickup, 2 = transfer
 
@@ -96,7 +96,7 @@ public class IntakingStateClaw extends BaseState {
             robot.switchState(State.AUTO_PICKUP);
         } else if(joystick.gamepad1GetA()) {
 
-            leftVertical = true;
+//            leftVertical = true;
 
             robot.setRobotSpeedNormal();
 
@@ -204,13 +204,15 @@ public class IntakingStateClaw extends BaseState {
         } else if (joystick.gamepad1GetDLeft()) {
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_LEFT);
         } else if (joystick.gamepad1GetDDown()) {
-            if (!leftVertical) {
-                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT);
-            } else {
-                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
-            }
+//            if (!leftVertical) {
+//                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT);
+//            } else {
+//                robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
+//            }
+//
+//            leftVertical = !leftVertical;
 
-            leftVertical = !leftVertical;
+            robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL);
 
         }
 

@@ -177,7 +177,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 3:
                     if (!follower.isBusy()) {
                         robotAuto.setSlidePos(1140);
-                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
+                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL);
                         robotAuto.startWait(500);
                         setPathState(pathState+1);
                     }
@@ -217,7 +217,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 8:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
+                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL);
                         setPathState(pathState+1);
                     }
                     break;
@@ -263,7 +263,7 @@ public class rightSideAuto extends LinearOpMode {
 
                 case 14:
                     if (robotAuto.checkWait()) {
-                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL_LEFT);
+                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_VERTICAL);
                         setPathState(pathState+1);
                     }
                     break;
