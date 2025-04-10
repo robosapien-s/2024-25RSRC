@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = .4144;//.9;
-        public static double CLAW_CLOSE = .7144;
+        public static double CLAW_OPEN = .4439;//.9;
+        public static double CLAW_CLOSE = .7;
 
 
         public static double INTAKE_ANGLE_OFFSET=0;
@@ -31,18 +31,20 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double INTAKE_ANGLE_CAMERA = 0.45+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN = 0.4575 + Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_WALL_PICKUP = .4575+Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_SWEEP = 0.565 + Params.INTAKE_ANGLE_OFFSET;
+//        public static double INTAKE_ANGLE_SWEEP = 0.565 + Params.INTAKE_ANGLE_OFFSET;
 
 
         public static double[] ROT_AND_ANGLE_SPECIMEN_FRONT = {0.70, .3};
 
-        public static double[] ROT_AND_ANGLE_CAMERA = {0.575, 0.885};
+        public static double[] ROT_AND_ANGLE_CAMERA = {0.03, 0.97};
 
         public static double[] ROT_AND_ANGLE_PREP = {0.0772, 0.915}; //{ 0.0978, .8894}; // R / L
 
 //        public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL_RIGHT = {0.02, 0.6333};
 
         public static double[] ROT_AND_ANGLE_PICKUP_VERTICAL = {.3072, 1};
+
+        public static double[] ROT_AND_ANGLE_AUTO_PICKUP = {.2, 1};
 
         public static double[] ROT_AND_ANGLE_PICKUP_LEFT = {.1317 , 0.98};
 
@@ -59,7 +61,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_SPECIMEN_FRONT_DROP_POSITION = 590;
 
-        public static int SLIDE_SPECIMEN_DROP_POSITION = 592;
+        public static int SLIDE_SPECIMEN_DROP_POSITION = 670;
 
         public static int SLIDE_SPECIMEN_DOWN_POSITION = 220;
 
@@ -82,7 +84,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 590;
 
-        public static int SLIDE_ROTATION_DROP_POSITION = 1345; //might help prevent tipping?
+        public static int SLIDE_ROTATION_DROP_POSITION = 1400;
 
         public static int SLIDE_ROTATION_MIDDLE_POSITION= 1295;
 

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
+import org.firstinspires.ftc.teamcode.controllers.RobotTaskParallel;
+import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -19,26 +22,44 @@ public class SpecimenHangState extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
+        IRobotTask trajectoryTask = runTrajectory(robot);
+
+        RobotTaskParallel parallelTask = new RobotTaskParallel();
+
+        RobotTaskSeries trajectorySeries = new RobotTaskSeries();
+
+        if (trajectoryTask != null) {
+            trajectorySeries.add(createWaitTask(robot, 100, "wait"));
+            trajectorySeries.add(trajectoryTask);
+
+            parallelTask.add(trajectorySeries);
+        }
+
+        RobotTaskSeries stateTransition  = new RobotTaskSeries();
+
         robot.setSlideMinPosition(0);
         robot.setSlideMaxPosition(1000);
 
         if (prevState.getState() == State.INTAKINGCLAW) {
-            taskArrayList.add(createSlideTask(robot, 0, 0, "Slide", false));
-            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
-            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 0, "Rot and Angle", false));
-            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 300, "Rotation", false));
-            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 0, "Slide", false));
+            stateTransition.add(createSlideTask(robot, 0, 0, "Slide", false));
+            stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
+            stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 0, "Rot and Angle", false));
+            stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 300, "Rotation", false));
+            stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 0, "Slide", false));
 
 
 
         } else {
-            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 100, "Claw Close", false));
-            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 100, "Rotation", false));
-            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
-            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 175, "Rot and Angle", false));
-//            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 300, "Rotation", false));
-            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 0, "Slide", false));
+            stateTransition.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 100, "Claw Close", false));
+            stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 100, "Rotation", false));
+            stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
+            stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 175, "Rot and Angle", false));
+//            stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 300, "Rotation", false));
+            stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 0, "Slide", false));
         }
+
+        parallelTask.add(stateTransition);
+        taskArrayList.add(parallelTask);
 
 
     }
@@ -75,6 +96,8 @@ public class SpecimenHangState extends BaseState {
 
         executeTasks(telemetry);
     }
+
+    public IRobotTask runTrajectory(Robot robot) {return null;};
 
     @Override
     public State getState() {

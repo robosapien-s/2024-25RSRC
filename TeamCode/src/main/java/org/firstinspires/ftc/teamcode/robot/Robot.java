@@ -1,11 +1,19 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import static org.firstinspires.ftc.teamcode.robot.AngleDrive.lineToConstantHeading;
+import static org.firstinspires.ftc.teamcode.robot.AngleDrive.splineToConstantHeading;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.localization.localizers.PinpointLocalizer;
+import com.pedropathing.pathgen.BezierCurve;
+import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.Path;
+import com.pedropathing.pathgen.PathChain;
+import com.pedropathing.pathgen.Point;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -29,6 +37,8 @@ import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.states.*;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +46,19 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class Robot {
+    public static Pose origin = new Pose(0,0,Math.toRadians(180));
+    public static Pose middlePose = new Pose(5.75, 22.75, Math.toRadians(180));
+
+    public static double leftPoseY = 40;
+
+    public static ArrayList<PathChain> pathChains = new ArrayList<>();
 
     public boolean isAuto;
 
     public static boolean resetEncoders = true;
+
+    /**IMU offset in degrees*/
+    public static double rotateAngleOffset = 0;
 
 
     public interface YawOverrride {
@@ -138,6 +157,8 @@ public class Robot {
         instanceStateMap.put(State.PICKUP_GROUND_LEFT, () -> new PickUpGroundStateLeft(joystick));
         instanceStateMap.put(State.AUTO_PICKUP, () -> new AutoPickupState(joystick));
         instanceStateMap.put(State.SPECIMEN_HANG_FRONT, () -> new SpecimenHangFrontState(joystick));
+        instanceStateMap.put(State.AUTO_WALLPICKUP, () -> new AutoWallPickUpState(joystick));
+        instanceStateMap.put(State.AUTO_SPECIMEN_HANG, () -> new AutoSpecimenHangState(joystick));
 
 
         /*
@@ -161,19 +182,45 @@ public class Robot {
             } else {
                 follower = inFollower;
             }
-            drive = new AngleDrive(hardwareMap, false, follower);
+            drive = new AngleDrive(hardwareMap, false, follower, rotateAngleOffset);
+            createPathChains();
         } else {
-            drive = new AngleDrive(hardwareMap, false, inFollower);
+            drive = new AngleDrive(hardwareMap, false, inFollower, rotateAngleOffset);
             setDriveTrainEnabled(false);
         }
 
         resetEncoders = true;
+        rotateAngleOffset = 0;
 
 
         initPid();
     }
 
     public void pickUp() {
+    }
+
+    private void createPathChains() {
+        pathChains.clear();
+
+        Pose pose;
+        for (int i = 0; i<12; i++) {
+            pose = new Pose(20, leftPoseY-2*i, Math.toRadians(180));
+            pathChains.add(splineToConstantHeading(getFollower(), origin, middlePose, pose, 1.5));
+            pathChains.add(lineToConstantHeading(getFollower(), pose, origin, 1.5));
+        }
+        Pose startSwipePose = new Pose(20,25.15, Math.toRadians(180));
+        Pose endSwipePose = new Pose(20, leftPoseY, Math.toRadians(180));
+
+        PathChain firstDrop = getFollower().pathBuilder()
+                .addPath(new BezierCurve(new Point(origin),new Point(middlePose), new Point(startSwipePose)))
+                .setConstantHeadingInterpolation(startSwipePose.getHeading())
+                .setZeroPowerAccelerationMultiplier(1.5)
+                .addPath(new BezierLine(new Point(startSwipePose), new Point(endSwipePose)))
+                .setConstantHeadingInterpolation(endSwipePose.getHeading())
+                .setZeroPowerAccelerationMultiplier(1.5)
+                .build();
+
+        pathChains.set(0, firstDrop);
     }
 
 

@@ -52,7 +52,7 @@ public class DroppingL1State extends BaseState {
 
 //        transferSeries.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIDDLE_POSITION, 100, "HorizontalSlide", false));
         transferSeries.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_DROP_POSITION, 400, "HorizontalSlide", false));
-//        transferSeries.add(createSlideTask(robot, getHeight(), 600, "VerticalSlide", false));
+        transferSeries.add(createSlideTask(robot, getHeight(), 600, "VerticalSlide", false));
 
 
         transferSeries.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_BASKET, 50, "IntakeAngle", false));

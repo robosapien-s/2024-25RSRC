@@ -7,6 +7,7 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
+import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
@@ -53,11 +54,12 @@ public class AngleDrive implements IDrive {
     private final PIDEx pidXController;
     private final PIDEx pidYController;
 
-    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Follower follower) {
-        this(hardwareMap, isLerpEnabled);
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, Follower follower, double rotateAngleOffset) {
+        this(hardwareMap, isLerpEnabled, rotateAngleOffset);
         this.follower = follower;
     }
-    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled) {
+    public AngleDrive(HardwareMap hardwareMap, boolean isLerpEnabled, double rotateAngleOffset) {
+        this.rotateAngleOffset = rotateAngleOffset;
         if (Robot.resetEncoders) {
             InitializeResetImu(hardwareMap);
         } else {
@@ -161,7 +163,6 @@ public class AngleDrive implements IDrive {
     }
 
     public void InitializeResetImu(HardwareMap hardwareMap) {
-        rotateAngleOffset = 0;
         Initialize(hardwareMap);
         imu.resetYaw();
     }
@@ -214,7 +215,7 @@ public class AngleDrive implements IDrive {
         }
 
 //maybe use rotate Angle Offset
-        double headingError = normalize((targetHeading - yaw));
+        double headingError = normalize((targetHeading - yaw)+rotateAngleOffset);
 
         Translation2d translation2d = RotateAngle(leftStickX * Math.abs(leftStickX), leftStickY * Math.abs(leftStickY), yaw);
 
@@ -374,5 +375,24 @@ public class AngleDrive implements IDrive {
                 .setZeroPowerAccelerationMultiplier(ZPAM)
                 .build();
     }
+
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param middlePose
+     * @param endPose
+     * @param ZPAM
+     * @return PathChain
+     */
+
+    public static PathChain splineToConstantHeading(@NonNull Follower follower, Pose startPose, Pose middlePose,Pose endPose,double ZPAM) {
+        return follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(startPose), new Point(middlePose), new Point(endPose)))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .setZeroPowerAccelerationMultiplier(ZPAM)
+                .build();
+    }
+
 
 }

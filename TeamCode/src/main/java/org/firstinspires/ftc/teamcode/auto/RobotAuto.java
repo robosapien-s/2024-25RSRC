@@ -26,9 +26,10 @@ public class RobotAuto {
     RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
     RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-    public RobotAuto(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, Follower follower) {
+    public RobotAuto(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, Follower follower, double rotateAngleOffset) {
         robot = new Robot(hardwareMap, gamepad1, gamepad2, telemetry, true, follower);
         Robot.resetEncoders = false;
+        Robot.rotateAngleOffset = rotateAngleOffset;
 
         robot.setYawOverride(new Robot.YawOverrride() {
             @Override

@@ -59,6 +59,13 @@ public class AutoPickupState extends BaseState {
 //            }
 //        }
 
+        if (joystick.gamepad2GetA()) {
+            if(!taskArrayList.isEmpty()) {
+                taskArrayList.get(0).stopTask();
+                robot.switchState(State.SERVO_TEST);
+            }
+        }
+
         if(joystick.gamepad1GetA()) {
             if(!taskArrayList.isEmpty()) {
                 taskArrayList.get(0).stopTask();

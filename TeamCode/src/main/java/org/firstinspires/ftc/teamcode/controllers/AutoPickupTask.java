@@ -261,7 +261,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
         } else if(!hasStarted()) {
 
             robot.setDriveTrainEnabled(false);
-            _detector = robot.createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.all);
+            _detector = robot.createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.yellow);
 
             robot.setSlideTargetPosition(700);
             robot.setSlideRotationPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_CAMERA_POSITION);

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 @Autonomous
@@ -25,12 +26,12 @@ public class leftSideAuto extends LinearOpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
-    private final Pose startPose = new Pose(7.3, 113.7, Math.toRadians(0));
-    private final Pose dropPose = new Pose(21.5, 128.9, Math.toRadians(-25.4));
+    private final Pose startPose = new Pose(8.8, 113.7, Math.toRadians(0));
+    private final Pose dropPose = new Pose(21, 129.4, Math.toRadians(-25.4));
 //    private final Pose dropPose = new Pose(20, 130.4, Math.toRadians(-25.4));
-    private final Pose firstPickUpPose = new Pose(20, 131.8, Math.toRadians(-25.4));
-    private final Pose secondPickUpPose = new Pose(19.6, 131.3, Math.toRadians(0));
-    private final Pose thirdPickUpPose = new Pose(20, 131, Math.toRadians(21.74));
+    private final Pose firstPickUpPose = new Pose(21.5, 131.8, Math.toRadians(-25.4));
+    private final Pose secondPickUpPose = new Pose(19.4, 131.3, Math.toRadians(0));
+    private final Pose thirdPickUpPose = new Pose(20.25, 131, Math.toRadians(21.74));
     private final Pose submersibleLineUpPose = new Pose(60, 108, Math.toRadians(-90));
     private final Pose submersiblePickUpPose = new Pose(60, 100, Math.toRadians(-90));
 
@@ -53,7 +54,7 @@ public class leftSideAuto extends LinearOpMode {
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
 
 
-        robotAuto = new RobotAuto(hardwareMap, gamepad1, gamepad2, telemetry, follower);
+        robotAuto = new RobotAuto(hardwareMap, gamepad1, gamepad2, telemetry, follower, Robot.rotateAngleOffset);
 
         follower.setStartingPose(startPose);
         //Path chains here
@@ -103,7 +104,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 1:
                     if (!follower.isBusy()) {
                         setPathState(pathState+1);
-                        robotAuto.startWait(500);
+                        robotAuto.startWait(700);
                     }
                     break;
                 case 2:
@@ -148,7 +149,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 7:
                     if (robotAuto.checkWait()/* && !follower.isBusy()*/) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1700);
+                        robotAuto.startWait(1900);
                         setPathState(pathState+1);
                     }
                     break;
@@ -197,7 +198,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 14:
                     if (/*!follower.isBusy() &&*/ robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1700);
+                        robotAuto.startWait(1900);
                         setPathState(pathState+1);
                     }
                     break;
@@ -219,7 +220,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 17:
                     if (!follower.isBusy() && robotAuto.checkWait()) {
                         robotAuto.setSlidePos(1290);
-                        robotAuto.setRotAndAnglePos(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PICKUP_RIGHT);
+                        robotAuto.setRotAndAnglePos(new double[] {.03, 0.8678});
                         robotAuto.startWait(700);
                         setPathState(pathState+1);
                     }
@@ -242,7 +243,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 20:
                     if (/*!follower.isBusy() &&*/ robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1700);
+                        robotAuto.startWait(1900);
                         setPathState(pathState+1);
                     }
                     break;
@@ -310,7 +311,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 30:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1700);
+                        robotAuto.startWait(1900);
                         setPathState(pathState+1);
                     }
                     break;

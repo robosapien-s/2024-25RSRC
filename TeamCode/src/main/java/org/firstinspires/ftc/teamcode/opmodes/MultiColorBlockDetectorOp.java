@@ -48,7 +48,7 @@ public class MultiColorBlockDetectorOp extends LinearOpMode {
 
  //       PinpointLocalizer localizer = new PinpointLocalizer(hardwareMap, new Pose(0,0,0));
         Follower localizer = new Follower(hardwareMap, FConstants.class, LConstants.class);
-        AngleDrive drive = new AngleDrive(hardwareMap, false, localizer);
+        AngleDrive drive = new AngleDrive(hardwareMap, false, localizer,0);
         JoystickWrapper joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
         MultiColorSampleDetector sampleDetector = new MultiColorSampleDetector(hardwareMap, telemetry, MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.all);
 

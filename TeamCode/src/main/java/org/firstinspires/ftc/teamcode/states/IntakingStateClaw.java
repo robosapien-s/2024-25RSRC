@@ -70,8 +70,8 @@ public class IntakingStateClaw extends BaseState {
             robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
         } else if (prevState.getState() == State.SPECIMEN_HANG) {
             taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN_DOWN, 0, "Rot and Angle", false));
-            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DOWN_POSITION, 100, "Slide", false));
-            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "Claw Open", false));
+            taskArrayList.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DOWN_POSITION, 150, "Slide", false));
+            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 50, "Claw Open", false));
             taskArrayList.add(createSlideTask(robot, 0, 0, "Slide", false));
             taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "Intake Angle", false));
             taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "Rot and Angle", false));

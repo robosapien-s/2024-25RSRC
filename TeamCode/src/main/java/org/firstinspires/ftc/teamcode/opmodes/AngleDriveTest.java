@@ -14,7 +14,7 @@ public class AngleDriveTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new AngleDrive(hardwareMap, false);
+        drive = new AngleDrive(hardwareMap, false,0);
         joystickWrapper = new JoystickWrapper(gamepad1, gamepad2);
 
         waitForStart();
