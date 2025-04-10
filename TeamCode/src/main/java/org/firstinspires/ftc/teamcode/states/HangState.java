@@ -86,15 +86,15 @@ public class HangState extends BaseState {
         }
 
         if(joystick.gamepad2GetRightBumperRaw()) {
-            robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
+            robot.increaseSlideTargetPosition((int) (joystick.gamepad2GetRightTrigger()*-100));
         } else {
-            robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
+            robot.increaseSlideTargetPosition((int) (joystick.gamepad2GetRightTrigger()*100));
         }
 
         if(joystick.gamepad2GetLeftBumperRaw()) {
-            robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-20));
+            robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad2GetLeftTrigger()*-20));
         } else {
-            robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*20));
+            robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad2GetLeftTrigger()*20));
         }
 
         executeTasks(telemetry);
