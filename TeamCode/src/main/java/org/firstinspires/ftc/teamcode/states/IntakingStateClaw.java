@@ -90,6 +90,8 @@ public class IntakingStateClaw extends BaseState {
 
         if (joystick.gamepad2GetA()) {
             robot.switchState(State.SERVO_TEST);
+        } else if(joystick.gamepad2GetY()) {
+            robot.switchState(State.ROBOT_HANG);
         }
 
         if(joystick.gamepad1GetY()) {

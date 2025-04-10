@@ -17,6 +17,7 @@ import com.pedropathing.pathgen.Point;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -77,6 +78,10 @@ public class Robot {
     private final Servo clawServo;
     private final Servo intakeAngleServo;
 
+
+    private final CRServo leftHangServo;
+    private final CRServo rightHangServo;
+
     private final HardwareMap hardwareMap;
 
     private final Telemetry telemetry;
@@ -136,6 +141,9 @@ public class Robot {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
 
+        leftHangServo = hardwareMap.get(CRServo.class, "leftHangServo");
+        rightHangServo = hardwareMap.get(CRServo.class, "rightHangServo");
+
 //        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
 //        intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
@@ -159,6 +167,7 @@ public class Robot {
         instanceStateMap.put(State.SPECIMEN_HANG_FRONT, () -> new SpecimenHangFrontState(joystick));
         instanceStateMap.put(State.AUTO_WALLPICKUP, () -> new AutoWallPickUpState(joystick));
         instanceStateMap.put(State.AUTO_SPECIMEN_HANG, () -> new AutoSpecimenHangState(joystick));
+        instanceStateMap.put(State.ROBOT_HANG, () -> new HangState(joystick));
 
 
         /*
@@ -342,6 +351,15 @@ public class Robot {
 
     public double getClawPosition() {
         return clawServo.getPosition();
+    }
+
+    public void setLeftHangServo(double power) {
+        leftHangServo.setPower(power);
+    }
+
+
+    public void setRightHangServo(double power) {
+        rightHangServo.setPower(power);
     }
 
 

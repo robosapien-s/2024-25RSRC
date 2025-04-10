@@ -24,7 +24,8 @@ public interface IRobot {
         AUTO_DRIVE_TEST,
         PICKUP_GROUND_LEFT,
         AUTO_PICKUP,
-        SPECIMEN_HANG_FRONT
+        SPECIMEN_HANG_FRONT,
+        ROBOT_HANG,
     }
 
 
