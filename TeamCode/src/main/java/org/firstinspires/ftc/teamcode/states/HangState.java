@@ -60,8 +60,8 @@ public class HangState extends BaseState {
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-                           robot.setLeftHangServo(-.3);
-                           robot.setRightHangServo(.3);
+//                           robot.setLeftHangServo(-.3);
+//                           robot.setRightHangServo(.3);
                        }
                    }, "Engage Hooks"
            ));
@@ -73,8 +73,8 @@ public class HangState extends BaseState {
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-                           robot.setLeftHangServo(0);
-                           robot.setRightHangServo(0);
+//                           robot.setLeftHangServo(0);
+//                           robot.setRightHangServo(0);
                        }
                    }, "Disengage Hooks"
            ));
