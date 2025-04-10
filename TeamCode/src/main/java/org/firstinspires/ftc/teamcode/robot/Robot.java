@@ -50,7 +50,9 @@ public class Robot {
     public static Pose origin = new Pose(0,0,Math.toRadians(180));
     public static Pose middlePose = new Pose(5.75, 22.75, Math.toRadians(180));
 
-    public static double leftPoseY = 40;
+    public static double leftPoseY = 37.5;
+
+    public static int numCycles = 12;
 
     public static ArrayList<PathChain> pathChains = new ArrayList<>();
 
@@ -212,16 +214,16 @@ public class Robot {
         pathChains.clear();
 
         Pose pose;
-        for (int i = 0; i<12; i++) {
-            pose = new Pose(20, leftPoseY-2*i, Math.toRadians(180));
+        for (int i = 0; i<numCycles; i++) {
+            pose = new Pose(20.25, leftPoseY-1.6*i, Math.toRadians(180));
             pathChains.add(splineToConstantHeading(getFollower(), origin, middlePose, pose, 1.5));
             pathChains.add(lineToConstantHeading(getFollower(), pose, origin, 1.5));
         }
-        Pose startSwipePose = new Pose(20,25.15, Math.toRadians(180));
-        Pose endSwipePose = new Pose(20, leftPoseY, Math.toRadians(180));
+        Pose startSwipePose = new Pose(20.25,22, Math.toRadians(180));
+        Pose endSwipePose = new Pose(20.25, leftPoseY, Math.toRadians(180));
 
         PathChain firstDrop = getFollower().pathBuilder()
-                .addPath(new BezierCurve(new Point(origin),new Point(middlePose), new Point(startSwipePose)))
+                .addPath(new BezierCurve(new Point(origin),new Point(new Pose(5.75, 20, Math.toRadians(180))), new Point(startSwipePose)))
                 .setConstantHeadingInterpolation(startSwipePose.getHeading())
                 .setZeroPowerAccelerationMultiplier(1.5)
                 .addPath(new BezierLine(new Point(startSwipePose), new Point(endSwipePose)))

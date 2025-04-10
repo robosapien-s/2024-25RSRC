@@ -29,7 +29,7 @@ public class SpecimenHangState extends BaseState {
         RobotTaskSeries trajectorySeries = new RobotTaskSeries();
 
         if (trajectoryTask != null) {
-            trajectorySeries.add(createWaitTask(robot, 100, "wait"));
+            trajectorySeries.add(createWaitTask(robot, 150, "wait"));
             trajectorySeries.add(trajectoryTask);
 
             parallelTask.add(trajectorySeries);
@@ -55,7 +55,12 @@ public class SpecimenHangState extends BaseState {
             stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
             stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 175, "Rot and Angle", false));
 //            stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 300, "Rotation", false));
-            stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 0, "Slide", false));
+            if (Robot.pathChains.size() == Robot.numCycles*2-1) {
+                stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 800, "Slide", false));
+                stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION-100, 0, "Slide", false));
+            } else {
+                stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DROP_POSITION, 0, "Slide", false));
+            }
         }
 
         parallelTask.add(stateTransition);

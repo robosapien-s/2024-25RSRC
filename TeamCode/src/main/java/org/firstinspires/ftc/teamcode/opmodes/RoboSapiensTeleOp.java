@@ -24,7 +24,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
         public static double INTAKE_ANGLE_OFFSET=0;
         public static double INTAKE_ANGLE_INIT = 0.24 + RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
 //        public static double INTAKE_ANGLE_START = .38 +RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
-        public static double INTAKE_ANGLE_BUCKET = 0.425+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
+        public static double INTAKE_ANGLE_BUCKET = 0.3144+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_SPECIMEN_FRONT = 0.39 + Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_READY =.4+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
         public static double INTAKE_ANGLE_PICKUP = .55+RoboSapiensTeleOp.Params.INTAKE_ANGLE_OFFSET;
@@ -69,30 +69,32 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_DROP_L1 = 1000;
 
-        public static int SLIDE_DROP_L2 = 1850;
+        public static int SLIDE_DROP_L2 = 1950;
 
         public static int SLIDE_MAX_POSITION = 1140;
 
         public static int SLIDE_MIN_POSITION = 70;
 
 
-        public static int SLIDE_ROTATION_SPECIMEN_POSITION = 1400;
+        public static int SLIDE_ROTATION_OFFSET = 0;
 
-        public static int SLIDE_ROTATION_WALL_POSITION = 218;
+        public static int SLIDE_ROTATION_SPECIMEN_POSITION = 1330 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_WALL_MIDDLE_POSITION = 320;
+        public static int SLIDE_ROTATION_WALL_POSITION = 218 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 590;
+        public static int SLIDE_ROTATION_WALL_MIDDLE_POSITION = 320 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_DROP_POSITION = 1400;
+        public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 590 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1295;
+        public static int SLIDE_ROTATION_DROP_POSITION = 1330 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_MIN_POSITION = 0;
+        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1230 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_CAMERA_POSITION = 350;
+        public static int SLIDE_ROTATION_MIN_POSITION = SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_MAX_POSITION = 1400;
+        public static int SLIDE_ROTATION_CAMERA_POSITION = 350 + SLIDE_ROTATION_OFFSET;
+
+        public static int SLIDE_ROTATION_MAX_POSITION = 1330 + SLIDE_ROTATION_OFFSET;
 
         public static double SLIDE_PID_kp = 0.027;
         public static double SLIDE_PID_kd = 0.027;
@@ -147,6 +149,9 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 //        }
         waitForStart();
         robot.start();
+
+        //11 and 6/16
+        //8 and 5/16
 
         while (opModeIsActive()) {
             follower.update();

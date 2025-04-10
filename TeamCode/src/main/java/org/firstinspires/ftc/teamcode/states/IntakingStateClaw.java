@@ -57,6 +57,8 @@ public class IntakingStateClaw extends BaseState {
             robot.setSlideTargetPosition(70);
         } else if (prevState.getState() == State.DROPPING_L2) {
 
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngle", false));
+
             taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
 
             taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIDDLE_POSITION, 200, "Rotation", false));

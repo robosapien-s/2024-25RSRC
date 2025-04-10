@@ -330,6 +330,8 @@ public class JoystickWrapper {
         return gamepad1.a;
     }
 
+    public boolean gamepad1GetYRaw() {return gamepad1.y;}
+
 
 
 

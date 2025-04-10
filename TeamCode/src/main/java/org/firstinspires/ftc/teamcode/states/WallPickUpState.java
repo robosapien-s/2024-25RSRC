@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.localization.Pose;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -53,10 +54,11 @@ public class WallPickUpState extends BaseState {
             stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DOWN_POSITION, 150, "Slide", false));
             stateTransition.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 50, "Claw Open", false));
             stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_WALL_POSITION, 0, "Slide", false));
-            stateTransition.add(createSlideRotationTask(robot, 0, 0, "Rotation", false));
-            stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
-            stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 500, "Rot and Angle", false));
+//            stateTransition.add(createSlideRotationTask(robot, 0, 0, "Rotation", false));
             stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
+            stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
+            stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
+//            stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
 
         } else {
             stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_WALL_POSITION, 0, "Slide", false));
@@ -85,7 +87,7 @@ public class WallPickUpState extends BaseState {
         }
 
         if (joystick.gamepad1GetX()) {
-            robot.getFollower().setPose(Robot.origin);
+            robot.getFollower().setPose(new Pose(0.25, 0, Math.toRadians(180)));
             robot.switchState(State.AUTO_SPECIMEN_HANG);
         }
 

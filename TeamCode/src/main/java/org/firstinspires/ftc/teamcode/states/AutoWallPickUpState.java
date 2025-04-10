@@ -25,7 +25,7 @@ public class AutoWallPickUpState extends WallPickUpState{
 
                     @Override
                     public boolean breakFollowing() {
-                        return joystick.gamepad1GetY();
+                        return joystick.gamepad1GetYRaw();
                     }
                 }, Robot.pathChains.remove(0)
         );

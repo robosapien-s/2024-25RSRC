@@ -306,6 +306,7 @@ public class leftSideAuto extends LinearOpMode {
                     if (!follower.isBusy()) {
                         follower.followPath(finalDrop, true);
                         robotAuto.startWait(1000);
+                        setPathState(pathState+1);
                     }
                     break;
                 case 30:

@@ -65,9 +65,11 @@ public class AutoPickupTask extends  RobotTaskImpl {
         _isComplete = true;
     }
 
+    //11 and 6/16
+    //8 and 5/16//11 and 6/16
     public Point getTargetPose(Point center) {
         //return new double[] {(240-center.y)*(6.25/480), (320-center.x)*(8.5/640)};
-        return new Point((240-center.y)*(6.25/480), (320-center.x)*(8.5/640)); //original
+        return new Point((240-center.y)*(8.3125/480), (320-center.x)*(11.375/640)); //original
 //        return new Point((320-center.x)*(8.5/640), (240-center.y)*(6.25/480));
     }
 

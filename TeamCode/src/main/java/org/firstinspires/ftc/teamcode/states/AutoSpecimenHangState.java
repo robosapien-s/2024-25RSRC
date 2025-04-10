@@ -26,7 +26,7 @@ public class AutoSpecimenHangState extends SpecimenHangState{
 
                     @Override
                     public boolean breakFollowing() {
-                        return joystick.gamepad1GetY();
+                        return joystick.gamepad1GetYRaw();
                     }
                 }, Robot.pathChains.remove(0)
         );
@@ -36,6 +36,7 @@ public class AutoSpecimenHangState extends SpecimenHangState{
     public void execute(Robot robot, Telemetry telemetry) {
         if (joystick.gamepad1GetY()) {
             robot.setDriveTrainEnabled(true);
+            Robot.pathChains.remove(0);
             robot.switchState(State.SPECIMEN_HANG);
         }
 
