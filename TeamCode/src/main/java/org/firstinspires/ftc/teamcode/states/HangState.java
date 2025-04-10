@@ -49,7 +49,9 @@ public class HangState extends BaseState {
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
 
-       if(joystick.gamepad1GetA()) {
+        if(joystick.gamepad2GetY()) {
+            robot.switchState(State.INTAKINGCLAW);
+        } else if(joystick.gamepad2GetA()) {
 
            taskArrayList.add(createSlideTask(robot, HANG_SLIDE_EXTENSTION_L2, 0, "Slide", false));
            taskArrayList.add(createSlideRotationTask(robot, HANG_SLIDE_ANGLE_ROTATION_L2, 1000, "Rotation", false));
@@ -58,7 +60,7 @@ public class HangState extends BaseState {
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-                           robot.setLeftHangServo(.3);
+                           robot.setLeftHangServo(-.3);
                            robot.setRightHangServo(.3);
                        }
                    }, "Engage Hooks"
@@ -83,13 +85,13 @@ public class HangState extends BaseState {
 
         }
 
-        if(joystick.gamepad1GetRightBumperRaw()) {
+        if(joystick.gamepad2GetRightBumperRaw()) {
             robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*-100));
         } else {
             robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetRightTrigger()*100));
         }
 
-        if(joystick.gamepad1GetLeftBumperRaw()) {
+        if(joystick.gamepad2GetLeftBumperRaw()) {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*-20));
         } else {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*20));
