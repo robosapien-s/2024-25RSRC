@@ -5,13 +5,10 @@ import static org.firstinspires.ftc.teamcode.robot.AngleDrive.splineToConstantHe
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.PIDEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficientsEx;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
-import com.pedropathing.localization.localizers.PinpointLocalizer;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
-import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -28,9 +25,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
-import org.firstinspires.ftc.teamcode.roadrunner.Localizer;
-import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.ThreeDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.interfaces.IDrive;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot.State;
@@ -39,7 +33,6 @@ import org.firstinspires.ftc.teamcode.states.*;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +41,10 @@ import java.util.function.Supplier;
 
 public class Robot {
     public static Pose origin = new Pose(0,0,Math.toRadians(180));
-    public static Pose middlePose = new Pose(5.75, 22.75, Math.toRadians(180));
+    public static Pose middlePoseHang = new Pose(5.75, 22.75, Math.toRadians(180));
+    public static Pose middlePoseWall = new Pose(7, 2, Math.toRadians(180));
 
-    public static double leftPoseY = 37.5;
+    public static double leftPoseY = 40.5;
 
     public static int numCycles = 12;
 
@@ -215,11 +209,11 @@ public class Robot {
 
         Pose pose;
         for (int i = 0; i<numCycles; i++) {
-            pose = new Pose(20.25, leftPoseY-1.6*i, Math.toRadians(180));
-            pathChains.add(splineToConstantHeading(getFollower(), origin, middlePose, pose, 1.5));
-            pathChains.add(lineToConstantHeading(getFollower(), pose, origin, 1.5));
+            pose = new Pose(20.25, leftPoseY-1.5*i, Math.toRadians(180));
+            pathChains.add(splineToConstantHeading(getFollower(), new Pose(1, 0.5, Math.toRadians(180)), middlePoseHang, pose, 1.5));
+            pathChains.add(splineToConstantHeading(getFollower(), pose, middlePoseWall, new Pose(1, 0.5, Math.toRadians(180)), 1.5));
         }
-        Pose startSwipePose = new Pose(20.25,22, Math.toRadians(180));
+        Pose startSwipePose = new Pose(20.25,22.5, Math.toRadians(180));
         Pose endSwipePose = new Pose(20.25, leftPoseY, Math.toRadians(180));
 
         PathChain firstDrop = getFollower().pathBuilder()

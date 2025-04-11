@@ -30,7 +30,7 @@ public class rightSideAuto extends LinearOpMode {
 
     private final Pose autoStartPose = new Pose(7.3, 75.6, Math.toRadians(180));
 
-    private final Pose preloadHangPose = new Pose(34.75, 74, Math.toRadians(180));
+    private final Pose preloadHangPose = new Pose(35, 74, Math.toRadians(180));
 
     private final Pose pickup1Pose = new Pose(32, 49.75, Math.toRadians(-60));
 
@@ -50,19 +50,21 @@ public class rightSideAuto extends LinearOpMode {
 
 //    private final Pose lineUpWall2Pose = new Pose(20, 45.3, Math.toRadians(180));
 
-//    private final Pose pickUpWall2Pose = new Pose(14, 37.5, Math.toRadians(180));
+    private final Pose pickUpWall2Pose = new Pose(15.25, 37.75, Math.toRadians(180));
 
-    private final Pose hang1Pose = new Pose(34.75, 71.6, Math.toRadians(180));
+    private final Pose middleWallPose = new Pose(19.25, 39.25, Math.toRadians(180));
 
-    private final Pose hang2Pose = new Pose(34.75, 69.2, Math.toRadians(180));
+    private final Pose hang1Pose = new Pose(34.75, 72.4, Math.toRadians(180));
 
-    private final Pose hang3Pose = new Pose(34.75, 66.8, Math.toRadians(180));
+    private final Pose hang2Pose = new Pose(34.75, 70.8, Math.toRadians(180));
 
-    private final Pose hang4Pose = new Pose(34.75, 64.4, Math.toRadians(180));
+    private final Pose hang3Pose = new Pose(34.75, 69.2, Math.toRadians(180));
+
+    private final Pose hang4Pose = new Pose(34.75, 67.6, Math.toRadians(180));
 
     private final Pose middleHangPose = new Pose(20, 60, Math.toRadians(180));
 
-    private final Pose parkPose = new Pose(14.25, 37.25, Math.toRadians(90));
+    private final Pose parkPose = new Pose(14.25, 35, Math.toRadians(90));
 
     private boolean clawOpen = false;
 
@@ -118,17 +120,17 @@ public class rightSideAuto extends LinearOpMode {
 
         PathChain hang1 = splineToConstantHeading(follower, pickUpWallPose,middleHangPose, hang1Pose, 1.5);
 //        PathChain lineUpWall2 = lineToConstantHeading(hang1Pose, lineUpWall2Pose);
-        PathChain pickUpWall2 = lineToConstantHeading(follower, hang1Pose, pickUpWallPose,1.5);
+        PathChain pickUpWall2 = splineToConstantHeading(follower, hang1Pose,middleWallPose, pickUpWall2Pose,1.5);
 
-        PathChain hang2 = splineToConstantHeading(follower, pickUpWallPose,middleHangPose, hang2Pose, 1.5);
+        PathChain hang2 = splineToConstantHeading(follower, pickUpWall2Pose,middleHangPose, hang2Pose, 1.5);
 //        PathChain lineUpWall3 = lineToConstantHeading(hang2Pose, lineUpWall2Pose);
-        PathChain pickUpWall3 = lineToConstantHeading(follower, hang2Pose, pickUpWallPose,1.5);
+        PathChain pickUpWall3 = splineToConstantHeading(follower, hang2Pose,middleWallPose, pickUpWall2Pose,1.5);
 
-        PathChain hang3 = splineToConstantHeading(follower, pickUpWallPose, middleHangPose,hang3Pose, 1.5);
+        PathChain hang3 = splineToConstantHeading(follower, pickUpWall2Pose, middleHangPose,hang3Pose, 1.5);
 //        PathChain lineUpWall4 = lineToConstantHeading(hang3Pose, lineUpWall2Pose);
-        PathChain pickUpWall4 = lineToConstantHeading(follower, hang3Pose, pickUpWallPose,1.5);
+        PathChain pickUpWall4 = splineToConstantHeading(follower, hang3Pose, middleWallPose,pickUpWall2Pose,1.5);
 
-        PathChain hang4 = splineToConstantHeading(follower, pickUpWallPose, middleHangPose,hang4Pose, 1.5);
+        PathChain hang4 = splineToConstantHeading(follower, pickUpWall2Pose, middleHangPose,hang4Pose, 1.5);
         PathChain park = lineToLinearHeading(follower, hang4Pose, parkPose);
 
 
@@ -163,7 +165,7 @@ public class rightSideAuto extends LinearOpMode {
 
                     follower.followPath(hangPreload, true);
 
-                    robotAuto.startWait(1200);
+                    robotAuto.startWait(1500);
                     setPathState(pathState+1);
                     break;
 

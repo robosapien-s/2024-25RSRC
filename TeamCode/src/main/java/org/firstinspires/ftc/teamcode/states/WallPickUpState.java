@@ -35,7 +35,7 @@ public class WallPickUpState extends BaseState {
         RobotTaskSeries trajectorySeries = new RobotTaskSeries();
         RobotTaskParallel parallelTask = new RobotTaskParallel();
         if (trajectoryTask != null) {
-            trajectorySeries.add(createWaitTask(robot, 100, "wait"));
+            trajectorySeries.add(createWaitTask(robot, 200, "wait"));
             trajectorySeries.add(trajectoryTask);
 
             parallelTask.add(trajectorySeries);
