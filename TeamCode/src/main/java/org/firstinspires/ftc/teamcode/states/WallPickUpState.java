@@ -87,7 +87,7 @@ public class WallPickUpState extends BaseState {
         }
 
         if (joystick.gamepad1GetX()) {
-            robot.getFollower().setPose(new Pose(0.25, 0, Math.toRadians(180)));
+            robot.getFollower().setPose(Robot.origin);
             robot.switchState(State.AUTO_SPECIMEN_HANG);
         }
 

@@ -359,9 +359,18 @@ public class Robot {
         leftHangServo.setPower(power);
     }
 
+    public void turnOffLeftHangServo() {
+        leftHangServo.getController().pwmDisable();
+    }
+
+
 
     public void setRightHangServo(double power) {
         rightHangServo.setPower(power);
+    }
+
+    public void turnOffRightHangServo() {
+        rightHangServo.getController().pwmDisable();
     }
 
 

@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
-import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -14,9 +13,10 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 @Config
 public class HangState extends BaseState {
 
-    public static int HANG_SLIDE_ANGLE_ROTATION_PREP = 500;
-    public static int HANG_SLIDE_EXTENSTION_PREP = 500;
+    public static int HANG_SLIDE_ANGLE_ROTATION_PREP = 810;
+    public static int HANG_SLIDE_EXTENSION_PREP = 820;
 
+    public static int HANG_SLIDE_EXTENSION_STAGE1 = 748;
 
 
     public static int HANG_SLIDE_ANGLE_ROTATION_L2 = 0;
@@ -35,7 +35,8 @@ public class HangState extends BaseState {
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
-        robot.setSlideTargetPosition(HANG_SLIDE_EXTENSTION_PREP);
+       robot.setDriveTrainEnabled(false);
+        robot.setSlideTargetPosition(HANG_SLIDE_EXTENSION_PREP);
         robot.setSlideRotationPosition(HANG_SLIDE_ANGLE_ROTATION_PREP);
         robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN);
         //robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
@@ -52,35 +53,37 @@ public class HangState extends BaseState {
         if(joystick.gamepad2GetY()) {
             robot.switchState(State.INTAKINGCLAW);
         } else if(joystick.gamepad2GetA()) {
+            taskArrayList.add(createSlideTask(robot, HANG_SLIDE_EXTENSION_STAGE1, 200, "Slide", false));
 
-           taskArrayList.add(createSlideTask(robot, HANG_SLIDE_EXTENSTION_L2, 0, "Slide", false));
-           taskArrayList.add(createSlideRotationTask(robot, HANG_SLIDE_ANGLE_ROTATION_L2, 1000, "Rotation", false));
 
-           taskArrayList.add(new ExecuteOnceTask(
+            taskArrayList.add(createSlideRotationTask(robot, HANG_SLIDE_ANGLE_ROTATION_L2, 500, "Rotation", false));
+            taskArrayList.add(createSlideTask(robot, HANG_SLIDE_EXTENSTION_L2, 1000, "Slide", false));
+
+            taskArrayList.add(new ExecuteOnceTask(
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-//                           robot.setLeftHangServo(-.3);
-//                           robot.setRightHangServo(.3);
+                           robot.setLeftHangServo(.3);
+                           robot.setRightHangServo(-.3);
                        }
                    }, "Engage Hooks"
            ));
 
-           taskArrayList.add(createWaitTask(robot, 200, "Wait for hooks"));
+           taskArrayList.add(createWaitTask(robot, 400, "Wait for hooks"));
 
 
            taskArrayList.add(new ExecuteOnceTask(
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-//                           robot.setLeftHangServo(0);
-//                           robot.setRightHangServo(0);
+                           robot.turnOffLeftHangServo();
+                           robot.turnOffRightHangServo();
                        }
                    }, "Disengage Hooks"
            ));
 
 
-           taskArrayList.add(createSlideTask(robot, HANG_SLIDE_EXTENSTION_L2-50, 30, "Slide", false));
+//           taskArrayList.add(createSlideTask(robot, HANG_SLIDE_EXTENSTION_L2+50, 30, "Slide", false));
 
 
         }
@@ -97,12 +100,15 @@ public class HangState extends BaseState {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad2GetLeftTrigger()*20));
         }
 
+        robot.updateDriveTrainsRaw(telemetry,false, joystick.gamepad1GetLeftStickX(), joystick.gamepad1GetLeftStickY(), joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);
+
         executeTasks(telemetry);
 
     }
 
     @Override
     public void dispose(Robot robot) {
+        robot.setDriveTrainEnabled(true);
         robot.setSlideMinPosition(RoboSapiensTeleOp.Params.SLIDE_MIN_POSITION);
     }
 
