@@ -9,6 +9,8 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
+import com.pedropathing.pathgen.BezierPoint;
+import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -393,6 +395,73 @@ public class AngleDrive implements IDrive {
                 .addPath(new BezierCurve(new Point(startPose), new Point(middlePose), new Point(endPose)))
                 .setConstantHeadingInterpolation(endPose.getHeading())
                 .setZeroPowerAccelerationMultiplier(ZPAM)
+                .build();
+    }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param middlePose
+     * @param endPose
+     * @param ZPAM
+     * @return PathChain
+     */
+
+    public static PathChain splineToTangentialHeading(@NonNull Follower follower, Pose startPose, Pose middlePose, Pose endPose, double ZPAM) {
+        return follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(startPose), new Point(middlePose), new Point(endPose)))
+                .setTangentHeadingInterpolation()
+                .setZeroPowerAccelerationMultiplier(ZPAM)
+                .addPath(new BezierLine(new Point(endPose), new Point(new Pose(endPose.getX()+.01, endPose.getY(), endPose.getHeading()))))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .build();
+    }
+
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param middlePose
+     * @param endPose
+     * @return PathChain
+     */
+    public static PathChain splineToTangentialHeading(@NonNull Follower follower, Pose startPose, Pose middlePose, Pose endPose) {
+        return follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(startPose), new Point(middlePose), new Point(endPose)))
+                .setTangentHeadingInterpolation()
+                .addPath(new BezierLine(new Point(endPose), new Point(new Pose(endPose.getX()+.01, endPose.getY(), endPose.getHeading()))))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .build();
+    }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param middlePose
+     * @param endPose
+     * @return PathChain
+     */
+    public static PathChain splineToTangentialHeadingReverse(@NonNull Follower follower, Pose startPose, Pose middlePose, Pose endPose) {
+        return follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(startPose), new Point(middlePose), new Point(endPose)))
+                .setTangentHeadingInterpolation()
+                .setReversed(true)
+                .addPath(new BezierLine(new Point(endPose), new Point(new Pose(endPose.getX()+.01, endPose.getY(), endPose.getHeading()))))
+                .setConstantHeadingInterpolation(endPose.getHeading())
+                .build();
+    }
+
+    /**
+     * @param follower
+     * @param startPose
+     * @param middlePose
+     * @param endPose
+     * @return PathChain
+     */
+    public static PathChain splineToLinearHeading(@NonNull Follower follower, Pose startPose, Pose middlePose, Pose endPose) {
+        return follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(startPose), new Point(middlePose), new Point(endPose)))
+                .setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
                 .build();
     }
 

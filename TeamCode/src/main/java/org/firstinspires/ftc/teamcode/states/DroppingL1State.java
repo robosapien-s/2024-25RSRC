@@ -4,6 +4,8 @@ import com.acmerobotics.roadrunner.Pose2d;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
+import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
+import org.firstinspires.ftc.teamcode.controllers.RobotTaskParallel;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -31,7 +33,19 @@ public class DroppingL1State extends BaseState {
     public void initialize(Robot robot, IRobot prevState) {
         robot.setSlideMaxPosition(getHeight());
 
+        IRobotTask trajectoryTask = runTrajectory(robot);
+
+        RobotTaskParallel parallelTask = new RobotTaskParallel();
+
         RobotTaskSeries transferSeries = new RobotTaskSeries();
+
+
+
+        if (trajectoryTask != null) {
+            parallelTask.add(transferSeries);
+        }
+
+
 
 //        transferSeries.add(new ExecuteOnceTask(
 //                new ExecuteOnceTask.ExecuteListener() {
@@ -45,15 +59,18 @@ public class DroppingL1State extends BaseState {
 
         transferSeries.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngle", false));
 
-        transferSeries.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 1, "ClawClose", false));
+        transferSeries.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 0, "ClawClose", false));
 
-        transferSeries.add(createSlideTask(robot, 0, 1, "VerticalSlide", false));
+        transferSeries.add(createSlideTask(robot, 0,400*(int)(((double)robot.getSlidePosition()-(double)RoboSapiensTeleOp.Params.SLIDE_MIN_POSITION)/((double)RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION-(double)RoboSapiensTeleOp.Params.SLIDE_MIN_POSITION)), "Slide", false));
 
 
 //        transferSeries.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIDDLE_POSITION, 100, "HorizontalSlide", false));
-        transferSeries.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_DROP_POSITION, 400, "HorizontalSlide", false));
-        transferSeries.add(createSlideTask(robot, getHeight(), 600, "VerticalSlide", false));
-
+        if (trajectoryTask != null) {
+            transferSeries.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_DROP_POSITION, 1000, "HorizontalSlide", false));
+        } else {
+            transferSeries.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_DROP_POSITION, 400, "HorizontalSlide", false));
+        }
+        transferSeries.add(createSlideTask(robot, getHeight(), 500, "VerticalSlide", false));
         transferSeries.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_BUCKET, 0, "IntakeAngle", false));
         transferSeries.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_BASKET, 50, "IntakeAngle", false));
 
@@ -68,8 +85,9 @@ public class DroppingL1State extends BaseState {
 //                }, "Substate Transition"
 //        ));
 
+        parallelTask.add(transferSeries);
 
-        taskArrayList.add(transferSeries);
+        taskArrayList.add(parallelTask);
 
     }
 
@@ -83,7 +101,7 @@ public class DroppingL1State extends BaseState {
 
         if(joystick.gamepad1GetX()) {
 
-            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 300, "claw open", false));
+            taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "claw open", false));
 
             taskArrayList.add(new ExecuteOnceTask(
                     new ExecuteOnceTask.ExecuteListener() {
@@ -108,6 +126,8 @@ public class DroppingL1State extends BaseState {
 
         executeTasks(telemetry);
     }
+
+    public IRobotTask runTrajectory(Robot robot) {return null;}
 
     @Override
     public State getState() {

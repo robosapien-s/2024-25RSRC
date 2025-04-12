@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = .4439;//.9;
-        public static double CLAW_CLOSE = .7;
+        public static double CLAW_OPEN = .479;//.9;
+        public static double CLAW_CLOSE = .224;
 
 
         public static double INTAKE_ANGLE_OFFSET=0;
@@ -88,7 +88,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_ROTATION_DROP_POSITION = 1330 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1230 + SLIDE_ROTATION_OFFSET;
+        public static int SLIDE_ROTATION_MIDDLE_POSITION= 1260 + SLIDE_ROTATION_OFFSET;
 
         public static int SLIDE_ROTATION_MIN_POSITION = SLIDE_ROTATION_OFFSET;
 

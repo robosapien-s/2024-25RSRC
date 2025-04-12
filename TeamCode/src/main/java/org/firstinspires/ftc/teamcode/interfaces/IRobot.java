@@ -26,6 +26,7 @@ public interface IRobot {
         AUTO_PICKUP,
         SPECIMEN_HANG_FRONT,
         ROBOT_HANG,
+        AUTO_BUCKET,
     }
 
 

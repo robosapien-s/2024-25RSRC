@@ -35,11 +35,20 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
     SquidToPointTask _squidToPointTask = null;
 
+    MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority _colorPriority = MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.yellow;
+
+
 //    PedroPathingTask _pedroPathingTask = null;
 
 //    boolean _movingToLocation = false;
 
     TaskExecuter _taskExecuter = new TaskExecuter();
+
+    public AutoPickupTask(AutoPickupListener listener, boolean isAuto, MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority colorPriority) {
+        _listener = listener;
+        _colorPriority = colorPriority;
+        this.isAuto = isAuto;
+    }
 
     public AutoPickupTask(AutoPickupListener listener, boolean isAuto) {
         _listener = listener;
@@ -106,7 +115,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
         long timeDelay = System.currentTimeMillis() - delayTimeHack;
 
-        if( timeDelay > 1000 && cloestRect.size.width != 0) {
+        if( timeDelay > 250 && cloestRect.size.width != 0) {
 
             _closestRec = cloestRect;
             _didFindSample = true;
@@ -143,15 +152,12 @@ public class AutoPickupTask extends  RobotTaskImpl {
                     is_pickupStarted = true;
                     double clawPosition = robot.getClawPosition();
 
+                    _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "IntakeClawOpen", false));
 
-                    _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 50, "IntakeAngle", false));
+                    _taskExecuter.add(BaseState.createSlideRotationTask(robot, 0, 0, "Arm Angle", false));
 
+                    _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 100, "IntakeAngle", false));
 
-                    _taskExecuter.add(BaseState.createSlideRotationTask(robot, 0, 500, "Arm Angle", false));
-
-                    if (Math.abs(clawPosition - RoboSapiensTeleOp.Params.CLAW_OPEN) > .02) {
-                        _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 250, "IntakeClawOpen", false));
-                    }
 
 
                     _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 150, "IntakeAngle", false));
@@ -263,7 +269,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
         } else if(!hasStarted()) {
 
             robot.setDriveTrainEnabled(false);
-            _detector = robot.createColorSampleDetector(MultiColorSampleDetector.ClosestSamplePipeline.SampleColorPriority.yellow);
+            _detector = robot.createColorSampleDetector(_colorPriority);
 
             robot.setSlideTargetPosition(700);
             robot.setSlideRotationPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_CAMERA_POSITION);

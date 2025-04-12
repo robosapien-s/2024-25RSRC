@@ -126,7 +126,7 @@ public class WallPickUpState extends BaseState {
         executeTasks(telemetry);
     }
 
-    public IRobotTask runTrajectory(Robot robot) {return null;};
+    public IRobotTask runTrajectory(Robot robot) {return null;}
 
     @Override
     public State getState() {

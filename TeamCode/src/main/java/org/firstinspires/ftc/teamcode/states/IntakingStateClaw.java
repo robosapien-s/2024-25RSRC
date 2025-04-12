@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
 import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
@@ -32,10 +33,14 @@ public class IntakingStateClaw extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         robot.setSlideMinPosition(110);
-        robot.setSlideMaxPosition(RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION);
+
+        if (prevState == null || (prevState.getState() != State.DROPPING_L2 && prevState.getState() != State.AUTO_BUCKET)) {
+            robot.setSlideMaxPosition(RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION);
+        }
 
         if(prevState == null) {
             //use robot.set directly, not a task series
+            robot.setSlideMaxPosition(RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION);
             robot.setSlideTargetPosition(70);
             robot.setSlideRotationPosition(0);
             robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP);
@@ -55,17 +60,27 @@ public class IntakingStateClaw extends BaseState {
             taskArrayList.add(createSlideRotationTask(robot, 0, 0, "Rotation", false));
         } else if (prevState.getState() == State.PICKUP_GROUND_LEFT) {
             robot.setSlideTargetPosition(70);
-        } else if (prevState.getState() == State.DROPPING_L2) {
+        } else if (prevState.getState() == State.DROPPING_L2 || prevState.getState() == State.AUTO_BUCKET) {
 
             taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngle", false));
 
-            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 50, "IntakeAngle", false));
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "Rotation and Angle", false));
 
-            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIDDLE_POSITION, 200, "Rotation", false));
+            taskArrayList.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_MIDDLE_POSITION, 50, "Rotation", false));
 
             taskArrayList.add(createSlideTask(robot, 0, 300, "Slide", false));
 
+
             taskArrayList.add(createSlideRotationTask(robot, 0, 200, "Rotation", false));
+
+            taskArrayList.add(new ExecuteOnceTask(
+                    new ExecuteOnceTask.ExecuteListener() {
+                        @Override
+                        public void execute() {
+                            robot.setSlideMaxPosition(RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION);
+                        }
+                    }, "setting max slide position"
+            ));
 
 
         } else if (prevState.getState() == State.PICKUP_GROUND) {

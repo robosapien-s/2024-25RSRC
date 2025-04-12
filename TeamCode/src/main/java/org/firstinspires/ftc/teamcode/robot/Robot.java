@@ -44,6 +44,8 @@ public class Robot {
     public static Pose middlePoseHang = new Pose(5.75, 22.75, Math.toRadians(180));
     public static Pose middlePoseWall = new Pose(7, 2, Math.toRadians(180));
 
+    public static Pose bucketPose = new Pose(20.25, 130.15, Math.toRadians(-45));
+
     public static double leftPoseY = 40.5;
 
     public static int numCycles = 12;
