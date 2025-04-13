@@ -13,14 +13,21 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 @Config
 public class HangState extends BaseState {
 
-    public static int HANG_SLIDE_ANGLE_ROTATION_PREP = 810;
-    public static int HANG_SLIDE_EXTENSION_PREP = 820;
+    public static int HANG_SLIDE_ANGLE_ROTATION_PREP = 723;
+    public static int HANG_SLIDE_EXTENSION_PREP = 1200;
 
     public static int HANG_SLIDE_EXTENSION_STAGE1 = 748;
 
 
     public static int HANG_SLIDE_ANGLE_ROTATION_L2 = 0;
-    public static int HANG_SLIDE_EXTENSTION_L2 = 0;
+    public static int HANG_SLIDE_EXTENSTION_L2 = 385;
+
+    //1770 on rotation
+    //1108 on slide
+    //1710 on rotation
+    //817 on slide
+
+    double targetPos;
 
 
     public HangState(JoystickWrapper joystick) {
@@ -41,9 +48,12 @@ public class HangState extends BaseState {
         robot.setRotAndAnglePosition(RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN);
         //robot.setClawPosition(RoboSapiensTeleOp.Params.CLAW_OPEN);
         robot.setIntakeAnglePosition(RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN);
+        robot.setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_OPEN);
 
         robot.setSlideMinPosition(0);
+        robot.setSlideMaxPosition(1500);
 
+        robot.setSlideRotationMaxPosition(2000);
 
     }
 
@@ -63,8 +73,7 @@ public class HangState extends BaseState {
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-                           robot.setLeftHangServo(.3);
-                           robot.setRightHangServo(-.3);
+                           robot.setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_CLOSED);
                        }
                    }, "Engage Hooks"
            ));
@@ -76,8 +85,7 @@ public class HangState extends BaseState {
                    new ExecuteOnceTask.ExecuteListener() {
                        @Override
                        public void execute() {
-                           robot.turnOffLeftHangServo();
-                           robot.turnOffRightHangServo();
+                           robot.disableHangServo();
                        }
                    }, "Disengage Hooks"
            ));
@@ -98,6 +106,34 @@ public class HangState extends BaseState {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad2GetLeftTrigger()*-20));
         } else {
             robot.increaseSlideRotationTargetPosition((int) (joystick.gamepad2GetLeftTrigger()*20));
+        }
+
+        if (joystick.gamepad2GetDUp()) {
+            targetPos = RoboSapiensTeleOp.Params.HANG_SERVO_OPEN;
+            robot.setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_OPEN);
+        }
+
+        if (joystick.gamepad2GetDDown()) {
+            targetPos = RoboSapiensTeleOp.Params.HANG_SERVO_CLOSED;
+            robot.setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_CLOSED);
+        }
+
+        if (joystick.gamepad2GetDLeft()) {
+            targetPos-=0.05;
+            robot.setHangServo(targetPos);
+        }
+
+        if (joystick.gamepad2GetDRight()) {
+            targetPos+=0.05;
+            robot.setHangServo(targetPos);
+        }
+
+        if (joystick.gamepad2GetLeftBumperDown()) {
+            robot.disableHangServo();
+        }
+
+        if (joystick.gamepad2GetRightBumperDown()) {
+            robot.enableHangServo();
         }
 
         robot.updateDriveTrainsRaw(telemetry,false, joystick.gamepad1GetLeftStickX(), joystick.gamepad1GetLeftStickY(), joystick.gamepad1GetRightStickX(), joystick.gamepad1GetRightStickY(), 1, 1);

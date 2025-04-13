@@ -17,8 +17,12 @@ import org.firstinspires.ftc.teamcode.robot.Robot;
 public class RoboSapiensTeleOp extends LinearOpMode {
 
     public static class Params {
-        public static double CLAW_OPEN = .479;//.9;
-        public static double CLAW_CLOSE = .224;
+        public static double HANG_SERVO_CLOSED = 0.825;
+        public static double HANG_SERVO_OPEN = 0.3;
+
+
+        public static double CLAW_OPEN = .4339;//.9;
+        public static double CLAW_CLOSE = .7339;
 
 
         public static double INTAKE_ANGLE_OFFSET=0;

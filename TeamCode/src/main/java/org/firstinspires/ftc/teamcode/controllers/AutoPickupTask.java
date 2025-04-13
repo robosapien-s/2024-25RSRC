@@ -4,6 +4,7 @@ import com.pedropathing.localization.Pose;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.interfaces.IRobot;
 import org.firstinspires.ftc.teamcode.opmodes.RoboSapiensTeleOp;
 import org.firstinspires.ftc.teamcode.robot.MultiColorSampleDetector;
 import org.firstinspires.ftc.teamcode.robot.Robot;
@@ -103,7 +104,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
             }
         }
     }
-    public void calculateDistanceToSample() {
+    public void calculateDistanceToSample(Robot robot) {
 
         Point centerTarget = _detector.getCenterOfScreen();
         centerTarget.y += 50;
@@ -115,10 +116,14 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
         long timeDelay = System.currentTimeMillis() - delayTimeHack;
 
-        if( timeDelay > 250 && cloestRect.size.width != 0) {
-
+        if( timeDelay > 1250 && cloestRect.size.width != 0) {
             _closestRec = cloestRect;
             _didFindSample = true;
+            _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "IntakeClawOpen", false));
+
+            _taskExecuter.add(BaseState.createSlideRotationTask(robot, 0, 0, "Arm Angle", false));
+
+            _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 0, "IntakeAngle", false));
         }
     }
 
@@ -150,31 +155,21 @@ public class AutoPickupTask extends  RobotTaskImpl {
             if(/*PedroPathingTask._doContinueHack == 2*/true) {
                 if (!is_pickupStarted) {
                     is_pickupStarted = true;
-                    double clawPosition = robot.getClawPosition();
+//                    double clawPosition = robot.getClawPosition();
 
-                    _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "IntakeClawOpen", false));
-
-                    _taskExecuter.add(BaseState.createSlideRotationTask(robot, 0, 0, "Arm Angle", false));
-
-                    _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, mapAngleToClawPosition(), 100, "IntakeAngle", false));
-
-
-
-                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 150, "IntakeAngle", false));
+                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 50, "IntakeAngle", false));
 
                     _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 300, "IntakeClawClose", false));
 
 
                     _taskExecuter.add(BaseState.createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "IntakeAngle", false));
 
-                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 50, "IntakeAngle", false));
-
-
+                    _taskExecuter.add(BaseState.createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "IntakeAngle", false));
                 }
                 if (_taskExecuter.isComplete()) {
 //                TODO:  check to see if it has it and maybe try a second time???
 
-                    robot.getFollower().breakFollowing();
+//                    robot.getFollower().breakFollowing();
                     _didPickup = true;
                 }
             }
@@ -264,7 +259,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
             }
 
         } else if(hasStarted()) {
-            calculateDistanceToSample();
+            calculateDistanceToSample(robot);
             robot.setDriveTrainEnabled(false);
         } else if(!hasStarted()) {
 

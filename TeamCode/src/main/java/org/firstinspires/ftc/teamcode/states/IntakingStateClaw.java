@@ -33,6 +33,7 @@ public class IntakingStateClaw extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
         robot.setSlideMinPosition(110);
+        robot.setSlideRotationMaxPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_MAX_POSITION);
 
         if (prevState == null || (prevState.getState() != State.DROPPING_L2 && prevState.getState() != State.AUTO_BUCKET)) {
             robot.setSlideMaxPosition(RoboSapiensTeleOp.Params.SLIDE_MAX_POSITION);

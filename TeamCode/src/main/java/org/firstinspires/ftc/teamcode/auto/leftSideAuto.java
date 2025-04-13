@@ -26,7 +26,7 @@ public class leftSideAuto extends LinearOpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
-    private final Pose startPose = new Pose(8.8, 113.7, Math.toRadians(0));
+    private final Pose startPose = new Pose(9.154, 113.7, Math.toRadians(0));
     private final Pose dropPose = new Pose(20.25, 130.15, Math.toRadians(-25.4));
 //    private final Pose dropPose = new Pose(20, 130.4, Math.toRadians(-25.4));
     private final Pose firstPickUpPose = new Pose(21.5, 131.8, Math.toRadians(-25.4));
@@ -153,7 +153,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 7:
                     if (robotAuto.checkWait()/* && !follower.isBusy()*/) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1900);
+                        robotAuto.startWait(1650);
                         setPathState(pathState+1);
                     }
                     break;
@@ -202,7 +202,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 14:
                     if (/*!follower.isBusy() &&*/ robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1800);
+                        robotAuto.startWait(1650);
                         setPathState(pathState+1);
                     }
                     break;
@@ -247,7 +247,7 @@ public class leftSideAuto extends LinearOpMode {
                 case 20:
                     if (/*!follower.isBusy() &&*/ robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1850);
+                        robotAuto.startWait(1650);
                         setPathState(pathState+1);
                     }
                     break;

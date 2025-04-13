@@ -14,7 +14,6 @@ import com.pedropathing.pathgen.Point;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -75,10 +74,8 @@ public class Robot {
     private final Servo clawRotAndAngleServoLeft;
     private final Servo clawServo;
     private final Servo intakeAngleServo;
+    private final Servo hangServo;
 
-
-    private final CRServo leftHangServo;
-    private final CRServo rightHangServo;
 
     private final HardwareMap hardwareMap;
 
@@ -139,8 +136,10 @@ public class Robot {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         intakeAngleServo = hardwareMap.get(Servo.class, "intakeAngleServo");
 
-        leftHangServo = hardwareMap.get(CRServo.class, "leftHangServo");
-        rightHangServo = hardwareMap.get(CRServo.class, "rightHangServo");
+        hangServo = hardwareMap.get(Servo.class, "hangServo");
+
+//        leftHangServo = hardwareMap.get(CRServo.class, "leftHangServo");
+//        rightHangServo = hardwareMap.get(CRServo.class, "rightHangServo");
 
 //        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
@@ -181,6 +180,9 @@ public class Robot {
 
 
         switchState(State.INTAKINGCLAW);
+
+        setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_CLOSED);
+
         if (!isAuto) {
             double startingHeading = Math.toRadians(90);
             Follower follower;
@@ -351,23 +353,39 @@ public class Robot {
         return clawServo.getPosition();
     }
 
-    public void setLeftHangServo(double power) {
-        leftHangServo.setPower(power);
+    public void setHangServo(double position) {
+        hangServo.setPosition(position);
     }
 
-    public void turnOffLeftHangServo() {
-        leftHangServo.getController().pwmDisable();
+    public void disableHangServo() {
+        hangServo.getController().pwmDisable();
     }
 
-
-
-    public void setRightHangServo(double power) {
-        rightHangServo.setPower(power);
+    public void enableHangServo() {
+        hangServo.getController().pwmEnable();
     }
 
-    public void turnOffRightHangServo() {
-        rightHangServo.getController().pwmDisable();
+    public void setSlideRotationMaxPosition(int pos) {
+        slideRotationController.setMaxPosition(pos);
     }
+
+//    public void setLeftHangServo(double power) {
+//        leftHangServo.setPower(power);
+//    }
+//
+//    public void turnOffLeftHangServo() {
+//        leftHangServo.getController().pwmDisable();
+//    }
+//
+//
+//
+//    public void setRightHangServo(double power) {
+//        rightHangServo.setPower(power);
+//    }
+//
+//    public void turnOffRightHangServo() {
+//        rightHangServo.getController().pwmDisable();
+//    }
 
 
     public int getSlidePosition() {
