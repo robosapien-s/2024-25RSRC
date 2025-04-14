@@ -32,6 +32,14 @@ public class IntakingStateClaw extends BaseState {
 
     @Override
     public void initialize(Robot robot, IRobot prevState) {
+        taskArrayList.add(new ExecuteOnceTask(
+                new ExecuteOnceTask.ExecuteListener() {
+                    @Override
+                    public void execute() {
+                        robot.setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_CLOSED);
+                    }
+                }, "hang servo"
+        ));
         robot.setSlideMinPosition(110);
         robot.setSlideRotationMaxPosition(RoboSapiensTeleOp.Params.SLIDE_ROTATION_MAX_POSITION);
 
@@ -94,6 +102,19 @@ public class IntakingStateClaw extends BaseState {
             taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 0, "Intake Angle", false));
             taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "Rot and Angle", false));
             taskArrayList.add(createSlideRotationTask(robot, 0, 0, "Rotation", false));
+        } else if (prevState.getState() == State.ROBOT_HANG) {
+            taskArrayList.add(new ExecuteOnceTask(
+                    new ExecuteOnceTask.ExecuteListener() {
+                        @Override
+                        public void execute() {
+                            robot.setHangServo(RoboSapiensTeleOp.Params.HANG_SERVO_OPEN);
+                        }
+                    }, "hang servo"
+            ));
+            taskArrayList.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_PREP, 0, "rot and angle", false));
+            taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_READY, 250, "intake angle", false));
+            taskArrayList.add(createSlideTask(robot, 0, 250, "slide", false));
+            taskArrayList.add(createSlideRotationTask(robot, 0, 0, "slide rotation", false));
         }
         else {
             robot.setSlideTargetPosition(70);
@@ -113,7 +134,7 @@ public class IntakingStateClaw extends BaseState {
         }
 
         if(joystick.gamepad1GetY()) {
-            robot.switchState(State.AUTO_PICKUP);
+            robot.switchState(State.ROBOT_HANG);
         } else if(joystick.gamepad1GetA()) {
 
 //            leftVertical = true;

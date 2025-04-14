@@ -37,14 +37,13 @@ public class AutoSpecimenHangState extends SpecimenHangState{
         if (joystick.gamepad1GetY()) {
             robot.setDriveTrainEnabled(true);
             Robot.pathChains.remove(0);
-            robot.switchState(State.SPECIMEN_HANG);
+            robot.switchState(State.WALLPICKUP);
         }
-
-
-        executeTasks(telemetry);
-        if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
+        else if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
             robot.switchState(State.AUTO_WALLPICKUP);
         }
+
+        executeTasks(telemetry);
     }
 
     @Override

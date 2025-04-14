@@ -38,9 +38,9 @@ public class AutoWallPickUpState extends WallPickUpState{
             robot.switchState(State.WALLPICKUP);
         }
 
-        executeTasks(telemetry);
 
-        if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
+
+        else if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
             if (Robot.pathChains.isEmpty()) {
                 robot.setDriveTrainEnabled(true);
                 robot.getFollower().breakFollowing();
@@ -49,6 +49,8 @@ public class AutoWallPickUpState extends WallPickUpState{
                 robot.switchState(State.AUTO_SPECIMEN_HANG);
             }
         }
+
+        executeTasks(telemetry);
     }
 
     @Override

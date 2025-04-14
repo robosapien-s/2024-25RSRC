@@ -41,7 +41,7 @@ import java.util.function.Supplier;
 public class Robot {
     public static Pose origin = new Pose(0,0,Math.toRadians(180));
     public static Pose middlePoseHang = new Pose(5.75, 22.75, Math.toRadians(180));
-    public static Pose middlePoseWall = new Pose(7, 2, Math.toRadians(180));
+//    public static Pose middlePoseWall = new Pose(10, 4, Math.toRadians(180));
 
     public static Pose bucketPose = new Pose(20.25, 130.15, Math.toRadians(-45));
 
@@ -214,8 +214,8 @@ public class Robot {
         Pose pose;
         for (int i = 0; i<numCycles; i++) {
             pose = new Pose(20.25, leftPoseY-1.5*i, Math.toRadians(180));
-            pathChains.add(splineToConstantHeading(getFollower(), new Pose(1, 0.5, Math.toRadians(180)), middlePoseHang, pose, 1.5));
-            pathChains.add(splineToConstantHeading(getFollower(), pose, middlePoseWall, new Pose(1, 0.5, Math.toRadians(180)), 1.5));
+            pathChains.add(splineToConstantHeading(getFollower(), new Pose(0, 0.5, Math.toRadians(180)), middlePoseHang, pose, 1.5));
+            pathChains.add(lineToConstantHeading(getFollower(), pose, new Pose(0, 0.5, Math.toRadians(180)), 1.5));
         }
         Pose startSwipePose = new Pose(20.25,22.5, Math.toRadians(180));
         Pose endSwipePose = new Pose(20.25, leftPoseY, Math.toRadians(180));
@@ -388,6 +388,10 @@ public class Robot {
 //    }
 
 
+    public double getPitch() {
+        return ((AngleDrive) drive).getPitch();
+    }
+
     public int getSlidePosition() {
         return slideController.getCurrentPosition();
     }
@@ -511,7 +515,7 @@ public class Robot {
     }
 
     public void updateDriveTrainsRaw(Telemetry telemetry, boolean isLeftStickPressed, double leftStickX, double leftStickY, double rightStickX, double rightStickY, double speed, double rotSpeed) {
-        drive.updateRaw(telemetry, false, leftStickX, -leftStickY, 0, 0, 1, 1);
+        drive.updateRaw(telemetry, false, leftStickX, -leftStickY, rightStickX, rightStickY, 1, 1);
     }
 
     public void moveMecanum(double xRotated, double yRotated, double anglePower){

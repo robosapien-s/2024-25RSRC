@@ -272,6 +272,10 @@ public class AngleDrive implements IDrive {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
+    public double getPitch() {
+        return imu.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES);
+    }
+
     @Override
     public void setAutoMode(double inX, double inY) {
 

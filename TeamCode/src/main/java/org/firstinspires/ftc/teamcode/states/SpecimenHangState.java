@@ -29,10 +29,12 @@ public class SpecimenHangState extends BaseState {
         RobotTaskSeries trajectorySeries = new RobotTaskSeries();
 
         if (trajectoryTask != null) {
-            trajectorySeries.add(createWaitTask(robot, 50, "wait"));
+            trajectorySeries.add(createWaitTask(robot, 500, "wait"));
             trajectorySeries.add(trajectoryTask);
 
             parallelTask.add(trajectorySeries);
+        } else if (!robot.isAuto) {
+            robot.getFollower().breakFollowing();
         }
 
         RobotTaskSeries stateTransition  = new RobotTaskSeries();
@@ -50,7 +52,7 @@ public class SpecimenHangState extends BaseState {
 
 
         } else {
-            stateTransition.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 100, "Claw Close", false));
+            stateTransition.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 200, "Claw Close", false));
             stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_SPECIMEN_POSITION, 100, "Rotation", false));
             stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_SPECIMEN, 0, "Intake Angle", false));
             stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN, 175, "Rot and Angle", false));
