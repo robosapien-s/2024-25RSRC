@@ -38,6 +38,7 @@ public class AutoCycleTask extends RobotTaskImpl{
                 _listener.follower().breakFollowing();
                 _isComplete = true;
             } else if (!_listener.follower().isBusy()) {
+                _listener.follower().breakFollowing();
                 _isComplete = true;
             }
         }

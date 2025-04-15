@@ -213,12 +213,12 @@ public class Robot {
 
         Pose pose;
         for (int i = 0; i<numCycles; i++) {
-            pose = new Pose(20.25, leftPoseY-1.5*i, Math.toRadians(180));
-            pathChains.add(splineToConstantHeading(getFollower(), new Pose(0, 0.5, Math.toRadians(180)), middlePoseHang, pose, 1.5));
-            pathChains.add(lineToConstantHeading(getFollower(), pose, new Pose(0, 0.5, Math.toRadians(180)), 1.5));
+            pose = new Pose(21, leftPoseY-1.75*i, Math.toRadians(180));
+            pathChains.add(splineToConstantHeading(getFollower(), new Pose(0.25, 0.5, Math.toRadians(180)), middlePoseHang, pose, 1.5));
+            pathChains.add(lineToConstantHeading(getFollower(), pose, new Pose(0.25, 0.5, Math.toRadians(180)), 1.5));
         }
-        Pose startSwipePose = new Pose(20.25,22.5, Math.toRadians(180));
-        Pose endSwipePose = new Pose(20.25, leftPoseY, Math.toRadians(180));
+        Pose startSwipePose = new Pose(21,23.5, Math.toRadians(180));
+        Pose endSwipePose = new Pose(21, leftPoseY, Math.toRadians(180));
 
         PathChain firstDrop = getFollower().pathBuilder()
                 .addPath(new BezierCurve(new Point(origin),new Point(new Pose(5.75, 20, Math.toRadians(180))), new Point(startSwipePose)))

@@ -29,7 +29,7 @@ public class SpecimenHangState extends BaseState {
         RobotTaskSeries trajectorySeries = new RobotTaskSeries();
 
         if (trajectoryTask != null) {
-            trajectorySeries.add(createWaitTask(robot, 500, "wait"));
+            trajectorySeries.add(createWaitTask(robot, 200, "wait"));
             trajectorySeries.add(trajectoryTask);
 
             parallelTask.add(trajectorySeries);

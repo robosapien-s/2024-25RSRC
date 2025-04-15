@@ -30,37 +30,37 @@ public class rightSideAuto extends LinearOpMode {
 
     private final Pose autoStartPose = new Pose(7.3, 75.6, Math.toRadians(180));
 
-    private final Pose preloadHangPose = new Pose(35, 74, Math.toRadians(180));
+    private final Pose preloadHangPose = new Pose(36, 74, Math.toRadians(180));
 
     private final Pose pickup1Pose = new Pose(32, 49.75, Math.toRadians(-60));
 
     private final Pose dropoff1Pose = new Pose(28, 45.5, Math.toRadians(-138));
 
-    private final Pose pickup2pose = new Pose(31, 38.5, Math.toRadians(-60));
+    private final Pose pickup2pose = new Pose(31.5, 38.5, Math.toRadians(-60));
 
     private final Pose dropoff2pose = new Pose(29, 34.25, Math.toRadians(-138));
 
-    private final Pose pickup3pose = new Pose(33.5, 29, Math.toRadians(-60));
+    private final Pose pickup3pose = new Pose(33, 29, Math.toRadians(-60));
 
     private final Pose dropoff3pose = new Pose(28, 32.5, Math.toRadians(-160));
 
     private final Pose lineUpWallPose = new Pose(19, 35, Math.toRadians(180));
 
-    private final Pose pickUpWallPose = new Pose(14.25, 37.25, Math.toRadians(180));
+    private final Pose pickUpWallPose = new Pose(14.5, 37.25, Math.toRadians(180));
 
 //    private final Pose lineUpWall2Pose = new Pose(20, 45.3, Math.toRadians(180));
 
-    private final Pose pickUpWall2Pose = new Pose(15.25, 37.75, Math.toRadians(180));
+    private final Pose pickUpWall2Pose = new Pose(14.5, 37.75, Math.toRadians(180));
 
-    private final Pose middleWallPose = new Pose(19.25, 39.25, Math.toRadians(180));
+//    private final Pose middleWallPose = new Pose(19.25, 39.25, Math.toRadians(180));
 
-    private final Pose hang1Pose = new Pose(34.75, 72.4, Math.toRadians(180));
+    private final Pose hang1Pose = new Pose(36, 72.4, Math.toRadians(180));
 
-    private final Pose hang2Pose = new Pose(34.75, 70.8, Math.toRadians(180));
+    private final Pose hang2Pose = new Pose(36, 70.8, Math.toRadians(180));
 
-    private final Pose hang3Pose = new Pose(34.75, 69.2, Math.toRadians(180));
+    private final Pose hang3Pose = new Pose(36, 69.2, Math.toRadians(180));
 
-    private final Pose hang4Pose = new Pose(34.75, 67.6, Math.toRadians(180));
+    private final Pose hang4Pose = new Pose(36, 67.6, Math.toRadians(180));
 
     private final Pose middleHangPose = new Pose(20, 60, Math.toRadians(180));
 
@@ -120,15 +120,15 @@ public class rightSideAuto extends LinearOpMode {
 
         PathChain hang1 = splineToConstantHeading(follower, pickUpWallPose,middleHangPose, hang1Pose, 1.5);
 //        PathChain lineUpWall2 = lineToConstantHeading(hang1Pose, lineUpWall2Pose);
-        PathChain pickUpWall2 = splineToConstantHeading(follower, hang1Pose,middleWallPose, pickUpWall2Pose,1.5);
+        PathChain pickUpWall2 = lineToConstantHeading(follower, hang1Pose, pickUpWall2Pose,1.5);
 
         PathChain hang2 = splineToConstantHeading(follower, pickUpWall2Pose,middleHangPose, hang2Pose, 1.5);
 //        PathChain lineUpWall3 = lineToConstantHeading(hang2Pose, lineUpWall2Pose);
-        PathChain pickUpWall3 = splineToConstantHeading(follower, hang2Pose,middleWallPose, pickUpWall2Pose,1.5);
+        PathChain pickUpWall3 = lineToConstantHeading(follower, hang2Pose, pickUpWall2Pose,1.5);
 
         PathChain hang3 = splineToConstantHeading(follower, pickUpWall2Pose, middleHangPose,hang3Pose, 1.5);
 //        PathChain lineUpWall4 = lineToConstantHeading(hang3Pose, lineUpWall2Pose);
-        PathChain pickUpWall4 = splineToConstantHeading(follower, hang3Pose, middleWallPose,pickUpWall2Pose,1.5);
+        PathChain pickUpWall4 = lineToConstantHeading(follower, hang3Pose,pickUpWall2Pose,1.5);
 
         PathChain hang4 = splineToConstantHeading(follower, pickUpWall2Pose, middleHangPose,hang4Pose, 1.5);
         PathChain park = lineToLinearHeading(follower, hang4Pose, parkPose);
@@ -172,7 +172,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 1:
                     if (robotAuto.checkWait() || !follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(100);
+                        robotAuto.startWait(150);
                         setPathState(pathState+1);
                     }
                     break;
@@ -334,7 +334,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 22:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.SPECIMEN_HANG);
-                        robotAuto.startWait(50);
+                        robotAuto.startWait(100);
                         setPathState(pathState+1);
                     }
                     break;
@@ -349,7 +349,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 24:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        robotAuto.startWait(100);
+                        robotAuto.startWait(150);
                         setPathState(pathState+1);
                     }
                     break;
@@ -377,7 +377,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 27:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.SPECIMEN_HANG);
-                        robotAuto.startWait(50);
+                        robotAuto.startWait(100);
                         setPathState(pathState+1);
                     }
                     break;
@@ -392,7 +392,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 29:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        robotAuto.startWait(100);
+                        robotAuto.startWait(150);
                         setPathState(pathState+1);
                     }
                     break;
@@ -421,7 +421,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 32:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.SPECIMEN_HANG);
-                        robotAuto.startWait(50);
+                        robotAuto.startWait(100);
                         setPathState(pathState+1);
                     }
                     break;
@@ -436,7 +436,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 34:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        robotAuto.startWait(100);
+                        robotAuto.startWait(150);
                         setPathState(pathState+1);
                     }
                     break;
@@ -465,7 +465,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 37:
                     if (robotAuto.checkWait()) {
                         robotAuto.setState(IRobot.State.SPECIMEN_HANG);
-                        robotAuto.startWait(50);
+                        robotAuto.startWait(100);
                         setPathState(pathState+1);
                     }
                     break;
@@ -480,7 +480,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 39:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(50);
+                        robotAuto.startWait(150);
                         setPathState(pathState+1);
                     }
                     break;

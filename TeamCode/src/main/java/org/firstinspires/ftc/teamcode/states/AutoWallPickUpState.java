@@ -34,18 +34,16 @@ public class AutoWallPickUpState extends WallPickUpState{
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
         if (joystick.gamepad1GetY()) {
+            robot.getFollower().breakFollowing();
             robot.setDriveTrainEnabled(true);
             robot.switchState(State.WALLPICKUP);
-        }
-
-
-
-        else if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
+        } else if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
             if (Robot.pathChains.isEmpty()) {
                 robot.setDriveTrainEnabled(true);
                 robot.getFollower().breakFollowing();
                 robot.switchState(State.WALLPICKUP);
             } else {
+                robot.getFollower().breakFollowing();
                 robot.switchState(State.AUTO_SPECIMEN_HANG);
             }
         }
@@ -57,5 +55,10 @@ public class AutoWallPickUpState extends WallPickUpState{
     public State getState() {
         return State.AUTO_WALLPICKUP;
     }
+
+//    @Override
+//    public void dispose(Robot robot) {
+//
+//    }
 
 }

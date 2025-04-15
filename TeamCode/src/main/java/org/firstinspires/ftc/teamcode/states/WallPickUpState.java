@@ -35,7 +35,7 @@ public class WallPickUpState extends BaseState {
         RobotTaskSeries trajectorySeries = new RobotTaskSeries();
         RobotTaskParallel parallelTask = new RobotTaskParallel();
         if (trajectoryTask != null) {
-            trajectorySeries.add(createWaitTask(robot, 500, "wait"));
+            trajectorySeries.add(createWaitTask(robot, 200, "wait"));
             trajectorySeries.add(trajectoryTask);
 
             parallelTask.add(trajectorySeries);
@@ -50,7 +50,7 @@ public class WallPickUpState extends BaseState {
             stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
             stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
             stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
-
+            parallelTask.add(stateTransition);
         } else if (prevState.getState() == State.SPECIMEN_HANG || prevState.getState() == State.AUTO_SPECIMEN_HANG) {
             stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_SPECIMEN_DOWN, 0, "Rot and Angle", false));
             stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_SPECIMEN_DOWN_POSITION, 150, "Slide", false));
@@ -61,15 +61,16 @@ public class WallPickUpState extends BaseState {
             stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
             stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
 //            stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
-
+            parallelTask.add(stateTransition);
         } else {
             stateTransition.add(createSlideTask(robot, RoboSapiensTeleOp.Params.SLIDE_WALL_POSITION, 0, "Slide", false));
             stateTransition.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_WALL_PICKUP, 0, "Intake Angle", false));
             stateTransition.add(createRotationAndAngleTask(robot, RoboSapiensTeleOp.Params.ROT_AND_ANGLE_WALL_PICKUP, 0, "Rot and Angle", false));
             stateTransition.add(createSlideRotationTask(robot, RoboSapiensTeleOp.Params.SLIDE_ROTATION_WALL_POSITION, 0, "Rotation", false));
+            parallelTask.add(stateTransition);
         }
 
-        parallelTask.add(stateTransition);
+
         taskArrayList.add(parallelTask);
     }
 

@@ -35,11 +35,13 @@ public class AutoSpecimenHangState extends SpecimenHangState{
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
         if (joystick.gamepad1GetY()) {
+            robot.getFollower().breakFollowing();
             robot.setDriveTrainEnabled(true);
             Robot.pathChains.remove(0);
             robot.switchState(State.WALLPICKUP);
         }
         else if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
+            robot.getFollower().breakFollowing();
             robot.switchState(State.AUTO_WALLPICKUP);
         }
 

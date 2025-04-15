@@ -205,7 +205,7 @@ public class AngleDrive implements IDrive {
 
 //        telemetry.addData("yaw", yaw);
 
-        if (length(rightStickX, rightStickY) > 0.5) {
+        if (length(rightStickX, rightStickY) > 0.65) {
             targetHeading = normalize(Math.toDegrees(Math.atan2(-rightStickY, rightStickX)) - 90);
         }
 
