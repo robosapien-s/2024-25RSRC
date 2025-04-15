@@ -232,8 +232,11 @@ public class IntakingStateClaw extends BaseState {
 
             robot.setRobotSpeedNormal();
 
-
-            robot.switchState(State.DROPPING_L2);
+            if (!DroppingL1State.autoL2) {
+                robot.switchState(State.DROPPING_L2);
+            } else {
+                robot.switchState(State.AUTO_BUCKET);
+            }
 
 
         }

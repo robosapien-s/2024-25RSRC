@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.states;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.localization.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
@@ -14,6 +15,8 @@ import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
 public class DroppingL1State extends BaseState {
     boolean angle_ready = false;
+
+    public static boolean autoL2 = false;
 
     public static Pose2d _lastPose = null;
 
@@ -100,6 +103,10 @@ public class DroppingL1State extends BaseState {
 
 
         if(joystick.gamepad1GetX()) {
+
+            autoL2 = true;
+
+            robot.getFollower().setPose(new Pose(0,0,0));
 
             taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 100, "claw open", false));
 

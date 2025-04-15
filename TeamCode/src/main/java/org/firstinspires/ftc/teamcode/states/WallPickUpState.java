@@ -94,6 +94,10 @@ public class WallPickUpState extends BaseState {
             robot.switchState(State.AUTO_SPECIMEN_HANG);
         }
 
+        if (joystick.gamepad1GetY()) {
+            robot.switchState(State.INTAKINGCLAW);
+        }
+
         if (joystick.gamepad1GetDDown()) {
             robot.setTargetHeading(180);
         }

@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.robot.AngleDrive.lineToConstantHead
 import static org.firstinspires.ftc.teamcode.robot.AngleDrive.lineToLinearHeading;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.AutoCycleTask;
@@ -30,22 +31,26 @@ public class AutoBucketState extends DroppingL2State{
                     public boolean breakFollowing() {
                         return joystick.gamepad1GetYRaw();
                     }
-                }, lineToLinearHeading(robot.getFollower(), robot.getPose(), Robot.bucketPose,3)
+                }, lineToLinearHeading(robot.getFollower(), robot.getPose(), new Pose(0,0,0),3)
         );
     }
 
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
         if (joystick.gamepad1GetY()) {
+            DroppingL1State.autoL2 = false;
+            robot.getFollower().breakFollowing();
             robot.setDriveTrainEnabled(true);
-            robot.switchState(State.DROPPING_L2);
+            robot.switchState(State.INTAKINGCLAW);
+        }
+
+
+        if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
+            robot.getFollower().breakFollowing();
+            robot.switchState(State.INTAKINGCLAW);
         }
 
         executeTasks(telemetry);
-
-        if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
-            robot.switchState(State.INTAKINGCLAW);
-        }
     }
 
     @Override

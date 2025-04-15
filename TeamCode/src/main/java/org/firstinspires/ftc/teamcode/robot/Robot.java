@@ -165,6 +165,7 @@ public class Robot {
         instanceStateMap.put(State.AUTO_WALLPICKUP, () -> new AutoWallPickUpState(joystick));
         instanceStateMap.put(State.AUTO_SPECIMEN_HANG, () -> new AutoSpecimenHangState(joystick));
         instanceStateMap.put(State.ROBOT_HANG, () -> new HangState(joystick));
+        instanceStateMap.put(State.AUTO_BUCKET, () -> new AutoBucketState(joystick));
 
 
         /*
