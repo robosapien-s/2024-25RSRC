@@ -349,7 +349,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 24:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        robotAuto.startWait(150);
+                        robotAuto.startWait(125);
                         setPathState(pathState+1);
                     }
                     break;
@@ -392,7 +392,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 29:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        robotAuto.startWait(150);
+                        robotAuto.startWait(125);
                         setPathState(pathState+1);
                     }
                     break;
@@ -436,7 +436,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 34:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.WALLPICKUP);
-                        robotAuto.startWait(150);
+                        robotAuto.startWait(125);
                         setPathState(pathState+1);
                     }
                     break;
@@ -480,7 +480,7 @@ public class rightSideAuto extends LinearOpMode {
                 case 39:
                     if (!follower.isBusy()) {
                         robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(150);
+                        robotAuto.startWait(125);
                         setPathState(pathState+1);
                     }
                     break;

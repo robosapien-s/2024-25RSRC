@@ -38,7 +38,7 @@ public class AutoBucketState extends DroppingL2State{
     @Override
     public void execute(Robot robot, Telemetry telemetry) {
         if (joystick.gamepad1GetY()) {
-            DroppingL1State.autoL2 = false;
+//            DroppingL1State.autoL2 = false;
             robot.getFollower().breakFollowing();
             robot.setDriveTrainEnabled(true);
             robot.switchState(State.INTAKINGCLAW);
