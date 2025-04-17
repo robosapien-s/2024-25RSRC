@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.states;
 
+import com.pedropathing.localization.Pose;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.controllers.ExecuteOnceTask;
 import org.firstinspires.ftc.teamcode.controllers.RobotTaskSeries;
@@ -234,7 +236,9 @@ public class IntakingStateClaw extends BaseState {
 
             robot.switchState(State.DROPPING_L2);
 
-//            if (!DroppingL1State.autoL2) {
+//            if (!Robot.autoBucket) {
+//                robot.getFollower().setPose(new Pose(0,0,0));
+//                Robot.autoBucket = true;
 //                robot.switchState(State.DROPPING_L2);
 //            } else {
 //                robot.switchState(State.AUTO_BUCKET);

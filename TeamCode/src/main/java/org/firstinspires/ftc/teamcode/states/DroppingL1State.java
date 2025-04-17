@@ -45,6 +45,7 @@ public class DroppingL1State extends BaseState {
 
 
         if (trajectoryTask != null) {
+//            parallelTask.add(createWaitTask(robot, ));
             parallelTask.add(transferSeries);
         }
 

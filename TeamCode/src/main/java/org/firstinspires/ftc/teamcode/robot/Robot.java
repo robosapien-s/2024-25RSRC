@@ -39,6 +39,8 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class Robot {
+
+    public static boolean autoBucket = false;
     public static Pose origin = new Pose(0,0,Math.toRadians(180));
     public static Pose middlePoseHang = new Pose(5.75, 22.75, Math.toRadians(180));
 //    public static Pose middlePoseWall = new Pose(10, 4, Math.toRadians(180));
