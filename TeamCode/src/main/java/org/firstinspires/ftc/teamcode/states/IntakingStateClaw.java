@@ -262,6 +262,10 @@ public class IntakingStateClaw extends BaseState {
 
         }
 
+        if (joystick.gamepad1GetLeftStick()) {
+            robot.getFollower().breakFollowing();
+        }
+
         robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-100)+joystick.gamepad1GetRightTrigger()*100));
 
         executeTasks(telemetry);

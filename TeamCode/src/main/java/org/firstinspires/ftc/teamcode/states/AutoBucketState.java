@@ -12,7 +12,10 @@ import org.firstinspires.ftc.teamcode.controllers.IRobotTask;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 import org.firstinspires.ftc.teamcode.wrappers.JoystickWrapper;
 
+
 public class AutoBucketState extends DroppingL2State{
+
+    boolean transitioning = false;
     public AutoBucketState(JoystickWrapper joystick) {
         super(joystick);
     }
@@ -45,7 +48,8 @@ public class AutoBucketState extends DroppingL2State{
         }
 
 
-        if (taskArrayList.isEmpty() /*joystick.gamepad1GetB()*/) {
+        if (taskArrayList.isEmpty()  && !transitioning/*joystick.gamepad1GetB()*/) {
+            transitioning = true;
             robot.getFollower().breakFollowing();
             robot.switchState(State.INTAKINGCLAW);
         }
