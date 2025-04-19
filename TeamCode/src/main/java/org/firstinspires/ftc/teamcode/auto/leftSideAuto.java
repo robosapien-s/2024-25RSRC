@@ -27,11 +27,11 @@ public class leftSideAuto extends LinearOpMode {
     private int pathState;
 
     private final Pose startPose = new Pose(9.154, 113.7, Math.toRadians(0));
-    private final Pose dropPose = new Pose(19.25, 131.15, Math.toRadians(-25.4));
+    private final Pose dropPose = new Pose(19.5, 130.9, Math.toRadians(-25.4));
 //    private final Pose dropPose = new Pose(20, 130.4, Math.toRadians(-25.4));
     private final Pose firstPickUpPose = new Pose(21.5, 131.8, Math.toRadians(-25.4));
-    private final Pose secondPickUpPose = new Pose(19.4, 130.5, Math.toRadians(0));
-    private final Pose thirdPickUpPose = new Pose(20.25, 131, Math.toRadians(21.74));
+    private final Pose secondPickUpPose = new Pose(19.4, 131, Math.toRadians(0));
+    private final Pose thirdPickUpPose = new Pose(20.25, 133.25, Math.toRadians(23));
     private final Pose submersibleLineUpPose = new Pose(57, 115, Math.toRadians(-90));
     private final Pose submersiblePickUp1Pose = new Pose(60, 107, Math.toRadians(-90));
     private final Pose submersiblePickUp2Pose = new Pose(62.5, 107, Math.toRadians(-90));
@@ -265,74 +265,74 @@ public class leftSideAuto extends LinearOpMode {
                         setPathState(pathState+1);
                     }
                     break;
-                case 23:
-                    if (robotAuto.checkWait()) {
-                        follower.followPath(submersiblePickUp1, true);
-                        robotAuto.startWait(1200);
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 24:
-//                    if (!follower.isBusy()) {
+//                case 23:
+//                    if (robotAuto.checkWait()) {
 //                        follower.followPath(submersiblePickUp1, true);
+//                        robotAuto.startWait(1350);
 //                        setPathState(pathState+1);
 //                    }
-
-                    setPathState(pathState+1);
-                    break;
-                case 25:
-                    if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.AUTO_PICKUP);
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 26:
-                    if (!follower.isBusy())  {
-                        follower.breakFollowing();
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 27:
-                    if (robotAuto.getState() == IRobot.State.INTAKINGCLAW) {
-                        robotAuto.startWait(0);
-                        finalDrop = splineToLinearHeading(follower, follower.getPose(), dropLineUpPose, dropPose);
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 28:
-                    if (robotAuto.checkWait()) {
-                        if (finalDrop == null) {
-                            throw (new NullPointerException("final drop path is null"));
-                        }
-                        follower.followPath(finalDrop, true);
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 29:
-                    robotAuto.startWait(600);
-                    setPathState(pathState+1);
-                    break;
-                case 30:
-                    if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.DROPPING_L2);
-                        robotAuto.startWait(1800);
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 31:
-                    if (!follower.isBusy() && robotAuto.checkWait()) {
-                        robotAuto.openClaw();
-                        robotAuto.startWait(100);
-                        setPathState(pathState+1);
-                    }
-                    break;
-                case 32:
-                    if (robotAuto.checkWait()) {
-                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
-                        robotAuto.startWait(300);
-                        setPathState(pathState+1);
-                    }
-                    break;
+//                    break;
+//                case 24:
+////                    if (!follower.isBusy()) {
+////                        follower.followPath(submersiblePickUp1, true);
+////                        setPathState(pathState+1);
+////                    }
+//
+//                    setPathState(pathState+1);
+//                    break;
+//                case 25:
+//                    if (robotAuto.checkWait()) {
+//                        robotAuto.setState(IRobot.State.AUTO_PICKUP);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+//                case 26:
+//                    if (!follower.isBusy())  {
+//                        follower.breakFollowing();
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+//                case 27:
+//                    if (robotAuto.getState() == IRobot.State.INTAKINGCLAW) {
+//                        robotAuto.startWait(0);
+//                        finalDrop = splineToLinearHeading(follower, follower.getPose(), dropLineUpPose, dropPose);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+//                case 28:
+//                    if (robotAuto.checkWait()) {
+//                        if (finalDrop == null) {
+//                            throw (new NullPointerException("final drop path is null"));
+//                        }
+//                        follower.followPath(finalDrop, true);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+//                case 29:
+//                    robotAuto.startWait(600);
+//                    setPathState(pathState+1);
+//                    break;
+//                case 30:
+//                    if (robotAuto.checkWait()) {
+//                        robotAuto.setState(IRobot.State.DROPPING_L2);
+//                        robotAuto.startWait(1800);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+//                case 31:
+//                    if (!follower.isBusy() && robotAuto.checkWait()) {
+//                        robotAuto.openClaw();
+//                        robotAuto.startWait(100);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
+//                case 32:
+//                    if (robotAuto.checkWait()) {
+//                        robotAuto.setState(IRobot.State.INTAKINGCLAW);
+//                        robotAuto.startWait(300);
+//                        setPathState(pathState+1);
+//                    }
+//                    break;
 //                case 33:
 //                    if (robotAuto.checkWait()) {
 //                        follower.followPath(submersiblePickUp2, true);

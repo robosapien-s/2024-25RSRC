@@ -94,7 +94,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_ROTATION_SPECIMEN_FRONT_DROP_POSITION = 590 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_DROP_POSITION = 1350 + SLIDE_ROTATION_OFFSET;
+        public static int SLIDE_ROTATION_DROP_POSITION = 1380 + SLIDE_ROTATION_OFFSET;
 
         public static int SLIDE_ROTATION_MIDDLE_POSITION= 1260 + SLIDE_ROTATION_OFFSET;
 
@@ -102,7 +102,7 @@ public class RoboSapiensTeleOp extends LinearOpMode {
 
         public static int SLIDE_ROTATION_CAMERA_POSITION = 350 + SLIDE_ROTATION_OFFSET;
 
-        public static int SLIDE_ROTATION_MAX_POSITION = 1350 + SLIDE_ROTATION_OFFSET;
+        public static int SLIDE_ROTATION_MAX_POSITION = 1380 + SLIDE_ROTATION_OFFSET;
 
         public static double SLIDE_PID_kp = 0.027;
         public static double SLIDE_PID_kd = 0.027;

@@ -80,14 +80,14 @@ public class HangState extends BaseState {
         } else if (joystick.gamepad1GetY()) {
             if (taskArrayList.isEmpty()) {
                 lvl2hang(robot);
-                lvl3hang(robot, telemetry);
+//                lvl3hang(robot, telemetry);
             }
 
         } else if (joystick.gamepad1GetB() || joystick.gamepad1GetX()) {
             if (taskArrayList.isEmpty() && !lvl2Reached) {
                     lvl2hang(robot);
                 }  else if (taskArrayList.isEmpty()) {
-                    lvl3hang(robot, telemetry);
+//                    lvl3hang(robot, telemetry);
 
                 }
 

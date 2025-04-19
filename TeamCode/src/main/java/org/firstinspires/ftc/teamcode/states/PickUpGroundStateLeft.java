@@ -17,7 +17,7 @@ public class PickUpGroundStateLeft extends BaseState {
     @Override
     public void initialize(Robot robot, IRobot prevState) {
 
-        taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP, 50, "IntakeAngle", false));
+        taskArrayList.add(createIntakeAngleServoTask(robot, RoboSapiensTeleOp.Params.INTAKE_ANGLE_PICKUP+0.01, 50, "IntakeAngle", false));
 
         taskArrayList.add(createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_CLOSE, 200, "IntakeClawClose", false));
 

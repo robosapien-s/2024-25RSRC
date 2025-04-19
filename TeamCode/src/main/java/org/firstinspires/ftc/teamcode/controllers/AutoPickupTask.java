@@ -116,7 +116,7 @@ public class AutoPickupTask extends  RobotTaskImpl {
 
         long timeDelay = System.currentTimeMillis() - delayTimeHack;
 
-        if( timeDelay > 1250 && cloestRect.size.width != 0) {
+        if( timeDelay > 2000 && cloestRect.size.width != 0) {
             _closestRec = cloestRect;
             _didFindSample = true;
             _taskExecuter.add(BaseState.createClawTask(robot, RoboSapiensTeleOp.Params.CLAW_OPEN, 0, "IntakeClawOpen", false));

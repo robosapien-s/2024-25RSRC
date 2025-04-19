@@ -32,7 +32,7 @@ public class rightSideAuto extends LinearOpMode {
 
     private final Pose preloadHangPose = new Pose(36, 74, Math.toRadians(180));
 
-    private final Pose pickup1Pose = new Pose(32, 49.75, Math.toRadians(-60));
+    private final Pose pickup1Pose = new Pose(32, 49.25, Math.toRadians(-60));
 
     private final Pose dropoff1Pose = new Pose(28, 45.5, Math.toRadians(-138));
 
@@ -40,7 +40,7 @@ public class rightSideAuto extends LinearOpMode {
 
     private final Pose dropoff2pose = new Pose(29, 34.25, Math.toRadians(-138));
 
-    private final Pose pickup3pose = new Pose(33, 29, Math.toRadians(-60));
+    private final Pose pickup3pose = new Pose(33, 28.25, Math.toRadians(-60));
 
     private final Pose dropoff3pose = new Pose(28, 32.5, Math.toRadians(-160));
 
@@ -50,7 +50,7 @@ public class rightSideAuto extends LinearOpMode {
 
 //    private final Pose lineUpWall2Pose = new Pose(20, 45.3, Math.toRadians(180));
 
-    private final Pose pickUpWall2Pose = new Pose(14.5, 37.75, Math.toRadians(180));
+    private final Pose pickUpWall2Pose = new Pose(14.75, 37.5, Math.toRadians(180));
 
 //    private final Pose middleWallPose = new Pose(19.25, 39.25, Math.toRadians(180));
 

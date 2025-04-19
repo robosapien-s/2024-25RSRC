@@ -34,7 +34,7 @@ public class DroppingL1State extends BaseState {
     public int getWait() {return 1000;}
     @Override
     public void initialize(Robot robot, IRobot prevState) {
-        robot.setSlideMaxPosition(getHeight());
+        robot.setSlideMaxPosition(getHeight()+150);
 
         IRobotTask trajectoryTask = runTrajectory(robot);
 
@@ -131,6 +131,8 @@ public class DroppingL1State extends BaseState {
                     }, "Substate Transition"
             ));
         }
+
+        robot.increaseSlideTargetPosition((int) (joystick.gamepad1GetLeftTrigger()*(-50)+joystick.gamepad1GetRightTrigger()*50));
 
         executeTasks(telemetry);
     }
